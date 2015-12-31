@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 //活动对象构造
 function Item(options){
 	options = options||{};
@@ -27,19 +27,18 @@ function Item(options){
 function Game(id,options){
 	var _ = this;
 	var _settings = {
-		name:'Pac-Man',		//游戏名称
+		name:'Pac-Man',					//游戏名称
 		copyright:'passer-by.com',		//版权信息
-		width:960,			//画布宽度
-		height:640,			//画布高度
-		map:{				//地图信息
-			x:0,			//地图起点坐标
+		width:960,						//画布宽度
+		height:640,						//画布高度
+		map:{							//地图信息
+			x:0,						//地图起点坐标
 			y:0,		
-			size:20,		//地图单元的宽度
+			size:20,					//地图单元的宽度
 			data:[]
 		},
-		fresh:100,			//画布刷新频率,一秒10帧
-		audio:[],			//音频资源
-		images:[],			//图片资源
+		audio:[],						//音频资源
+		images:[],						//图片资源
 	};
 	for(i in options){
 		_settings[i] = options[i];
@@ -49,8 +48,8 @@ function Game(id,options){
 	$canvas.height = _settings.height;
 	var _context = $canvas.getContext('2d');	//画布上下文环境
 	var _items = [];							//动画对象队列
-	var _status = 0;							//页面状态							
-	var _hander = null;  						//画布更新
+	var _status,								//页面状态							
+		_hander;  								//画布更新
 	//动画开始
 	this.startAnimate = function(callback,frame){
 		frame = frame||1;
@@ -59,6 +58,7 @@ function Game(id,options){
 		var fn = function(){
 			t++;
 			if(!(t%frame)){
+				_context.clearRect(0,0,_settings.width,_settings.height);	//清除画布
 				callback(t/frame);
 			}
 			_hander = requestAnimationFrame(fn);
@@ -71,11 +71,18 @@ function Game(id,options){
 		var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;
 		_hander&&cancelAnimationFrame(_hander);
 	};
+	//事件坐标
+	this.windowToCanvas = function(x,y){
+		var box = $canvas.getBoundingClientRect();
+		return {
+			x:x-box.left*(_settings.width/box.width),
+			y:y-box.top*(_settings.height/box.height)
+		};
+	}
 	//开始画面
 	this.launch = function(){
+		_status = 0;
 		_.startAnimate(function(t){
-			//清除画布
-			_context.clearRect(0,0,_settings.width,_settings.height);
 			//logo
 			_context.fillStyle = '#FC3';
 			_context.beginPath();
@@ -107,6 +114,14 @@ function Game(id,options){
 			_context.fillText('© '+_settings.copyright,_settings.width-12,_settings.height-5);
 		},10);
 	};
+	//开始游戏
+	this.start = function(){
+		_status = 1;
+		_.startAnimate(function(){
+
+		},10);
+	};
+	//更新画布
 	this.update = function(){
 		_startAnimate(function(t){
 			_items.forEach(function(item,index){
@@ -127,4 +142,15 @@ function Game(id,options){
 
 	};
 	//事件
+	//鼠标点击事件
+	$canvas.addEventListener('mousedown',function(e){
+		var position = _.windowToCanvas(e.clientX,e.clientY);
+		if(!_status){
+			_.start();
+		}
+	});
+	$canvas.addEventListener('mouseup',function(e){
+		var position = _.windowToCanvas(e.clientX,e.clientY);
+		//React to the mouse down event
+	});
 }
