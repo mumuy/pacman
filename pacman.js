@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 //活动对象构造
 function Item(options){
 	options = options||{};
@@ -28,6 +28,7 @@ function Game(id,options){
 	var _ = this;
 	var _settings = {
 		name:'Pac-Man',		//游戏名称
+		copyright:'passer-by.com',		//版权信息
 		width:960,			//画布宽度
 		height:640,			//画布高度
 		map:{				//地图信息
@@ -48,21 +49,37 @@ function Game(id,options){
 	$canvas.height = _settings.height;
 	var _context = $canvas.getContext('2d');	//画布上下文环境
 	var _items = [];							//动画对象队列
-	var _status = 0;							//页面状态
-	var _t = 0;									//内部计算器,交替帧数更新动画
+	var _status = 0;							//页面状态							
 	var _hander = null;  						//画布更新
-	
+	//动画开始
+	this.startAnimate = function(callback,frame){
+		frame = frame||1;
+		var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||window.msRequestAnimationFrame;
+		var t = 0;	//帧数计算
+		var fn = function(){
+			t++;
+			if(!(t%frame)){
+				callback(t/frame);
+			}
+			_hander = requestAnimationFrame(fn);
+		};
+		_.stopAnimate();
+		_hander = requestAnimationFrame(fn);
+	};
+	//动画开始
+	this.stopAnimate = function(){
+		var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;
+		_hander&&cancelAnimationFrame(_hander);
+	};
 	//开始画面
 	this.launch = function(){
-		_hander = setInterval(function(){
-			_t++;
-			var s = _t%4;
+		_.startAnimate(function(t){
 			//清除画布
 			_context.clearRect(0,0,_settings.width,_settings.height);
 			//logo
 			_context.fillStyle = '#FC3';
 			_context.beginPath();
-			if(s<2){
+			if(t%2){
 				_context.arc(_settings.width/2,_settings.height*.45,50,.20*Math.PI,1.80*Math.PI,false);
 				_context.lineTo(_settings.width/2,_settings.height*.45);
 			}else{
@@ -81,22 +98,21 @@ function Game(id,options){
 			_context.textAlign = 'center';
 			_context.textBaseline = 'middle';
 			_context.fillStyle = '#FFF';
-			_context.fillText(_settings.name,_settings.width/2,_settings.height*.618);			
-		},_settings.fresh);
+			_context.fillText(_settings.name,_settings.width/2,_settings.height*.6);
+			//版权信息
+			_context.font = '14px Helvetica';
+			_context.textAlign = 'right';
+			_context.textBaseline = 'bottom';
+			_context.fillStyle = '#AAA';
+			_context.fillText('© '+_settings.copyright,_settings.width-12,_settings.height-5);
+		},10);
 	};
-	//动画停止
-	this.stop = function(){
-		_hander&&clearInterval(_hander);
-	};
-	//动画开始
-	this.start = function(){
-		_.stop();
-		_hander = setInterval(function(){  //定时刷新画布
-			_t++;
+	this.update = function(){
+		_startAnimate(function(t){
 			_items.forEach(function(item,index){
-				item.update(_t);
-			});
-		},_settings.fresh);
+				item.update(t);
+			});			
+		});
 	};
 	//添加对象
 	this.addItem = function(item){
@@ -110,4 +126,5 @@ function Game(id,options){
 	this.draw = function(){
 
 	};
+	//事件
 }
