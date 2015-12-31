@@ -5,10 +5,15 @@
 	(function(){
 		var stage = game.createStage();
 		stage.bind('keydown',function(e){
-			game.nextStage();
+			switch(e.keyCode){
+				case 13:
+				case 32:
+					game.nextStage();
+				break;
+			}
 		});
 		//logo
-		var item = stage.createItem({
+		stage.createItem({
 			x:game.width/2,
 			y:game.height*.45,
 			width:100,
@@ -32,11 +37,8 @@
 				context.fill();
 			}
 		});
-		item.bind('click',function(){
-			console.log('不要点我！');
-		});
 		//游戏名
-		var item2 = stage.createItem({
+		stage.createItem({
 			x:game.width/2,
 			y:game.height*.6,
 			update:function(context){

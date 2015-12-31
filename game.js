@@ -89,7 +89,7 @@ function Game(id,options){
 				f++;
 				stage.items.forEach(function(item,index){
 					if(!(f%item.speed)){
-						item.times = f/item.speed;							//计数器
+						item.times = f/item.speed;		//计数器
 					}
 					item.update(_context);
 				});
