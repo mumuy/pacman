@@ -27,7 +27,7 @@ function Item(options){
 function Game(id,options){
 	var _ = this;
 	var _settings = {
-		name:'Eat Beans',	//游戏名称
+		name:'Pac-Man',		//游戏名称
 		width:960,			//画布宽度
 		height:640,			//画布高度
 		map:{				//地图信息
