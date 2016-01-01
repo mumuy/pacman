@@ -60,17 +60,27 @@ function Game(id,options){
 		}
 		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
 	};
+	//地图对象构造器
+	var Map = function(options){
+		options = options||{};
+		var settings = {
+			x:0,						//地图起点坐标
+			y:0,		
+			size:20,					//地图单元的宽度
+			data:[],					//地图数据
+			update:function(){},		//更新地图数据
+			draw:function(){},			//绘制地图
+		};
+		for(var i in settings){
+			this[i] = options[i]||settings[i];
+		}
+	};
 	//布景对象构造器
 	var Stage = function(options){
 		options = options||{};
 		var settings = {
-			map:{							//地图信息
-				x:0,						//地图起点坐标
-				y:0,		
-				size:20,					//地图单元的宽度
-				data:[]						//地图数据
-			},
 			status:1,						//布景状态,1表示正常,0表示非活动
+			map:null,						//布景地图对象
 			audio:[],						//音频资源
 			images:[],						//图片资源
 			items:[]						//对象队列
@@ -85,11 +95,15 @@ function Game(id,options){
 		var f = 0;		//帧数计算
 		var stage = this;
 		var fn = function(){
-			_context.clearRect(0,0,_.width,_.height);	//清除画布
+			_context.clearRect(0,0,_.width,_.height);		//清除画布
+			f++;
+			if(stage.map){
+				stage.map.update();
+				stage.map.draw(_context);
+			}			
 			if(stage.items.length){
-				f++;
 				stage.items.forEach(function(item,index){
-					if(stage.status!=2){
+					if(stage.status!=2&&item.status!=2){  	//对象及布景状态不为暂停
 						if(!(f%item.speed)){
 							item.frames = f/item.speed;		//计数器
 						}
@@ -97,8 +111,8 @@ function Game(id,options){
 					}
 					item.draw(_context);
 				});
-				_hander = requestAnimationFrame(fn);
 			}
+			_hander = requestAnimationFrame(fn);
 		};
 		this.stop();
 		_hander = requestAnimationFrame(fn);
@@ -116,6 +130,12 @@ function Game(id,options){
 		item.index = this.items.length;		//对象层级
 		this.items.push(item);
 		return item;
+	};
+	//添加地图
+	Stage.prototype.createMap = function(options){
+		var map = new Map(options);
+		map.stage = this;
+		return map;
 	};
 	//绑定事件
 	Stage.prototype.bind = function(eventType,callback){
