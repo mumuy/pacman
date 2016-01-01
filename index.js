@@ -19,10 +19,10 @@
 			width:100,
 			height:100,
 			speed:10,
-			update:function(context){
+			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
-				if(this.times%2){
+				if(this.frames%2){
 					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
 				}else{
 					context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
@@ -41,7 +41,7 @@
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.6,
-			update:function(context){
+			draw:function(context){
 				context.font = 'bold 42px Helvetica';
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
@@ -53,7 +53,7 @@
 		stage.createItem({
 			x:game.width-12,
 			y:game.height-5,
-			update:function(context){
+			draw:function(context){
 				context.font = '14px Helvetica';
 				context.textAlign = 'right';
 				context.textBaseline = 'bottom';

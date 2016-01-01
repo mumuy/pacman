@@ -36,7 +36,8 @@ function Game(id,options){
 				y:0
 			},
 			speed:1,				//速度等级,内部计算器times多少帧变化一次
-			update:function(){} 	//更新参数信息
+			update:function(){}, 	//更新参数信息
+			draw:function(){}		//绘制
 		};
 		for(var i in settings){
 			this[i] = options[i]||settings[i];
@@ -89,9 +90,10 @@ function Game(id,options){
 				f++;
 				stage.items.forEach(function(item,index){
 					if(!(f%item.speed)){
-						item.times = f/item.speed;		//计数器
+						item.frames = f/item.speed;		//计数器
 					}
-					item.update(_context);
+					item.update();
+					item.draw(_context);
 				});
 				_hander = requestAnimationFrame(fn);
 			}
