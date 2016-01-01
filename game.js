@@ -70,7 +70,7 @@ function Game(id,options){
 				size:20,					//地图单元的宽度
 				data:[]						//地图数据
 			},
-			status:1,						//布景状态
+			status:1,						//布景状态,1表示正常,0表示非活动
 			audio:[],						//音频资源
 			images:[],						//图片资源
 			items:[]						//对象队列
@@ -89,10 +89,12 @@ function Game(id,options){
 			if(stage.items.length){
 				f++;
 				stage.items.forEach(function(item,index){
-					if(!(f%item.speed)){
-						item.frames = f/item.speed;		//计数器
+					if(stage.status!=2){
+						if(!(f%item.speed)){
+							item.frames = f/item.speed;		//计数器
+						}
+						item.update();
 					}
-					item.update();
 					item.draw(_context);
 				});
 				_hander = requestAnimationFrame(fn);
@@ -145,7 +147,8 @@ function Game(id,options){
 	};
 	//下个布景
 	this.nextStage = function(){
-		if(_stages[_index+1]){
+		if(_index<_stages.length-1){
+			_stages[_index] = 0;
 			_index++;
 			_stages[_index].start();
 		}else{

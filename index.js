@@ -9,6 +9,8 @@
 				case 13:
 				case 32:
 					game.nextStage();
+					// stage.status = 2;
+					// console.log(this);
 				break;
 			}
 		});
