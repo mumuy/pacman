@@ -9,8 +9,6 @@
 				case 13:
 				case 32:
 					game.nextStage();
-					// stage.status = 2;
-					// console.log(this);
 				break;
 			}
 		});
@@ -67,8 +65,38 @@
 	//游戏主程序
 	(function(){
 		var stage = game.createStage();
-		stage.bind('keydown',function(){
-			console.log('没东西啦……还按！');
+		stage.bind('keydown',function(e){
+			switch(e.keyCode){
+				case 13:
+				case 32:
+					this.status = this.status==2?1:2;
+				break;
+			}
+		});
+		//logo
+		stage.createItem({
+			x:game.width/2,
+			y:game.height*.45,
+			width:100,
+			height:100,
+			speed:10,
+			draw:function(context){
+				context.fillStyle = '#FC3';
+				context.beginPath();
+				if(this.frames%2){
+					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
+				}else{
+					context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
+				}
+				context.lineTo(this.x,this.y);
+				context.closePath();
+				context.fill();
+				context.fillStyle = '#000';
+				context.beginPath();
+				context.arc(this.x+5,this.y-27,7,0,2*Math.PI,false);
+				context.closePath();
+				context.fill();
+			}
 		});
 	})();
 	game.init();

@@ -58,7 +58,7 @@ function Game(id,options){
 				});
 			});
 		}
-		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback;
+		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
 	};
 	//布景对象构造器
 	var Stage = function(options){
@@ -128,7 +128,7 @@ function Game(id,options){
 				}
 			});
 		}
-		_events[eventType]['s'+this.index] = callback;
+		_events[eventType]['s'+this.index] = callback.bind(this);	//绑定事件作用域
 	};
 	//事件坐标
 	this.getPosition = function(e){
