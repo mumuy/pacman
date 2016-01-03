@@ -63,6 +63,39 @@
 		});
 	})();
 	//游戏主程序
+	var map_data = [
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+	[1,0,1,0,0,1,0,1,0,0,0,1,0,1,1,0,1,0,0,0,1,0,1,0,0,1,0,1],
+	[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
+	[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
+	[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+	[0,0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0],
+	[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
+	[0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0],
+	[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
+	[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+	[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
+	[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
+	[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
+	[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
+	[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+	[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+	[1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
+	[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
+	[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
+	[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
+	[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
+	[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+];		//地图数据
 	(function(){
 		var stage = game.createStage();
 		stage.bind('keydown',function(e){
@@ -73,29 +106,56 @@
 				break;
 			}
 		});
-		//logo
-		stage.createItem({
-			x:game.width/2,
-			y:game.height*.45,
-			width:100,
-			height:100,
-			speed:10,
+		//绘制地图
+		stage.createMap({
+			x:60,
+			y:15,
+			data:map_data,
 			draw:function(context){
-				context.fillStyle = '#FC3';
-				context.beginPath();
-				if(this.frames%2){
-					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
-				}else{
-					context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
+				var x_length = this.data[0].length;
+				var y_length = this.data.length;
+				for(var i=0; i<x_length; i++){
+					for(var j=0; j<y_length; j++){
+						context.lineWidth = 2;
+						context.strokeStyle="#09c";
+						if(this.get(j,i)){
+							var x = this.x+i*this.size;
+							var y = this.y+j*this.size;
+							if(this.get(j,i-1)&&!(this.get(j-1,i-1)&&this.get(j+1,i-1)&&this.get(j-1,i)&&this.get(j+1,i))){
+								if(i){
+									context.beginPath();
+									context.moveTo(x,y);
+									context.lineTo(x-this.size/2,y);
+									context.stroke();
+								}
+							}
+							if(this.get(j,i+1)&&!(this.get(j-1,i+1)&&this.get(j+1,i+1)&&this.get(j-1,i)&&this.get(j+1,i))){
+								if(i<x_length-1){
+									context.beginPath();
+									context.moveTo(x,y);
+									context.lineTo(x+this.size/2,y);
+									context.stroke();
+								}
+							}
+							if(this.get(j-1,i)&&!(this.get(j-1,i-1)&&this.get(j-1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
+								if(j){
+									context.beginPath();
+									context.moveTo(x,y);
+									context.lineTo(x,y-this.size/2);
+									context.stroke();
+								}
+							}
+							if(this.get(j+1,i)&&!(this.get(j+1,i-1)&&this.get(j+1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
+								if(j<y_length-1){
+									context.beginPath();
+									context.moveTo(x,y);
+									context.lineTo(x,y+this.size/2);
+									context.stroke();
+								}
+							}
+						}
+					}
 				}
-				context.lineTo(this.x,this.y);
-				context.closePath();
-				context.fill();
-				context.fillStyle = '#000';
-				context.beginPath();
-				context.arc(this.x+5,this.y-27,7,0,2*Math.PI,false);
-				context.closePath();
-				context.fill();
 			}
 		});
 	})();

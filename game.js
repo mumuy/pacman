@@ -75,6 +75,12 @@ function Game(id,options){
 			this[i] = options[i]||settings[i];
 		}
 	};
+	Map.prototype.get = function(j,i){
+		if(this.data[j]&&typeof this.data[j][i]!='undefined'){
+			return this.data[j][i];
+		}
+		return -1;
+	};
 	//布景对象构造器
 	var Stage = function(options){
 		options = options||{};
@@ -134,6 +140,7 @@ function Game(id,options){
 	//添加地图
 	Stage.prototype.createMap = function(options){
 		var map = new Map(options);
+		this.map = map;
 		map.stage = this;
 		return map;
 	};
