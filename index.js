@@ -224,7 +224,7 @@
 				var coord = map.position2coord(this.x,this.y);
 				var inPlace = !coord.offset;
 				if(inPlace){
-					if(this.control.orientation){
+					if(typeof this.control.orientation!='undefined'){
 						switch(this.control.orientation){
 							case 0:
 								if(!map.get(coord.x,coord.y-1)){
@@ -248,7 +248,7 @@
 								break;
 						}						
 					}
-					this.control.orientation = null;
+					this.control = {};
 				}
 				switch(this.orientation){
 					case 0:
