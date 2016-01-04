@@ -36,6 +36,7 @@ function Game(id,options){
 				y:0
 			},
 			speed:1,				//速度等级,内部计算器times多少帧变化一次
+			control:{},				//控制缓存,到达定位点时处理
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
 		};
@@ -83,17 +84,20 @@ function Game(id,options){
 		return -1;
 	};
 	//地图坐标转画布坐标
-	Map.prototype.coord2position = function(x,y){
+	Map.prototype.coord2position = function(cx,cy){
 		return {
-			x:this.x+x*this.size+this.size/2,
-			y:this.y+y*this.size+this.size/2
+			x:this.x+cx*this.size+this.size/2,
+			y:this.y+cy*this.size+this.size/2
 		};
 	};
 	//画布坐标转地图坐标
 	Map.prototype.position2coord = function(x,y){
+		var fx = (x-this.x)%this.size-this.size/2;
+		var fy = (y-this.y)%this.size-this.size/2;
 		return {
-			x:Math.floor((x-this.x)/this.size-.5),
-			y:Math.floor((y-this.y)/this.size-.5)
+			x:Math.floor((x-this.x)/this.size),
+			y:Math.floor((y-this.y)/this.size),
+			offset:Math.sqrt(fx*fx+fy*fy)
 		};
 	};
 	//布景对象构造器

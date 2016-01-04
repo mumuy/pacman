@@ -175,34 +175,32 @@
 										context.closePath();
 										break;
 									default:
-										if(Math.floor(code/1000)){
+										var arr = String.prototype.split.call(code,'');
+										if(+arr.pop()){
 											context.beginPath();
 											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x,pos.y-this.size/2);
+											context.lineTo(pos.x-this.size/2,pos.y);
 											context.stroke();
 											context.closePath();
 										}
-										code %= 1000;
-										if(Math.floor(code/100)){
-											context.beginPath();
-											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x+this.size/2,pos.y);
-											context.stroke();
-											context.closePath();
-										}
-										code %= 100;
-										if(Math.floor(code/10)){
+										if(+arr.pop()){
 											context.beginPath();
 											context.moveTo(pos.x,pos.y);
 											context.lineTo(pos.x,pos.y+this.size/2);
 											context.stroke();
 											context.closePath();
 										}
-										code %= 10;
-										if(Math.floor(code/1)){
+										if(+arr.pop()){
 											context.beginPath();
 											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x-this.size/2,pos.y);
+											context.lineTo(pos.x+this.size/2,pos.y);
+											context.stroke();
+											context.closePath();
+										}
+										if(+arr.pop()){
+											context.beginPath();
+											context.moveTo(pos.x,pos.y);
+											context.lineTo(pos.x,pos.y-this.size/2);
 											context.stroke();
 											context.closePath();
 										}
@@ -222,6 +220,59 @@
 			height:30,
 			orientation:3,
 			speed:10,
+			update:function(){
+				var coord = map.position2coord(this.x,this.y);
+				var inPlace = !coord.offset;
+				if(inPlace){
+					if(this.control.orientation){
+						switch(this.control.orientation){
+							case 0:
+								if(!map.get(coord.x,coord.y-1)){
+									this.orientation = this.control.orientation;
+								}
+								break;
+							case 1:
+								if(!map.get(coord.x+1,coord.y)){
+									this.orientation = this.control.orientation;
+								}
+								break;
+							case 2:
+								if(!map.get(coord.x,coord.y+1)){
+									this.orientation = this.control.orientation;
+								}
+								break;
+							case 3:
+								if(!map.get(coord.x-1,coord.y)){
+									this.orientation = this.control.orientation;
+								}
+								break;
+						}						
+					}
+					this.control.orientation = null;
+				}
+				switch(this.orientation){
+					case 0:
+						if(!(map.get(coord.x,coord.y-1)&&inPlace)){
+							this.y-=1;
+						}
+						break;
+					case 1:
+						if(!(map.get(coord.x+1,coord.y)&&inPlace)){
+							this.x+=1;
+						}
+						break;
+					case 2:
+						if(!(map.get(coord.x,coord.y+1)&&inPlace)){
+							this.y+=1;
+						}
+						break;
+					case 3:
+						if(!(map.get(coord.x-1,coord.y)&&inPlace)){
+							this.x-=1;
+						}
+						break;
+				}
+			},
 			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
@@ -261,7 +312,7 @@
 			}
 		});
 		stage.bind('keydown',function(e){
-			player.orientation = MAP_ORIENTATION[e.keyCode];
+			player.control = {orientation:MAP_ORIENTATION[e.keyCode]};
 		});
 	})();
 	game.init();
