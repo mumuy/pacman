@@ -75,11 +75,26 @@ function Game(id,options){
 			this[i] = options[i]||settings[i];
 		}
 	};
-	Map.prototype.get = function(j,i){
-		if(this.data[j]&&typeof this.data[j][i]!='undefined'){
-			return this.data[j][i];
+	//获取地图上某点的值
+	Map.prototype.get = function(x,y){
+		if(this.data[y]&&typeof this.data[y][x]!='undefined'){
+			return this.data[y][x];
 		}
 		return -1;
+	};
+	//地图坐标转画布坐标
+	Map.prototype.coord2position = function(x,y){
+		return {
+			x:this.x+x*this.size+this.size/2,
+			y:this.y+y*this.size+this.size/2
+		};
+	};
+	//画布坐标转地图坐标
+	Map.prototype.position2coord = function(x,y){
+		return {
+			x:Math.floor((x-this.x)/this.size-.5),
+			y:Math.floor((y-this.y)/this.size-.5)
+		};
 	};
 	//布景对象构造器
 	var Stage = function(options){
