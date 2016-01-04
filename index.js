@@ -121,8 +121,8 @@
 			draw:function(context){
 				var y_length = this.data.length;
 				var x_length = this.data[0].length;
-				for(var j=0; j<y_length; j++){
-					for(var i=0; i<x_length; i++){
+				for(var j=0; j<this.y_length; j++){
+					for(var i=0; i<this.x_length; i++){
 						context.lineWidth = 2;
 						context.strokeStyle="#09C";
 						if(this.get(i,j)){
@@ -222,8 +222,8 @@
 			speed:10,
 			update:function(){
 				var coord = map.position2coord(this.x,this.y);
-				var inPlace = !coord.offset;
-				if(inPlace){
+				var steps = 2;
+				if(!coord.offset){
 					if(typeof this.control.orientation!='undefined'){
 						switch(this.control.orientation){
 							case 0:
@@ -249,28 +249,55 @@
 						}						
 					}
 					this.control = {};
-				}
-				switch(this.orientation){
-					case 0:
-						if(!(map.get(coord.x,coord.y-1)&&inPlace)){
-							this.y-=1;
-						}
-						break;
-					case 1:
-						if(!(map.get(coord.x+1,coord.y)&&inPlace)){
-							this.x+=1;
-						}
-						break;
-					case 2:
-						if(!(map.get(coord.x,coord.y+1)&&inPlace)){
-							this.y+=1;
-						}
-						break;
-					case 3:
-						if(!(map.get(coord.x-1,coord.y)&&inPlace)){
-							this.x-=1;
-						}
-						break;
+					switch(this.orientation){
+						case 0:
+							var value = map.get(coord.x,coord.y-1);
+							if(value==0){
+								this.y-=steps;
+							}else if(value<0){
+								this.y += map.size*(map.y_length-1);
+							}
+							break;
+						case 1:
+							var value = map.get(coord.x+1,coord.y);
+							if(value==0){
+								this.x+=steps;
+							}else if(value<0){
+								this.x -= map.size*(map.x_length-1);
+							}
+							break;
+						case 2:
+							var value = map.get(coord.x,coord.y+1);
+							if(value==0){
+								this.y+=steps;
+							}else if(value<0){
+								this.y -= map.size*(map.y_length-1);
+							}
+							break;
+						case 3:
+							var value = map.get(coord.x-1,coord.y);
+							if(value==0){
+								this.x-=steps;
+							}else if(value<0){
+								this.x += map.size*(map.x_length-1);
+							}
+							break;
+					}
+				}else{
+					switch(this.orientation){
+						case 0:
+								this.y-=steps;
+							break;
+						case 1:
+								this.x+=steps;
+							break;
+						case 2:
+								this.y+=steps;
+							break;
+						case 3:
+								this.x-=steps;
+							break;
+					}
 				}
 			},
 			draw:function(context){

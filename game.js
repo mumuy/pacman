@@ -69,6 +69,9 @@ function Game(id,options){
 			y:0,		
 			size:20,					//地图单元的宽度
 			data:[],					//地图数据
+			stage:null,					//布景
+			x_length:0,					//二维数组x轴长度
+			y_length:0,					//二维数组y轴长度
 			update:function(){},		//更新地图数据
 			draw:function(){},			//绘制地图
 		};
@@ -159,8 +162,11 @@ function Game(id,options){
 	//添加地图
 	Stage.prototype.createMap = function(options){
 		var map = new Map(options);
+		//动态属性
 		this.map = map;
 		map.stage = this;
+		map.y_length = map.data.length;
+		map.x_length = map.data[0].length;
 		return map;
 	};
 	//绑定事件
