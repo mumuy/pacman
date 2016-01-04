@@ -112,50 +112,106 @@
 			y:15,
 			data:map_data,
 			draw:function(context){
-				var x_length = this.data[0].length;
-				var y_length = this.data.length;
-				for(var i=0; i<x_length; i++){
-					for(var j=0; j<y_length; j++){
-						context.lineWidth = 2;
-						context.strokeStyle="#09c";
-						if(this.get(j,i)){
-							var x = this.x+i*this.size;
-							var y = this.y+j*this.size;
-							if(this.get(j,i-1)&&!(this.get(j-1,i-1)&&this.get(j+1,i-1)&&this.get(j-1,i)&&this.get(j+1,i))){
-								if(i){
-									context.beginPath();
-									context.moveTo(x,y);
-									context.lineTo(x-this.size/2,y);
-									context.stroke();
-								}
-							}
-							if(this.get(j,i+1)&&!(this.get(j-1,i+1)&&this.get(j+1,i+1)&&this.get(j-1,i)&&this.get(j+1,i))){
-								if(i<x_length-1){
-									context.beginPath();
-									context.moveTo(x,y);
-									context.lineTo(x+this.size/2,y);
-									context.stroke();
-								}
-							}
-							if(this.get(j-1,i)&&!(this.get(j-1,i-1)&&this.get(j-1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
-								if(j){
-									context.beginPath();
-									context.moveTo(x,y);
-									context.lineTo(x,y-this.size/2);
-									context.stroke();
-								}
-							}
-							if(this.get(j+1,i)&&!(this.get(j+1,i-1)&&this.get(j+1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
-								if(j<y_length-1){
-									context.beginPath();
-									context.moveTo(x,y);
-									context.lineTo(x,y+this.size/2);
-									context.stroke();
-								}
-							}
-						}
-					}
-				}
+				context.strokeStyle='#f00';
+				context.beginPath();
+				context.moveTo(15,15);
+				context.lineTo(15,15-this.size/2);
+				context.stroke();
+				context.closePath();
+				context.beginPath();
+				context.moveTo(15,15);
+				context.lineTo(15,15+this.size/2);
+				context.stroke();
+				context.closePath();
+				// var x_length = this.data[0].length;
+				// var y_length = this.data.length;
+				// for(var i=0; i<x_length; i++){
+				// 	for(var j=0; j<y_length; j++){
+				// 		context.lineWidth = 2;
+				// 		context.strokeStyle="#09c";
+				// 		if(this.get(j,i)){
+				// 			var x = this.x+i*this.size;
+				// 			var y = this.y+j*this.size;
+				// 			var code = 0;
+				// 			if(this.get(j-1,i)&&!(this.get(j-1,i-1)&&this.get(j-1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
+				// 				if(j){
+				// 					code += 1000;
+				// 				}
+				// 			}
+				// 			if(this.get(j,i+1)&&!(this.get(j-1,i+1)&&this.get(j+1,i+1)&&this.get(j-1,i)&&this.get(j+1,i))){
+				// 				if(i<x_length-1){
+				// 					code += 100;
+				// 				}
+				// 			}
+				// 			if(this.get(j+1,i)&&!(this.get(j+1,i-1)&&this.get(j+1,i+1)&&this.get(j,i-1)&&this.get(j,i+1))){
+				// 				if(j<y_length-1){
+				// 					code += 10;
+				// 				}
+				// 			}
+				// 			if(this.get(j,i-1)&&!(this.get(j-1,i-1)&&this.get(j+1,i-1)&&this.get(j-1,i)&&this.get(j+1,i))){
+				// 				if(i){
+				// 					code += 1;
+				// 				}
+				// 			}
+				// 			if(code){
+				// 				context.beginPath();
+				// 				switch(code){
+				// 					case 1100:
+				// 						context.arc(x+this.size,y-this.size,this.size/2,.5*Math.PI,1*Math.PI,false);
+				// 						context.stroke();
+				// 						context.closePath();
+				// 						break;
+				// 					case 110:
+				// 						context.arc(x+this.size,y+this.size,this.size/2,Math.PI,1.5*Math.PI,false);
+				// 						context.stroke();
+				// 						context.closePath();
+				// 						break;
+				// 					case 11:
+				// 						context.arc(x-this.size,y+this.size,this.size/2,1.5*Math.PI,2*Math.PI,false);
+				// 						context.stroke();
+				// 						context.closePath();
+				// 						break;
+				// 					case 1001:
+				// 						context.arc(x-this.size,y-this.size,this.size/2,0,.5*Math.PI,false);
+				// 						context.stroke();
+				// 						context.closePath();
+				// 						break;
+				// 					default:
+				// 						if(code/1000){
+				// 							context.moveTo(x,y);
+				// 							context.lineTo(x,y-this.size);
+				// 							context.stroke();
+				// 							context.closePath();
+				// 							context.beginPath();
+				// 						}
+				// 						code %= 1000;
+				// 						if(code/100){
+				// 							context.moveTo(x,y);
+				// 							context.lineTo(x+this.size,y);
+				// 							context.stroke();
+				// 							context.closePath();
+				// 							context.beginPath();
+				// 						}
+				// 						code %= 100;
+				// 						if(code/10){
+				// 							context.moveTo(x,y);
+				// 							context.lineTo(x,y+this.size);
+				// 							context.stroke();
+				// 							context.closePath();
+				// 							context.beginPath();
+				// 						}
+				// 						code %= 10;
+				// 						if(code/1){
+				// 							context.moveTo(x,y);
+				// 							context.lineTo(x-this.size,y);
+				// 							context.stroke();
+				// 						}
+				// 						context.closePath();
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// }
 			}
 		});
 	})();
