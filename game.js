@@ -28,15 +28,16 @@ function Game(id,options){
 			y:0,					//纵坐标
 			width:20,				//宽
 			height:20,				//高
-			type:1,					//对象类型
+			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
 			status:1,				//对象状态,1表示正常,0表示隐藏
 			orientation:0,			//当前定位方向,0表示上,1表示右,2表示下,3表示左
-			vector:{				//目标坐标
-				x:0,
-				y:0
-			},
+			vector:{},				//目标坐标
+			coord:{},				//如果对象与地图绑定,获得坐标值
 			speed:1,				//速度等级,内部计算器times多少帧变化一次
 			control:{},				//控制缓存,到达定位点时处理
+			path:[],				//NPC自动行走的路径
+			index:0,				//对象索引
+			stage:null,				//绑定对象与所属布景绑定
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
 		};
@@ -107,7 +108,7 @@ function Game(id,options){
 	//寻址算法
 	Map.prototype.finder = function(param){
 		var defaults = {
-			map :this.data,
+			map:this.data,
 			start:[0,0],
 			end:[0,0]
 		};
@@ -131,7 +132,7 @@ function Game(id,options){
 				steps[x][y] = 0;
 			}
 		}
-		(function(list){
+		var _render = function(list){
 			var new_list = [];
 			var next = function(from,to){
 				var x = to[0],y = to[1];
@@ -154,9 +155,10 @@ function Game(id,options){
 				next(current,[x,y-1]);
 			}
 			if(!finded&&new_list.length){
-				arguments.callee(new_list);
+				_render(new_list);
 			}
-		})([options.start]);
+		};
+		_render([options.start]);
 		if(finded){
 			var current=options.end;
 			while(current[0]!=options.start[0]||current[1]!=options.start[1]){
@@ -198,6 +200,9 @@ function Game(id,options){
 						if(!(f%item.speed)){
 							item.frames = f/item.speed;		//计数器
 						}
+						if(stage.map&&item.type){
+							item.coord = stage.map.position2coord(item.x,item.y);
+						}
 						item.update();
 					}
 					item.draw(_context);
@@ -216,9 +221,9 @@ function Game(id,options){
 	//添加对象
 	Stage.prototype.createItem = function(options){
 		var item = new Item(options);
-		//对象动态属性
-		item.stage = this;					//绑定对象与所属布景绑定
-		item.index = this.items.length;		//对象层级
+		//动态属性
+		item.stage = this;
+		item.index = this.items.length;
 		this.items.push(item);
 		return item;
 	};

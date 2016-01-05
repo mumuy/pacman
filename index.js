@@ -218,10 +218,11 @@
 			y:pos.y,
 			width:30,
 			height:30,
+			type:1,
 			orientation:3,
 			speed:10,
 			update:function(){
-				var coord = map.position2coord(this.x,this.y);
+				var coord = this.coord;
 				var steps = 2;
 				if(!coord.offset){
 					if(typeof this.control.orientation!='undefined'){
@@ -338,11 +339,20 @@
 				context.fill();
 			}
 		});
+		var pos = map.coord2position(12,14);
 		stage.createItem({
-			x:650,
-			y:100,
+			x:pos.x,
+			y:pos.y,
 			width:30,
 			height:30,
+			type:2,
+			speed:10,
+			update:function(){
+				this.path = map.finder({
+					start:[this.coord.y,this.coord.x],
+					end:[player.coord.y,player.coord.x]
+				});
+			},
 			draw:function(context){
 				context.fillStyle = '#F00';
 				context.beginPath();              
