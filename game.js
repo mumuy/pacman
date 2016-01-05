@@ -57,6 +57,7 @@ function Game(id,options){
 						}
 					}
 				});
+				e.preventDefault(); 
 			});
 		}
 		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
@@ -102,6 +103,68 @@ function Game(id,options){
 			y:Math.floor((y-this.y)/this.size),
 			offset:Math.sqrt(fx*fx+fy*fy)
 		};
+	};
+	//寻址算法
+	Map.prototype.finder = function(param){
+		var defaults = {
+			map :this.data,
+			start:[0,0],
+			end:[0,0]
+		};
+		var options = (function(target, params) {
+		   for (var prop in params) {  
+				target[prop] = params[prop];
+		   }      
+		   return target;
+		})(defaults,param);
+		var result = [];
+		if(options.map[options.start[0]][options.start[1]]||options.map[options.end[0]][options.end[1]]){ //当起点或终点设置在墙上
+			return [];
+		}
+		var finded = false;
+		var length_x  = options.map.length;
+		var steps = new Array(length_x); //步骤的映射
+		for(var x=length_x;x--;){
+			var length_y = options.map[x].length;
+			steps[x] = new Array(length_y);
+			for(var y=length_y;y--;){
+				steps[x][y] = 0;
+			}
+		}
+		(function(list){
+			var new_list = [];
+			var next = function(from,to){
+				var x = to[0],y = to[1];
+				if(typeof steps[x]!= 'undefined'&&typeof steps[x][y] != 'undefined'&&!options.map[x][y]&&!finded){	//当前点是否可以走
+					if(x==options.end[0]&&y==options.end[1]){
+						steps[x][y] = from;
+						finded = true;
+					}else if(!steps[x][y]){
+						steps[x][y] = from;
+						new_list.push(to);
+					}
+				}
+			};				
+			for(var i=0,len=list.length;i<len;i++){
+				var current = list[i];
+				var x = current[0],y=current[1];
+				next(current,[x+1,y]);
+				next(current,[x,y+1]);
+				next(current,[x-1,y]);
+				next(current,[x,y-1]);
+			}
+			if(!finded&&new_list.length){
+				arguments.callee(new_list);
+			}
+		})([options.start]);
+		if(finded){
+			var current=options.end;
+			while(current[0]!=options.start[0]||current[1]!=options.start[1]){
+				result.unshift(current);
+				current=steps[current[0]][current[1]];
+			}
+		}
+		return result;
 	};
 	//布景对象构造器
 	var Stage = function(options){
@@ -178,6 +241,7 @@ function Game(id,options){
 				if(_events[eventType][key]){
 					_events[eventType][key](e);
 				}
+				e.preventDefault(); 
 			});
 		}
 		_events[eventType]['s'+this.index] = callback.bind(this);	//绑定事件作用域

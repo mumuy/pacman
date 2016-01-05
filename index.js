@@ -338,6 +338,41 @@
 				context.fill();
 			}
 		});
+		stage.createItem({
+			x:650,
+			y:100,
+			width:30,
+			height:30,
+			draw:function(context){
+				context.fillStyle = '#F00';
+				context.beginPath();              
+            	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
+            	context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+            	context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+            	context.fill();
+            	context.closePath();
+            	context.fillStyle = '#FFF';
+            	context.beginPath();
+            	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+            	context.fill();
+            	context.closePath();
+            	context.beginPath();
+            	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+            	context.fill();
+            	context.closePath();
+            	context.fillStyle = '#00F';
+            	context.beginPath();
+            	context.arc(this.x-this.width*.15,this.y-this.height*.28,this.width*.07,0,2*Math.PI,false);
+            	context.fill();
+            	context.closePath();
+            	context.beginPath();
+            	context.arc(this.x+this.width*.15,this.y-this.height*.28,this.width*.07,0,2*Math.PI,false);
+            	context.fill();
+            	context.closePath();
+			}
+		});
 		stage.bind('keydown',function(e){
 			player.control = {orientation:MAP_ORIENTATION[e.keyCode]};
 		});
