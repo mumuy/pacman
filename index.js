@@ -348,10 +348,39 @@
 			type:2,
 			speed:10,
 			update:function(){
-				this.path = map.finder({
-					start:[this.coord.y,this.coord.x],
-					end:[player.coord.y,player.coord.x]
-				});
+				if(!this.coord.offset){
+					this.path = map.finder({
+						start:this.coord,
+						end:player.coord
+					});
+					if(this.path.length){
+						this.vector = this.path[0];
+					}
+					if(this.vector.x>this.coord.x){
+						this.orientation = 1;
+					}else if(this.vector.x<this.coord.x){
+						this.orientation = 3;
+					}else if(this.vector.y>this.coord.y){
+						this.orientation = 2;
+					}else if(this.vector.y<this.coord.y){
+						this.orientation = 0;
+					}
+				}
+				var steps = 1;
+				switch(this.orientation){
+					case 0:
+							this.y-=steps;
+						break;
+					case 1:
+							this.x+=steps;
+						break;
+					case 2:
+							this.y+=steps;
+						break;
+					case 3:
+							this.x-=steps;
+						break;
+				}
 			},
 			draw:function(context){
 				context.fillStyle = '#F00';

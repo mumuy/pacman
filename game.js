@@ -29,7 +29,7 @@ function Game(id,options){
 			width:20,				//宽
 			height:20,				//高
 			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
-			status:1,				//对象状态,1表示正常,0表示隐藏
+			status:1,				//对象状态,1表示正常,0表示隐藏,2表示暂停
 			orientation:0,			//当前定位方向,0表示上,1表示右,2表示下,3表示左
 			vector:{},				//目标坐标
 			coord:{},				//如果对象与地图绑定,获得坐标值
@@ -109,8 +109,8 @@ function Game(id,options){
 	Map.prototype.finder = function(param){
 		var defaults = {
 			map:this.data,
-			start:[0,0],
-			end:[0,0]
+			start:{},
+			end:{}
 		};
 		var options = (function(target, params) {
 		   for (var prop in params) {  
@@ -119,40 +119,39 @@ function Game(id,options){
 		   return target;
 		})(defaults,param);
 		var result = [];
-		if(options.map[options.start[0]][options.start[1]]||options.map[options.end[0]][options.end[1]]){ //当起点或终点设置在墙上
+		if(options.map[options.start.y][options.start.x]||options.map[options.end.y][options.end.x]){ //当起点或终点设置在墙上
 			return [];
 		}
 		var finded = false;
-		var length_x  = options.map.length;
-		var steps = new Array(length_x); //步骤的映射
-		for(var x=length_x;x--;){
-			var length_y = options.map[x].length;
-			steps[x] = new Array(length_y);
-			for(var y=length_y;y--;){
-				steps[x][y] = 0;
+		var _self = this;
+		var y_length  = options.map.length;
+		var x_length = options.map[0].length;
+		var steps = []; 	//步骤的映射
+		for(var y=y_length;y--;){
+			steps[y] = [];
+			for(var x=x_length;x--;){
+				steps[y][x] = 0;
 			}
 		}
 		var _render = function(list){
 			var new_list = [];
 			var next = function(from,to){
-				var x = to[0],y = to[1];
-				if(typeof steps[x]!= 'undefined'&&typeof steps[x][y] != 'undefined'&&!options.map[x][y]&&!finded){	//当前点是否可以走
-					if(x==options.end[0]&&y==options.end[1]){
-						steps[x][y] = from;
+				if(_self.get(to.x,to.y)==0&&!finded){	//当前点是否可以走
+					if(to.x==options.end.x&&to.y==options.end.y){
+						steps[to.y][to.x] = from;
 						finded = true;
-					}else if(!steps[x][y]){
-						steps[x][y] = from;
+					}else if(!steps[to.y][to.x]){
+						steps[to.y][to.x] = from;
 						new_list.push(to);
 					}
 				}
-			};				
+			};
 			for(var i=0,len=list.length;i<len;i++){
 				var current = list[i];
-				var x = current[0],y=current[1];
-				next(current,[x+1,y]);
-				next(current,[x,y+1]);
-				next(current,[x-1,y]);
-				next(current,[x,y-1]);
+				next(current,{y:current.y+1,x:current.x});
+				next(current,{y:current.y,x:current.x+1});
+				next(current,{y:current.y-1,x:current.x});
+				next(current,{y:current.y,x:current.x-1});
 			}
 			if(!finded&&new_list.length){
 				_render(new_list);
@@ -161,9 +160,9 @@ function Game(id,options){
 		_render([options.start]);
 		if(finded){
 			var current=options.end;
-			while(current[0]!=options.start[0]||current[1]!=options.start[1]){
+			while(current.x!=options.start.x||current.y!=options.start.y){
 				result.unshift(current);
-				current=steps[current[0]][current[1]];
+				current=steps[current.y][current.x];
 			}
 		}
 		return result;
