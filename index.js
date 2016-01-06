@@ -339,7 +339,7 @@
 				context.fill();
 			}
 		});
-		var NPC_COLOR = ['#96F','#6C6','#C30','#3C9'];
+		var NPC_COLOR = ['#F00','#F60','#3C6','#69F'];
 		for(var i=0;i<4;i++){
 			var pos = map.coord2position(12+i,14);
 			stage.createItem({
