@@ -1,5 +1,50 @@
 //主程序,业务逻辑
 (function(){
+	//处理映射关系
+	var _ORIENTATION = {	//方向
+		'39':0, //右
+		'40':1, //下
+		'37':2, //左
+		'38':3,	//上
+	},
+	_DATA = [		//地图数据
+		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+		[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
+		[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
+		[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
+		[1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+		[0,0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0],
+		[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
+		[0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0],
+		[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
+		[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+		[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
+		[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
+		[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
+		[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
+		[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
+		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+		[1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
+		[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
+		[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
+		[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
+		[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
+		[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
+		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+	],
+	_COS = [1,0,-1,0],
+	_SIN = [0,1,0,-1],
+	_COLOR = ['#F00','#F60','#3C6','#69F'],
+	_SIZE = 20;		//地图大小
+
 	var game = new Game('canvas');
 	//启动页
 	(function(){
@@ -64,46 +109,6 @@
 	})();
 	//游戏主程序
 	(function(){
-		var MAP_ORIENTATION = {	//地图方向
-			'38':0,
-			'39':1,
-			'40':2,
-			'37':3
-		},
-			MAP_DATA = [		//地图数据
-				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
-				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
-				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
-				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
-				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
-				[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
-				[1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
-				[0,0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0],
-				[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
-				[0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0],
-				[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
-				[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
-				[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
-				[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
-				[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
-				[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
-				[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
-				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
-				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
-				[1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
-				[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
-				[1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1],
-				[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
-				[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
-				[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
-				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-			],
-			MAP_SIZE = 20;		//地图大小
 		var stage = game.createStage();
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
@@ -117,7 +122,7 @@
 		var map = stage.createMap({
 			x:50,
 			y:10,
-			data:MAP_DATA,
+			data:_DATA,
 			draw:function(context){
 				var y_length = this.data.length;
 				var x_length = this.data[0].length;
@@ -214,52 +219,27 @@
 		//主角
 		var pos = map.coord2position(14,23);
 		var player = stage.createItem({
-			x:pos.x-MAP_SIZE/2,
+			x:pos.x-_SIZE/2,
 			y:pos.y,
 			width:30,
 			height:30,
 			type:1,
-			orientation:3,
+			orientation:2,
 			speed:2,
 			frames:10,
 			update:function(){
 				var coord = this.coord;
 				if(!coord.offset){
 					if(typeof this.control.orientation!='undefined'){
-						switch(this.control.orientation){
-							case 0:
-								if(!map.get(coord.x,coord.y-1)){
-									this.orientation = this.control.orientation;
-								}
-								break;
-							case 1:
-								if(!map.get(coord.x+1,coord.y)){
-									this.orientation = this.control.orientation;
-								}
-								break;
-							case 2:
-								if(!map.get(coord.x,coord.y+1)){
-									this.orientation = this.control.orientation;
-								}
-								break;
-							case 3:
-								if(!map.get(coord.x-1,coord.y)){
-									this.orientation = this.control.orientation;
-								}
-								break;
-						}						
+						var x = coord.x+_COS[this.control.orientation];
+						var y = coord.y+_SIN[this.control.orientation];
+						if(!map.get(x,y)){
+							this.orientation = this.control.orientation;
+						}	
 					}
 					this.control = {};
 					switch(this.orientation){
 						case 0:
-							var value = map.get(coord.x,coord.y-1);
-							if(value==0){
-								this.y-=this.speed;
-							}else if(value<0){
-								this.y += map.size*(map.y_length-1);
-							}
-							break;
-						case 1:
 							var value = map.get(coord.x+1,coord.y);
 							if(value==0){
 								this.x+=this.speed;
@@ -267,7 +247,7 @@
 								this.x -= map.size*(map.x_length-1);
 							}
 							break;
-						case 2:
+						case 1:
 							var value = map.get(coord.x,coord.y+1);
 							if(value==0){
 								this.y+=this.speed;
@@ -275,7 +255,7 @@
 								this.y -= map.size*(map.y_length-1);
 							}
 							break;
-						case 3:
+						case 2:
 							var value = map.get(coord.x-1,coord.y);
 							if(value==0){
 								this.x-=this.speed;
@@ -283,63 +263,33 @@
 								this.x += map.size*(map.x_length-1);
 							}
 							break;
+						case 3:
+							var value = map.get(coord.x,coord.y-1);
+							if(value==0){
+								this.y-=this.speed;
+							}else if(value<0){
+								this.y += map.size*(map.y_length-1);
+							}
+							break;
 					}
 				}else{
-					switch(this.orientation){
-						case 0:
-								this.y-=this.speed;
-							break;
-						case 1:
-								this.x+=this.speed;
-							break;
-						case 2:
-								this.y+=this.speed;
-							break;
-						case 3:
-								this.x-=this.speed;
-							break;
-					}
+					this.x += this.speed*_COS[this.orientation];
+					this.y += this.speed*_SIN[this.orientation];
 				}
 			},
 			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
-				switch(this.orientation){
-					case 0:
-						if(this.times%2){
-							context.arc(this.x,this.y,this.width/2,1.70*Math.PI,1.30*Math.PI,false);
-						}else{
-							context.arc(this.x,this.y,this.width/2,1.51*Math.PI,1.49*Math.PI,false);
-						}
-						break;
-					case 1:
-						if(this.times%2){
-							context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
-						}else{
-							context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
-						}
-						break;
-					case 2:
-						if(this.times%2){
-							context.arc(this.x,this.y,this.width/2,.70*Math.PI,.30*Math.PI,false);
-						}else{
-							context.arc(this.x,this.y,this.width/2,.51*Math.PI,.49*Math.PI,false);
-						}
-						break;
-					case 3:
-						if(this.times%2){
-							context.arc(this.x,this.y,this.width/2,1.20*Math.PI,.80*Math.PI,false);
-						}else{
-							context.arc(this.x,this.y,this.width/2,1.01*Math.PI,.99*Math.PI,false);
-						}
-						break;
+				if(this.times%2){
+					context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
+				}else{
+					context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
 				}
 				context.lineTo(this.x,this.y);
 				context.closePath();
 				context.fill();
 			}
 		});
-		var NPC_COLOR = ['#F00','#F60','#3C6','#69F'];
 		for(var i=0;i<4;i++){
 			var pos = map.coord2position(12+i,14);
 			stage.createItem({
@@ -347,7 +297,7 @@
 				y:pos.y,
 				width:30,
 				height:30,
-				color:NPC_COLOR[i],
+				color:_COLOR[i],
 				type:2,
 				frames:10,
 				speed:1,
@@ -377,29 +327,17 @@
 							}
 						}
 						if(this.vector.x>this.coord.x){
-							this.orientation = 1;
-						}else if(this.vector.x<this.coord.x){
-							this.orientation = 3;
-						}else if(this.vector.y>this.coord.y){
-							this.orientation = 2;
-						}else if(this.vector.y<this.coord.y){
 							this.orientation = 0;
+						}else if(this.vector.x<this.coord.x){
+							this.orientation = 2;
+						}else if(this.vector.y>this.coord.y){
+							this.orientation = 1;
+						}else if(this.vector.y<this.coord.y){
+							this.orientation = 3;
 						}
 					}
-					switch(this.orientation){
-						case 0:
-								this.y-=this.speed;
-							break;
-						case 1:
-								this.x+=this.speed;
-							break;
-						case 2:
-								this.y+=this.speed;
-							break;
-						case 3:
-								this.x-=this.speed;
-							break;
-					}
+					this.x += this.speed*_COS[this.orientation];
+					this.y += this.speed*_SIN[this.orientation];
 				},
 				draw:function(context){
 					context.fillStyle = this.color;
@@ -423,61 +361,21 @@
 	            	context.fillStyle = '#FFF';
 	            	context.beginPath();
 	            	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-	            	context.fill();
-	            	context.closePath();
-	            	context.beginPath();
 	            	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
 	            	context.fill();
 	            	context.closePath();
 	            	context.fillStyle = '#000';
-	            	switch(this.orientation){
-	            		case 0:
-			            	context.beginPath();
-			            	context.arc(this.x-this.width*.15,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-			            	context.beginPath();
-			            	context.arc(this.x+this.width*.15,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-	            			break;
-	            		case 1:
-	            			context.beginPath();
-			            	context.arc(this.x-this.width*.11,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-			            	context.beginPath();
-			            	context.arc(this.x+this.width*.19,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-	            			break;
-	            		case 2:
-	            			context.beginPath();
-			            	context.arc(this.x-this.width*.15,this.y-this.height*.16,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-			            	context.beginPath();
-			            	context.arc(this.x+this.width*.15,this.y-this.height*.16,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-	            			break;
-	            		case 3:
-	            			context.beginPath();
-			            	context.arc(this.x-this.width*.19,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-			            	context.beginPath();
-			            	context.arc(this.x+this.width*.11,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
-			            	context.fill();
-			            	context.closePath();
-	            			break;
-	            	}
+	            	context.beginPath();
+	            	context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+	            	context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+	            	context.fill();
+	            	context.closePath();
 				}
 			});
 		}
 
 		stage.bind('keydown',function(e){
-			player.control = {orientation:MAP_ORIENTATION[e.keyCode]};
+			player.control = {orientation:_ORIENTATION[e.keyCode]};
 		});
 	})();
 	game.init();
