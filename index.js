@@ -231,46 +231,18 @@
 				var coord = this.coord;
 				if(!coord.offset){
 					if(typeof this.control.orientation!='undefined'){
-						var x = coord.x+_COS[this.control.orientation];
-						var y = coord.y+_SIN[this.control.orientation];
-						if(!map.get(x,y)){
+						if(!map.get(coord.x+_COS[this.control.orientation],coord.y+_SIN[this.control.orientation])){
 							this.orientation = this.control.orientation;
 						}	
 					}
 					this.control = {};
-					switch(this.orientation){
-						case 0:
-							var value = map.get(coord.x+1,coord.y);
-							if(value==0){
-								this.x+=this.speed;
-							}else if(value<0){
-								this.x -= map.size*(map.x_length-1);
-							}
-							break;
-						case 1:
-							var value = map.get(coord.x,coord.y+1);
-							if(value==0){
-								this.y+=this.speed;
-							}else if(value<0){
-								this.y -= map.size*(map.y_length-1);
-							}
-							break;
-						case 2:
-							var value = map.get(coord.x-1,coord.y);
-							if(value==0){
-								this.x-=this.speed;
-							}else if(value<0){
-								this.x += map.size*(map.x_length-1);
-							}
-							break;
-						case 3:
-							var value = map.get(coord.x,coord.y-1);
-							if(value==0){
-								this.y-=this.speed;
-							}else if(value<0){
-								this.y += map.size*(map.y_length-1);
-							}
-							break;
+					var value = map.get(coord.x+_COS[this.orientation],coord.y+_SIN[this.orientation]);
+					if(value==0){
+						this.x += this.speed*_COS[this.orientation];
+						this.y += this.speed*_SIN[this.orientation];
+					}else if(value<0){
+						this.x -= map.size*(map.x_length-1)*_SIN[this.orientation];
+						this.y -= map.size*(map.y_length-1)*_COS[this.orientation];
 					}
 				}else{
 					this.x += this.speed*_COS[this.orientation];
