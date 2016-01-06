@@ -353,17 +353,11 @@
 				speed:1,
 				update:function(){
 					if(!this.coord.offset){
-						var new_map = [];
-						for(var j=0;j<map.data.length;j++){
-							new_map[j]=[];
-							for(var k=0;k<map.data[0].length;k++){
-								new_map[j][k]=map.data[j][k];
-							}
-						}
+						var new_map = JSON.parse(JSON.stringify(map.data));
 						var items = stage.getItemsByType(2);
 						var index = this.index;
 						items.forEach(function(item){
-							if(item.coord.y&&item.index!=index){
+							if(item.index!=index){
 								new_map[item.coord.y][item.coord.x]=1;
 							}
 						});
