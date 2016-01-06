@@ -339,120 +339,140 @@
 				context.fill();
 			}
 		});
-		var pos = map.coord2position(12,14);
-		stage.createItem({
-			x:pos.x,
-			y:pos.y,
-			width:30,
-			height:30,
-			type:2,
-			frames:10,
-			speed:1,
-			update:function(){
-				if(!this.coord.offset){
-					this.path = map.finder({
-						start:this.coord,
-						end:player.coord
-					});
-					if(this.path.length){
-						this.vector = this.path[0];
-						if(this.vector.change){ //是否转变方向
-							this.coord.x = this.vector.x;
-							this.coord.y = this.vector.y;
-							var pos = map.coord2position(this.coord.x,this.coord.y);
-							this.x = pos.x;
-							this.y = pos.y;
+		var NPC_COLOR = ['#96F','#6C6','#C30','#3C9'];
+		for(var i=0;i<4;i++){
+			var pos = map.coord2position(12+i,14);
+			stage.createItem({
+				x:pos.x,
+				y:pos.y,
+				width:30,
+				height:30,
+				color:NPC_COLOR[i],
+				type:2,
+				frames:10,
+				speed:1,
+				update:function(){
+					if(!this.coord.offset){
+						var new_map = [];
+						for(var j=0;j<map.data.length;j++){
+							new_map[j]=[];
+							for(var k=0;k<map.data[0].length;k++){
+								new_map[j][k]=map.data[j][k];
+							}
+						}
+						var items = stage.getItemsByType(2);
+						var index = this.index;
+						items.forEach(function(item){
+							if(item.coord.y&&item.index!=index){
+								new_map[item.coord.y][item.coord.x]=1;
+							}
+						});
+						this.path = map.finder({
+							map:new_map,
+							start:this.coord,
+							end:player.coord
+						});
+						if(this.path.length){
+							this.vector = this.path[0];
+							if(this.vector.change){ //是否转变方向
+								this.coord.x = this.vector.x;
+								this.coord.y = this.vector.y;
+								var pos = map.coord2position(this.coord.x,this.coord.y);
+								this.x = pos.x;
+								this.y = pos.y;
+							}
+						}
+						if(this.vector.x>this.coord.x){
+							this.orientation = 1;
+						}else if(this.vector.x<this.coord.x){
+							this.orientation = 3;
+						}else if(this.vector.y>this.coord.y){
+							this.orientation = 2;
+						}else if(this.vector.y<this.coord.y){
+							this.orientation = 0;
 						}
 					}
-					if(this.vector.x>this.coord.x){
-						this.orientation = 1;
-					}else if(this.vector.x<this.coord.x){
-						this.orientation = 3;
-					}else if(this.vector.y>this.coord.y){
-						this.orientation = 2;
-					}else if(this.vector.y<this.coord.y){
-						this.orientation = 0;
+					switch(this.orientation){
+						case 0:
+								this.y-=this.speed;
+							break;
+						case 1:
+								this.x+=this.speed;
+							break;
+						case 2:
+								this.y+=this.speed;
+							break;
+						case 3:
+								this.x-=this.speed;
+							break;
 					}
+				},
+				draw:function(context){
+					context.fillStyle = this.color;
+					context.beginPath();              
+	            	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
+	            	switch(this.times%2){
+	            		case 0:
+	            			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+	            			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+			            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+			            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+			            	break;
+			            case 1:
+			            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
+			            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
+			            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
+			            	break;
+	            	}
+	            	context.fill();
+	            	context.closePath();
+	            	context.fillStyle = '#FFF';
+	            	context.beginPath();
+	            	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+	            	context.fill();
+	            	context.closePath();
+	            	context.beginPath();
+	            	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+	            	context.fill();
+	            	context.closePath();
+	            	context.fillStyle = '#000';
+	            	switch(this.times%4){
+	            		case 2:
+	            		case 0:
+			            	context.beginPath();
+			            	context.arc(this.x-this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+			            	context.beginPath();
+			            	context.arc(this.x+this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+	            			break;
+	            		case 1:
+	            			context.beginPath();
+			            	context.arc(this.x-this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+			            	context.beginPath();
+			            	context.arc(this.x+this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+	            			break;
+	            		case 3:
+	            			context.beginPath();
+			            	context.arc(this.x-this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+			            	context.beginPath();
+			            	context.arc(this.x+this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+			            	break;
+	            	}
 				}
-				switch(this.orientation){
-					case 0:
-							this.y-=this.speed;
-						break;
-					case 1:
-							this.x+=this.speed;
-						break;
-					case 2:
-							this.y+=this.speed;
-						break;
-					case 3:
-							this.x-=this.speed;
-						break;
-				}
-			},
-			draw:function(context){
-				context.fillStyle = '#F00';
-				context.beginPath();              
-            	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
-            	switch(this.times%2){
-            		case 0:
-            			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-            			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-		            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-		            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
-		            	break;
-		            case 1:
-		            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
-		            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
-		            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
-		            	break;
-            	}
-            	context.fill();
-            	context.closePath();
-            	context.fillStyle = '#FFF';
-            	context.beginPath();
-            	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-            	context.fill();
-            	context.closePath();
-            	context.beginPath();
-            	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-            	context.fill();
-            	context.closePath();
-            	context.fillStyle = '#00F';
-            	switch(this.times%4){
-            		case 2:
-            		case 0:
-		            	context.beginPath();
-		            	context.arc(this.x-this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-		            	context.beginPath();
-		            	context.arc(this.x+this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-            			break;
-            		case 1:
-            			context.beginPath();
-		            	context.arc(this.x-this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-		            	context.beginPath();
-		            	context.arc(this.x+this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-            			break;
-            		case 3:
-            			context.beginPath();
-		            	context.arc(this.x-this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-		            	context.beginPath();
-		            	context.arc(this.x+this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
-		            	context.fill();
-		            	context.closePath();
-		            	break;
-            	}
-			}
-		});
+			});
+		}
+
 		stage.bind('keydown',function(e){
 			player.control = {orientation:MAP_ORIENTATION[e.keyCode]};
 		});

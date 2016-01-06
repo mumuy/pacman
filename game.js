@@ -29,6 +29,7 @@ function Game(id,options){
 			width:20,				//宽
 			height:20,				//高
 			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
+			color:'#F00',			//标识颜色
 			status:1,				//对象状态,1表示正常,0表示隐藏,2表示暂停
 			orientation:0,			//当前定位方向,0表示上,1表示右,2表示下,3表示左
 			vector:{},				//目标坐标
@@ -110,7 +111,7 @@ function Game(id,options){
 	//寻址算法
 	Map.prototype.finder = function(param){
 		var defaults = {
-			map:this.data,
+			map:null,//this.data,
 			start:{},
 			end:{}
 		};
@@ -125,7 +126,6 @@ function Game(id,options){
 			return [];
 		}
 		var finded = false;
-		var _self = this;
 		var y_length  = options.map.length;
 		var x_length = options.map[0].length;
 		var steps = []; 	//步骤的映射
@@ -139,7 +139,7 @@ function Game(id,options){
 			var new_list = [];
 			var next = function(from,to){
 				if(!finded){
-					var value = _self.get(to.x,to.y);
+					var value = typeof options.map[to.y][to.x] !='undefined'?options.map[to.y][to.x]:-1;
 					if(value!=1){	//当前点是否可以走
 						if(value==-1){
 							to.x = (to.x+x_length)%x_length;
@@ -190,7 +190,7 @@ function Game(id,options){
 		for(var i in settings){
 			this[i] = options[i]||settings[i];
 		}
-	}
+	};
 	//动画开始
 	Stage.prototype.start = function() {
 		var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||window.msRequestAnimationFrame;
@@ -233,8 +233,20 @@ function Game(id,options){
 		//动态属性
 		item.stage = this;
 		item.index = this.items.length;
+		if(this.map&&item.type){
+			item.coord = this.map.position2coord(item.x,item.y);
+		}
 		this.items.push(item);
 		return item;
+	};
+	//获取对象列表
+	Stage.prototype.getItemsByType = function(type){
+		var items = this.items.filter(function(item){
+			if(item.type==type){
+				return item;
+			}
+		});
+		return items;
 	};
 	//添加地图
 	Stage.prototype.createMap = function(options){
