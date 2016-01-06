@@ -241,8 +241,8 @@
 						this.x += this.speed*_COS[this.orientation];
 						this.y += this.speed*_SIN[this.orientation];
 					}else if(value<0){
-						this.x -= map.size*(map.x_length-1)*_SIN[this.orientation];
-						this.y -= map.size*(map.y_length-1)*_COS[this.orientation];
+						this.x -= map.size*(map.x_length-1)*_COS[this.orientation];
+						this.y -= map.size*(map.y_length-1)*_SIN[this.orientation];
 					}
 				}else{
 					this.x += this.speed*_COS[this.orientation];
