@@ -430,38 +430,47 @@
 	            	context.fill();
 	            	context.closePath();
 	            	context.fillStyle = '#000';
-	            	switch(this.times%4){
-	            		case 2:
+	            	switch(this.orientation){
 	            		case 0:
 			            	context.beginPath();
-			            	context.arc(this.x-this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x-this.width*.15,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
 			            	context.beginPath();
-			            	context.arc(this.x+this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x+this.width*.15,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
 	            			break;
 	            		case 1:
 	            			context.beginPath();
-			            	context.arc(this.x-this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x-this.width*.11,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
 			            	context.beginPath();
-			            	context.arc(this.x+this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x+this.width*.19,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+	            			break;
+	            		case 2:
+	            			context.beginPath();
+			            	context.arc(this.x-this.width*.15,this.y-this.height*.16,this.width*.07,0,2*Math.PI,false);
+			            	context.fill();
+			            	context.closePath();
+			            	context.beginPath();
+			            	context.arc(this.x+this.width*.15,this.y-this.height*.16,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
 	            			break;
 	            		case 3:
 	            			context.beginPath();
-			            	context.arc(this.x-this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x-this.width*.19,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
 			            	context.beginPath();
-			            	context.arc(this.x+this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+			            	context.arc(this.x+this.width*.11,this.y-this.height*.21,this.width*.07,0,2*Math.PI,false);
 			            	context.fill();
 			            	context.closePath();
-			            	break;
+	            			break;
 	            	}
 				}
 			});
