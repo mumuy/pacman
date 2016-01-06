@@ -18,11 +18,11 @@
 			y:game.height*.45,
 			width:100,
 			height:100,
-			speed:10,
+			frames:10,
 			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
-				if(this.frames%2){
+				if(this.times%2){
 					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
 				}else{
 					context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
@@ -220,10 +220,10 @@
 			height:30,
 			type:1,
 			orientation:3,
-			speed:10,
+			speed:2,
+			frames:10,
 			update:function(){
 				var coord = this.coord;
-				var steps = 2;
 				if(!coord.offset){
 					if(typeof this.control.orientation!='undefined'){
 						switch(this.control.orientation){
@@ -254,7 +254,7 @@
 						case 0:
 							var value = map.get(coord.x,coord.y-1);
 							if(value==0){
-								this.y-=steps;
+								this.y-=this.speed;
 							}else if(value<0){
 								this.y += map.size*(map.y_length-1);
 							}
@@ -262,7 +262,7 @@
 						case 1:
 							var value = map.get(coord.x+1,coord.y);
 							if(value==0){
-								this.x+=steps;
+								this.x+=this.speed;
 							}else if(value<0){
 								this.x -= map.size*(map.x_length-1);
 							}
@@ -270,7 +270,7 @@
 						case 2:
 							var value = map.get(coord.x,coord.y+1);
 							if(value==0){
-								this.y+=steps;
+								this.y+=this.speed;
 							}else if(value<0){
 								this.y -= map.size*(map.y_length-1);
 							}
@@ -278,7 +278,7 @@
 						case 3:
 							var value = map.get(coord.x-1,coord.y);
 							if(value==0){
-								this.x-=steps;
+								this.x-=this.speed;
 							}else if(value<0){
 								this.x += map.size*(map.x_length-1);
 							}
@@ -287,16 +287,16 @@
 				}else{
 					switch(this.orientation){
 						case 0:
-								this.y-=steps;
+								this.y-=this.speed;
 							break;
 						case 1:
-								this.x+=steps;
+								this.x+=this.speed;
 							break;
 						case 2:
-								this.y+=steps;
+								this.y+=this.speed;
 							break;
 						case 3:
-								this.x-=steps;
+								this.x-=this.speed;
 							break;
 					}
 				}
@@ -306,28 +306,28 @@
 				context.beginPath();
 				switch(this.orientation){
 					case 0:
-						if(this.frames%2){
+						if(this.times%2){
 							context.arc(this.x,this.y,this.width/2,1.70*Math.PI,1.30*Math.PI,false);
 						}else{
 							context.arc(this.x,this.y,this.width/2,1.51*Math.PI,1.49*Math.PI,false);
 						}
 						break;
 					case 1:
-						if(this.frames%2){
+						if(this.times%2){
 							context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
 						}else{
 							context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
 						}
 						break;
 					case 2:
-						if(this.frames%2){
+						if(this.times%2){
 							context.arc(this.x,this.y,this.width/2,.70*Math.PI,.30*Math.PI,false);
 						}else{
 							context.arc(this.x,this.y,this.width/2,.51*Math.PI,.49*Math.PI,false);
 						}
 						break;
 					case 3:
-						if(this.frames%2){
+						if(this.times%2){
 							context.arc(this.x,this.y,this.width/2,1.20*Math.PI,.80*Math.PI,false);
 						}else{
 							context.arc(this.x,this.y,this.width/2,1.01*Math.PI,.99*Math.PI,false);
@@ -346,7 +346,8 @@
 			width:30,
 			height:30,
 			type:2,
-			speed:10,
+			frames:10,
+			speed:1,
 			update:function(){
 				if(!this.coord.offset){
 					this.path = map.finder({
@@ -366,19 +367,18 @@
 						this.orientation = 0;
 					}
 				}
-				var steps = 1;
 				switch(this.orientation){
 					case 0:
-							this.y-=steps;
+							this.y-=this.speed;
 						break;
 					case 1:
-							this.x+=steps;
+							this.x+=this.speed;
 						break;
 					case 2:
-							this.y+=steps;
+							this.y+=this.speed;
 						break;
 					case 3:
-							this.x-=steps;
+							this.x-=this.speed;
 						break;
 				}
 			},

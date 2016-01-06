@@ -33,7 +33,9 @@ function Game(id,options){
 			orientation:0,			//当前定位方向,0表示上,1表示右,2表示下,3表示左
 			vector:{},				//目标坐标
 			coord:{},				//如果对象与地图绑定,获得坐标值
-			speed:1,				//速度等级,内部计算器times多少帧变化一次
+			speed:0,				//移动速度
+			frames:1,				//速度等级,内部计算器times多少帧变化一次
+			times:0,				//计数
 			control:{},				//控制缓存,到达定位点时处理
 			path:[],				//NPC自动行走的路径
 			index:0,				//对象索引
@@ -196,8 +198,8 @@ function Game(id,options){
 			if(stage.items.length){
 				stage.items.forEach(function(item,index){
 					if(stage.status!=2&&item.status!=2){  	//对象及布景状态不为暂停
-						if(!(f%item.speed)){
-							item.frames = f/item.speed;		//计数器
+						if(!(f%item.frames)){
+							item.times = f/item.frames;		//计数器
 						}
 						if(stage.map&&item.type){
 							item.coord = stage.map.position2coord(item.x,item.y);
