@@ -138,13 +138,21 @@ function Game(id,options){
 		var _render = function(list){
 			var new_list = [];
 			var next = function(from,to){
-				if(_self.get(to.x,to.y)==0&&!finded){	//当前点是否可以走
-					if(to.x==options.end.x&&to.y==options.end.y){
-						steps[to.y][to.x] = from;
-						finded = true;
-					}else if(!steps[to.y][to.x]){
-						steps[to.y][to.x] = from;
-						new_list.push(to);
+				if(!finded){
+					var value = _self.get(to.x,to.y);
+					if(value!=1){	//当前点是否可以走
+						if(value==-1){
+							to.x = (to.x+x_length)%x_length;
+							to.y = (to.y+y_length)%y_length;
+							to.change = 1;
+						}
+						if(to.x==options.end.x&&to.y==options.end.y){
+							steps[to.y][to.x] = from;
+							finded = true;
+						}else if(!steps[to.y][to.x]){
+							steps[to.y][to.x] = from;
+							new_list.push(to);
+						}
 					}
 				}
 			};

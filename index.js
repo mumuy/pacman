@@ -356,6 +356,13 @@
 					});
 					if(this.path.length){
 						this.vector = this.path[0];
+						if(this.vector.change){ //是否转变方向
+							this.coord.x = this.vector.x;
+							this.coord.y = this.vector.y;
+							var pos = map.coord2position(this.coord.x,this.coord.y);
+							this.x = pos.x;
+							this.y = pos.y;
+						}
 					}
 					if(this.vector.x>this.coord.x){
 						this.orientation = 1;
@@ -386,10 +393,19 @@
 				context.fillStyle = '#F00';
 				context.beginPath();              
             	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
-            	context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-            	context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+            	switch(this.times%2){
+            		case 0:
+            			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+            			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+		            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+		            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+		            	break;
+		            case 1:
+		            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
+		            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
+		            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
+		            	break;
+            	}
             	context.fill();
             	context.closePath();
             	context.fillStyle = '#FFF';
@@ -402,14 +418,39 @@
             	context.fill();
             	context.closePath();
             	context.fillStyle = '#00F';
-            	context.beginPath();
-            	context.arc(this.x-this.width*.15,this.y-this.height*.28,this.width*.07,0,2*Math.PI,false);
-            	context.fill();
-            	context.closePath();
-            	context.beginPath();
-            	context.arc(this.x+this.width*.15,this.y-this.height*.28,this.width*.07,0,2*Math.PI,false);
-            	context.fill();
-            	context.closePath();
+            	switch(this.times%4){
+            		case 2:
+            		case 0:
+		            	context.beginPath();
+		            	context.arc(this.x-this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+		            	context.beginPath();
+		            	context.arc(this.x+this.width*.15,this.y-this.height*.27,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+            			break;
+            		case 1:
+            			context.beginPath();
+		            	context.arc(this.x-this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+		            	context.beginPath();
+		            	context.arc(this.x+this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+            			break;
+            		case 3:
+            			context.beginPath();
+		            	context.arc(this.x-this.width*.13,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+		            	context.beginPath();
+		            	context.arc(this.x+this.width*.17,this.y-this.height*.25,this.width*.07,0,2*Math.PI,false);
+		            	context.fill();
+		            	context.closePath();
+		            	break;
+            	}
 			}
 		});
 		stage.bind('keydown',function(e){
