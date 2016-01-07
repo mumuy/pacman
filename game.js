@@ -100,8 +100,8 @@ function Game(id,options){
 	};
 	//画布坐标转地图坐标
 	Map.prototype.position2coord = function(x,y){
-		var fx = (x-this.x)%this.size-this.size/2;
-		var fy = (y-this.y)%this.size-this.size/2;
+		var fx = Math.abs(x-this.x)%this.size-this.size/2;
+		var fy = Math.abs(y-this.y)%this.size-this.size/2;
 		return {
 			x:Math.floor((x-this.x)/this.size),
 			y:Math.floor((y-this.y)/this.size),
@@ -139,7 +139,7 @@ function Game(id,options){
 			var new_list = [];
 			var next = function(from,to){
 				if(!finded){
-					var value = typeof options.map[to.y][to.x] !='undefined'?options.map[to.y][to.x]:-1;
+					var value = options.map[to.y]&&typeof options.map[to.y][to.x] !='undefined'?options.map[to.y][to.x]:-1;
 					if(value!=1){	//当前点是否可以走
 						if(value==-1){
 							to.x = (to.x+x_length)%x_length;

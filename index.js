@@ -290,13 +290,13 @@
 						});
 						if(this.path.length){
 							this.vector = this.path[0];
-							if(this.vector.change){ //是否转变方向
-								this.coord.x = this.vector.x;
-								this.coord.y = this.vector.y;
-								var pos = map.coord2position(this.coord.x,this.coord.y);
-								this.x = pos.x;
-								this.y = pos.y;
-							}
+						}
+						if(this.vector.change){ //是否转变方向
+							this.coord.x = this.vector.x;
+							this.coord.y = this.vector.y;
+							var pos = map.coord2position(this.coord.x,this.coord.y);
+							this.x = pos.x;
+							this.y = pos.y;
 						}
 						if(this.vector.x>this.coord.x){
 							this.orientation = 0;
