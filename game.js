@@ -242,10 +242,9 @@ function Game(id,options){
 		return item;
 	};
 	//获取对象列表
-	Stage.prototype.getItemsByType = function(){
-		var types = Array.prototype.slice.call(arguments,0);
+	Stage.prototype.getItemsByType = function(type){
 		var items = this.items.filter(function(item){
-			if(types.indexOf(item.type)>-1){
+			if(item.type==type){
 				return item;
 			}
 		});

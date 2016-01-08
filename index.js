@@ -106,16 +106,13 @@
 			update:function(){
 				if(this.map){
 					var stage = this;
-					var items = this.getItemsByType(1,2);
-					var hash = {};	//当前对象位置分布
+					var player = this.getItemsByType(1)[0];
+					var items = this.getItemsByType(2);
 					items.forEach(function(item){
-						var key = 'x'+item.coord.x+'y'+item.coord.y;  //坐标的标识
-						if(hash[key]){
-							if(hash[key]!=item.type){ //如果NPC与玩家相遇
-								stage.status = 2;
-							}
-						}else{
-							hash[key] = item.type;
+						var dx = item.x-player.x;
+						var dy = item.y-player.y;
+						if(dx*dx+dy*dy<750){
+							stage.status = 2;
 						}
 					});
 				}
