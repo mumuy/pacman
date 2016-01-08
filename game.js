@@ -200,6 +200,7 @@ function Game(id,options){
 		var fn = function(){
 			_context.clearRect(0,0,_.width,_.height);		//清除画布
 			f++;
+			stage.update();
 			if(stage.map){
 				stage.map.update();
 				stage.map.draw(_context);
@@ -241,9 +242,10 @@ function Game(id,options){
 		return item;
 	};
 	//获取对象列表
-	Stage.prototype.getItemsByType = function(type){
+	Stage.prototype.getItemsByType = function(){
+		var types = Array.prototype.slice.call(arguments,0);
 		var items = this.items.filter(function(item){
-			if(item.type==type){
+			if(types.indexOf(item.type)>-1){
 				return item;
 			}
 		});

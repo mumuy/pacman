@@ -104,7 +104,21 @@
 	(function(){
 		var stage = game.createStage({
 			update:function(){
-
+				if(this.map){
+					var stage = this;
+					var items = this.getItemsByType(1,2);
+					var hash = {};	//当前对象位置分布
+					items.forEach(function(item){
+						var key = 'x'+item.coord.x+'y'+item.coord.y;  //坐标的标识
+						if(hash[key]){
+							if(hash[key]!=item.type){ //如果NPC与玩家相遇
+								stage.status = 2;
+							}
+						}else{
+							hash[key] = item.type;
+						}
+					});
+				}
 			}
 		});
 		//绘制地图
@@ -358,5 +372,5 @@
 		});
 	})();
 	game.init();
-	game.nextStage();	//测试游戏主布景
+	game.nextStage();	//*测试*游戏主布景,完成后需关闭
 })();
