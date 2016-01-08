@@ -185,7 +185,8 @@ function Game(id,options){
 			map:null,						//布景地图对象
 			audio:[],						//音频资源
 			images:[],						//图片资源
-			items:[]						//对象队列
+			items:[],						//对象队列
+			update:function(){}				//嗅探,处理布局下不同对象的相对关系
 		};
 		for(var i in settings){
 			this[i] = options[i]||settings[i];

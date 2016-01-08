@@ -1,12 +1,5 @@
 //主程序,业务逻辑
 (function(){
-	//处理映射关系
-	var _ORIENTATION = {	//方向
-		'39':0, //右
-		'40':1, //下
-		'37':2, //左
-		'38':3,	//上
-	},
 	_DATA = [		//地图数据
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -109,13 +102,9 @@
 	})();
 	//游戏主程序
 	(function(){
-		var stage = game.createStage();
-		stage.bind('keydown',function(e){
-			switch(e.keyCode){
-				case 13:
-				case 32:
-					this.status = this.status==2?1:2;
-				break;
+		var stage = game.createStage({
+			update:function(){
+
 			}
 		});
 		//绘制地图
@@ -262,6 +251,7 @@
 				context.fill();
 			}
 		});
+		//NPC
 		for(var i=0;i<4;i++){
 			var pos = map.coord2position(12+i,14);
 			stage.createItem({
@@ -345,9 +335,26 @@
 				}
 			});
 		}
-
+		//布景事件绑定
 		stage.bind('keydown',function(e){
-			player.control = {orientation:_ORIENTATION[e.keyCode]};
+			switch(e.keyCode){
+				case 13: //回车
+				case 32: //空格
+					this.status = this.status==2?1:2;
+					break;
+				case 39: //右
+					player.control = {orientation:0};
+					break;
+				case 40: //下
+					player.control = {orientation:1};
+					break;
+				case 37: //左
+					player.control = {orientation:2};
+					break;
+				case 38: //上
+					player.control = {orientation:3};
+					break;
+			}
 		});
 	})();
 	game.init();
