@@ -24,8 +24,8 @@ function Game(id,options){
 	var Item = function(options){
 		options = options||{};
 		var settings = {
-			x:0,					//横坐标
-			y:0,					//纵坐标
+			x:0,					//位置坐标:横坐标
+			y:0,					//位置坐标:纵坐标
 			width:20,				//宽
 			height:20,				//高
 			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
@@ -35,9 +35,9 @@ function Game(id,options){
 			speed:0,				//移动速度
 			//地图相关
 			location:null,			//定位地图,Map对象
+			coord:null,				//如果对象与地图绑定,需设置地图坐标;若不绑定,则设置位置坐标
 			path:[],				//NPC自动行走的路径
-			coord:{},				//如果对象与地图绑定,获得坐标值
-			vector:{},				//目标坐标
+			vector:null,			//目标坐标
 			//布局相关
 			stage:null,				//绑定对象与所属布景绑定
 			index:0,				//对象索引
@@ -241,7 +241,9 @@ function Game(id,options){
 		item.stage = this;
 		item.index = this.items.length;
 		if(item.location){
-			item.coord = item.location.position2coord(item.x,item.y);
+			var position = item.location.coord2position(item.coord.x,item.coord.y);
+			item.x = position.x;
+			item.y = position.y;
 		}
 		this.items.push(item);
 		return item;

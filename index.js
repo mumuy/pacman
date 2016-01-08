@@ -215,14 +215,12 @@
 			}
 		});
 		//主角
-		var pos = map.coord2position(14,23);
 		var player = stage.createItem({
-			x:pos.x-_SIZE/2,
-			y:pos.y,
 			width:30,
 			height:30,
 			type:1,
 			location:map,
+			coord:{x:13.5,y:23},
 			orientation:2,
 			speed:2,
 			frames:10,
@@ -263,14 +261,12 @@
 		});
 		//NPC
 		for(var i=0;i<4;i++){
-			var pos = map.coord2position(12+i,14);
 			stage.createItem({
-				x:pos.x,
-				y:pos.y,
 				width:30,
 				height:30,
 				color:_COLOR[i],
 				location:map,
+				coord:{x:12+i,y:14},
 				type:2,
 				frames:10,
 				speed:1,
