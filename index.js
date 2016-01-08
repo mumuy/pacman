@@ -104,18 +104,16 @@
 	(function(){
 		var stage = game.createStage({
 			update:function(){
-				if(this.map){
-					var stage = this;
-					var player = this.getItemsByType(1)[0];
-					var items = this.getItemsByType(2);
-					items.forEach(function(item){
-						var dx = item.x-player.x;
-						var dy = item.y-player.y;
-						if(dx*dx+dy*dy<750){
-							stage.status = 2;
-						}
-					});
-				}
+				var stage = this;
+				var player = this.getItemsByType(1)[0];
+				var items = this.getItemsByType(2);
+				items.forEach(function(item){
+					var dx = item.x-player.x;
+					var dy = item.y-player.y;
+					if(dx*dx+dy*dy<750){
+						stage.status = 2;
+					}
+				});
 			}
 		});
 		//绘制地图
@@ -224,6 +222,7 @@
 			width:30,
 			height:30,
 			type:1,
+			location:map,
 			orientation:2,
 			speed:2,
 			frames:10,
@@ -271,6 +270,7 @@
 				width:30,
 				height:30,
 				color:_COLOR[i],
+				location:map,
 				type:2,
 				frames:10,
 				speed:1,

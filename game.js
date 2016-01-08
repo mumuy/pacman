@@ -32,15 +32,18 @@ function Game(id,options){
 			color:'#F00',			//标识颜色
 			status:1,				//对象状态,1表示正常,0表示隐藏,2表示暂停
 			orientation:0,			//当前定位方向,0表示右,1表示下,2表示左,3表示上
-			vector:{},				//目标坐标
-			coord:{},				//如果对象与地图绑定,获得坐标值
 			speed:0,				//移动速度
+			//地图相关
+			location:null,			//定位地图,Map对象
+			path:[],				//NPC自动行走的路径
+			coord:{},				//如果对象与地图绑定,获得坐标值
+			vector:{},				//目标坐标
+			//布局相关
+			stage:null,				//绑定对象与所属布景绑定
+			index:0,				//对象索引
 			frames:1,				//速度等级,内部计算器times多少帧变化一次
 			times:0,				//计数
 			control:{},				//控制缓存,到达定位点时处理
-			path:[],				//NPC自动行走的路径
-			index:0,				//对象索引
-			stage:null,				//绑定对象与所属布景绑定
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
 		};
@@ -111,7 +114,7 @@ function Game(id,options){
 	//寻址算法
 	Map.prototype.finder = function(param){
 		var defaults = {
-			map:null,//this.data,
+			map:null,
 			start:{},
 			end:{}
 		};
@@ -182,7 +185,7 @@ function Game(id,options){
 		options = options||{};
 		var settings = {
 			status:1,						//布景状态,1表示正常,0表示非活动
-			map:null,						//布景地图对象
+			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
 			items:[],						//对象队列
@@ -201,9 +204,11 @@ function Game(id,options){
 			_context.clearRect(0,0,_.width,_.height);		//清除画布
 			f++;
 			stage.update();
-			if(stage.map){
-				stage.map.update();
-				stage.map.draw(_context);
+			if(stage.maps.length){
+				stage.maps.forEach(function(map,index){
+					map.update();
+					map.draw(_context);
+				});
 			}			
 			if(stage.items.length){
 				stage.items.forEach(function(item,index){
@@ -211,8 +216,8 @@ function Game(id,options){
 						if(!(f%item.frames)){
 							item.times = f/item.frames;		//计数器
 						}
-						if(stage.map&&item.type){
-							item.coord = stage.map.position2coord(item.x,item.y);
+						if(item.location){
+							item.coord = item.location.position2coord(item.x,item.y);
 						}
 						item.update();
 					}
@@ -235,8 +240,8 @@ function Game(id,options){
 		//动态属性
 		item.stage = this;
 		item.index = this.items.length;
-		if(this.map&&item.type){
-			item.coord = this.map.position2coord(item.x,item.y);
+		if(item.location){
+			item.coord = item.location.position2coord(item.x,item.y);
 		}
 		this.items.push(item);
 		return item;
@@ -254,10 +259,10 @@ function Game(id,options){
 	Stage.prototype.createMap = function(options){
 		var map = new Map(options);
 		//动态属性
-		this.map = map;
 		map.stage = this;
 		map.y_length = map.data.length;
 		map.x_length = map.data[0].length;
+		this.maps.push(map);
 		return map;
 	};
 	//绑定事件
