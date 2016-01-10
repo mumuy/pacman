@@ -105,15 +105,20 @@
 		var stage = game.createStage({
 			update:function(){
 				var stage = this;
-				var player = this.getItemsByType(1)[0];
-				var items = this.getItemsByType(2);
-				items.forEach(function(item){
-					var dx = item.x-player.x;
-					var dy = item.y-player.y;
-					if(dx*dx+dy*dy<750){
-						stage.status = 2;
-					}
-				});
+				if(stage.status==1){
+					var player = stage.getItemsByType(1)[0];
+					var items = stage.getItemsByType(2);
+					items.forEach(function(item){
+						var dx = item.x-player.x;
+						var dy = item.y-player.y;
+						if(dx*dx+dy*dy<750){
+							stage.status = 2;
+							player.status = 3;
+							player.frames = 1;
+							player.timeout = 50;
+						}
+					});
+				}
 			}
 		});
 		//绘制地图
@@ -249,10 +254,16 @@
 			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
-				if(this.times%2){
-					context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
+				if(this.status<3){
+					if(this.times%2){
+						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
+					}else{
+						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
+					}
 				}else{
-					context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
+					if(this.timeout) {
+						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*this.timeout)*Math.PI,(.5*this.orientation-1+.02*this.timeout)*Math.PI,false);
+					}
 				}
 				context.lineTo(this.x,this.y);
 				context.closePath();

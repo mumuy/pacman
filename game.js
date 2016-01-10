@@ -30,7 +30,7 @@ function Game(id,options){
 			height:20,				//高
 			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
 			color:'#F00',			//标识颜色
-			status:1,				//对象状态,1表示正常,0表示隐藏,2表示暂停
+			status:1,				//对象状态,0表示隐藏,1表示正常,2表示暂停
 			orientation:0,			//当前定位方向,0表示右,1表示下,2表示左,3表示上
 			speed:0,				//移动速度
 			//地图相关
@@ -42,7 +42,8 @@ function Game(id,options){
 			stage:null,				//绑定对象与所属布景绑定
 			index:0,				//对象索引
 			frames:1,				//速度等级,内部计算器times多少帧变化一次
-			times:0,				//计数
+			times:0,				//刷新画布计数(用于循环动画状态判断)
+			timeout:0,				//倒计时(用于过程动画状态判断)
 			control:{},				//控制缓存,到达定位点时处理
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
@@ -184,7 +185,7 @@ function Game(id,options){
 	var Stage = function(options){
 		options = options||{};
 		var settings = {
-			status:1,						//布景状态,1表示正常,0表示非活动
+			status:1,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示结束
 			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
@@ -211,11 +212,14 @@ function Game(id,options){
 				});
 			}			
 			if(stage.items.length){
-				stage.items.forEach(function(item,index){
-					if(stage.status!=2&&item.status!=2){  	//对象及布景状态不为暂停
-						if(!(f%item.frames)){
-							item.times = f/item.frames;		//计数器
+				stage.items.forEach(function(item,index){				
+					if(!(f%item.frames)){
+						item.times = f/item.frames;		//计数器
+						if(item.timeout){
+							item.timeout--;
 						}
+					}
+					if(stage.status==1&&item.status==1){  	//对象及布景状态都处于正常状态下
 						if(item.location){
 							item.coord = item.location.position2coord(item.x,item.y);
 						}
