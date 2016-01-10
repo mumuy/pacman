@@ -113,11 +113,14 @@
 						var dy = item.y-player.y;
 						if(dx*dx+dy*dy<750){
 							stage.status = 2;
+							stage.timeout = 30;
 							player.status = 3;
-							player.frames = 1;
-							player.timeout = 50;
 						}
 					});
+				}else if(stage.status=3){
+					if(!stage.timeout){
+						stage.reset();
+					}
 				}
 			}
 		});
@@ -261,8 +264,8 @@
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
 					}
 				}else{
-					if(this.timeout) {
-						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*this.timeout)*Math.PI,(.5*this.orientation-1+.02*this.timeout)*Math.PI,false);
+					if(stage.timeout) {
+						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*stage.timeout)*Math.PI,(.5*this.orientation-1+.02*stage.timeout)*Math.PI,false);
 					}
 				}
 				context.lineTo(this.x,this.y);

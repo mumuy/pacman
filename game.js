@@ -2,16 +2,19 @@
 /*
 * 小型游戏引擎
 */
-function Game(id,options){
+function Game(id,params){
 	var _ = this;
-	options = options||{};
+	params = params||{};
 	var settings = {
 		width:960,						//画布宽度
 		height:640						//画布高度
 	};
-	for(var i in settings){
-		this[i] = options[i]||settings[i];
-	}
+	var _extend = function(target,settings,params){
+		for(var i in settings){
+			target[i] = params[i]||settings[i];
+		}
+	};
+	_extend(this,settings,params);
 	var $canvas = document.getElementById(id);
 	$canvas.width = _.width;
 	$canvas.height = _.height;
@@ -21,9 +24,9 @@ function Game(id,options){
 	var _index,									//当前布景索引					
 		_hander;  								//帧动画控制
 	//活动对象构造
-	var Item = function(options){
-		options = options||{};
-		var settings = {
+	var Item = function(params){
+		this._params = params||{};
+		this._settings = {
 			x:0,					//位置坐标:横坐标
 			y:0,					//位置坐标:纵坐标
 			width:20,				//宽
@@ -43,14 +46,11 @@ function Game(id,options){
 			index:0,				//对象索引
 			frames:1,				//速度等级,内部计算器times多少帧变化一次
 			times:0,				//刷新画布计数(用于循环动画状态判断)
-			timeout:0,				//倒计时(用于过程动画状态判断)
 			control:{},				//控制缓存,到达定位点时处理
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
 		};
-		for(var i in settings){
-			this[i] = options[i]||settings[i];
-		}
+		_extend(this,this._settings,this._params);
 	};
 	Item.prototype.bind = function(eventType,callback){
 		if(!_events[eventType]){
@@ -71,9 +71,9 @@ function Game(id,options){
 		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
 	};
 	//地图对象构造器
-	var Map = function(options){
-		options = options||{};
-		var settings = {
+	var Map = function(params){
+		this._params = params||{};
+		this._settings = {
 			x:0,						//地图起点坐标
 			y:0,		
 			size:20,					//地图单元的宽度
@@ -84,9 +84,7 @@ function Game(id,options){
 			update:function(){},		//更新地图数据
 			draw:function(){},			//绘制地图
 		};
-		for(var i in settings){
-			this[i] = options[i]||settings[i];
-		}
+		_extend(this,this._settings,this._params);
 	};
 	//获取地图上某点的值
 	Map.prototype.get = function(x,y){
@@ -182,19 +180,18 @@ function Game(id,options){
 		return result;
 	};
 	//布景对象构造器
-	var Stage = function(options){
-		options = options||{};
-		var settings = {
+	var Stage = function(params){
+		this._params = params||{};
+		this._settings = {
 			status:1,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示结束
 			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
 			items:[],						//对象队列
+			timeout:0,						//倒计时(用于过程动画状态判断)
 			update:function(){}				//嗅探,处理布局下不同对象的相对关系
 		};
-		for(var i in settings){
-			this[i] = options[i]||settings[i];
-		}
+		_extend(this,this._settings,this._params);
 	};
 	//动画开始
 	Stage.prototype.start = function() {
@@ -204,6 +201,9 @@ function Game(id,options){
 		var fn = function(){
 			_context.clearRect(0,0,_.width,_.height);		//清除画布
 			f++;
+			if(stage.timeout){
+				stage.timeout--;
+			}
 			stage.update();
 			if(stage.maps.length){
 				stage.maps.forEach(function(map,index){
@@ -212,12 +212,9 @@ function Game(id,options){
 				});
 			}			
 			if(stage.items.length){
-				stage.items.forEach(function(item,index){				
+				stage.items.forEach(function(item){				
 					if(!(f%item.frames)){
 						item.times = f/item.frames;		//计数器
-						if(item.timeout){
-							item.timeout--;
-						}
 					}
 					if(stage.status==1&&item.status==1){  	//对象及布景状态都处于正常状态下
 						if(item.location){
@@ -237,6 +234,26 @@ function Game(id,options){
 	Stage.prototype.stop = function(){
 		var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;
 		_hander&&cancelAnimationFrame(_hander);
+	};
+	//重置
+	Stage.prototype.reset = function(){
+		_extend(this,this._settings,this._params);
+		this.maps.forEach(function(map){
+			_extend(map,map._settings,map._params);
+			map.stage = this;
+			map.y_length = map.data.length;
+			map.x_length = map.data[0].length;
+		}.bind(this));
+		this.items.forEach(function(item,index){
+			_extend(item,item._settings,item._params);
+			item.index = index;
+			item.stage = this;
+			if(item.location){
+				var position = item.location.coord2position(item.coord.x,item.coord.y);
+				item.x = position.x;
+				item.y = position.y;
+			}
+		}.bind(this));
 	};
 	//添加对象
 	Stage.prototype.createItem = function(options){
