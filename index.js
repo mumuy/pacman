@@ -36,6 +36,7 @@
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
 	_COLOR = ['#F00','#F60','#3C6','#69F'],
+	_LIFE = 3,
 	_SCORE = 0;		//得分
 
 	var game = new Game('canvas');
@@ -116,8 +117,9 @@
 							stage.timeout = 30;
 						}
 					});
-				}else if(stage.status=3){
+				}else if(stage.status==3){
 					if(!stage.timeout){
+						_LIFE&&_LIFE--;
 						stage.reset();
 					}
 				}
@@ -125,7 +127,7 @@
 		});
 		//绘制地图
 		var map = stage.createMap({
-			x:50,
+			x:60,
 			y:10,
 			data:JSON.parse(JSON.stringify(_DATA)),
 			draw:function(context){
@@ -221,7 +223,7 @@
 			}
 		});
 		var goods = stage.createMap({
-			x:50,
+			x:60,
 			y:10,
 			data:JSON.parse(JSON.stringify(_DATA)),
 			draw:function(context){
@@ -238,8 +240,8 @@
 		});
 		//得分
 		stage.createItem({
-			x:680,
-			y:84,
+			x:690,
+			y:120,
 			draw:function(context){
 				context.font = 'bold 28px Helvetica';
 				context.textAlign = 'left';
@@ -251,6 +253,24 @@
 				context.textBaseline = 'top';
 				context.fillStyle = '#FFF';
 				context.fillText(_SCORE,this.x+12,this.y);
+			}
+		});
+		//生命值
+		stage.createItem({
+			x:705,
+			y:520,
+			width:30,
+			height:30,
+			draw:function(context){
+				for(var i=0;i<_LIFE;i++){
+					var x=this.x+36*i,y=this.y;
+					context.fillStyle = '#FC3';
+					context.beginPath();
+					context.arc(x,y,this.width/2,.15*Math.PI,-.15*Math.PI,false);
+					context.lineTo(x,y);
+					context.closePath();
+					context.fill();
+				}
 			}
 		});
 		//主角

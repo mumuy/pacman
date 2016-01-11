@@ -186,7 +186,7 @@ function Game(id,params){
 	var Stage = function(params){
 		this._params = params||{};
 		this._settings = {
-			status:1,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示结束
+			status:1,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示中断或异常,4表示结束
 			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
