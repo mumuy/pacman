@@ -277,17 +277,18 @@
 			stage.createItem({
 				width:30,
 				height:30,
+				orientation:3,
 				color:_COLOR[i],
 				location:map,
 				coord:{x:12+i,y:14},
+				vector:{x:12+i,y:14},
 				type:2,
 				frames:10,
 				speed:1,
 				timeout:Math.floor(Math.random()*120),
 				update:function(){
-					console.log(this.timeout);
-					if(!this.timeout){
-						if(!this.coord.offset){
+					if(!this.coord.offset){
+						if(!this.timeout){
 							var new_map = JSON.parse(JSON.stringify(map.data));
 							var items = stage.getItemsByType(2);
 							var index = this.index;
@@ -304,30 +305,26 @@
 							if(this.path.length){
 								this.vector = this.path[0];
 							}
-							if(this.vector){
-								if(this.vector.change){ //是否转变方向
-									this.coord.x = this.vector.x;
-									this.coord.y = this.vector.y;
-									var pos = map.coord2position(this.coord.x,this.coord.y);
-									this.x = pos.x;
-									this.y = pos.y;
-								}
-								if(this.vector.x>this.coord.x){
-									this.orientation = 0;
-								}else if(this.vector.x<this.coord.x){
-									this.orientation = 2;
-								}else if(this.vector.y>this.coord.y){
-									this.orientation = 1;
-								}else if(this.vector.y<this.coord.y){
-									this.orientation = 3;
-								}
-							}
 						}
-						if(this.vector){
-							this.x += this.speed*_COS[this.orientation];
-							this.y += this.speed*_SIN[this.orientation];
+						if(this.vector.change){ //是否转变方向
+							this.coord.x = this.vector.x;
+							this.coord.y = this.vector.y;
+							var pos = map.coord2position(this.coord.x,this.coord.y);
+							this.x = pos.x;
+							this.y = pos.y;
+						}
+						if(this.vector.x>this.coord.x){
+							this.orientation = 0;
+						}else if(this.vector.x<this.coord.x){
+							this.orientation = 2;
+						}else if(this.vector.y>this.coord.y){
+							this.orientation = 1;
+						}else if(this.vector.y<this.coord.y){
+							this.orientation = 3;
 						}
 					}
+					this.x += this.speed*_COS[this.orientation];
+					this.y += this.speed*_SIN[this.orientation];
 				},
 				draw:function(context){
 					context.fillStyle = this.color;
