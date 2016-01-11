@@ -112,9 +112,8 @@
 						var dx = item.x-player.x;
 						var dy = item.y-player.y;
 						if(dx*dx+dy*dy<750){
-							stage.status = 2;
+							stage.status = 3;
 							stage.timeout = 30;
-							player.status = 3;
 						}
 					});
 				}else if(stage.status=3){
@@ -257,7 +256,7 @@
 			draw:function(context){
 				context.fillStyle = '#FC3';
 				context.beginPath();
-				if(this.status<3){
+				if(stage.status<3){
 					if(this.times%2){
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
 					}else{
@@ -284,43 +283,51 @@
 				type:2,
 				frames:10,
 				speed:1,
+				timeout:Math.floor(Math.random()*120),
 				update:function(){
-					if(!this.coord.offset){
-						var new_map = JSON.parse(JSON.stringify(map.data));
-						var items = stage.getItemsByType(2);
-						var index = this.index;
-						items.forEach(function(item){
-							if(item.index!=index){
-								new_map[item.coord.y][item.coord.x]=1;
+					console.log(this.timeout);
+					if(!this.timeout){
+						if(!this.coord.offset){
+							var new_map = JSON.parse(JSON.stringify(map.data));
+							var items = stage.getItemsByType(2);
+							var index = this.index;
+							items.forEach(function(item){
+								if(item.index!=index){
+									new_map[item.coord.y][item.coord.x]=1;
+								}
+							});
+							this.path = map.finder({
+								map:new_map,
+								start:this.coord,
+								end:player.coord
+							});
+							if(this.path.length){
+								this.vector = this.path[0];
 							}
-						});
-						this.path = map.finder({
-							map:new_map,
-							start:this.coord,
-							end:player.coord
-						});
-						if(this.path.length){
-							this.vector = this.path[0];
+							if(this.vector){
+								if(this.vector.change){ //是否转变方向
+									this.coord.x = this.vector.x;
+									this.coord.y = this.vector.y;
+									var pos = map.coord2position(this.coord.x,this.coord.y);
+									this.x = pos.x;
+									this.y = pos.y;
+								}
+								if(this.vector.x>this.coord.x){
+									this.orientation = 0;
+								}else if(this.vector.x<this.coord.x){
+									this.orientation = 2;
+								}else if(this.vector.y>this.coord.y){
+									this.orientation = 1;
+								}else if(this.vector.y<this.coord.y){
+									this.orientation = 3;
+								}
+							}
 						}
-						if(this.vector.change){ //是否转变方向
-							this.coord.x = this.vector.x;
-							this.coord.y = this.vector.y;
-							var pos = map.coord2position(this.coord.x,this.coord.y);
-							this.x = pos.x;
-							this.y = pos.y;
-						}
-						if(this.vector.x>this.coord.x){
-							this.orientation = 0;
-						}else if(this.vector.x<this.coord.x){
-							this.orientation = 2;
-						}else if(this.vector.y>this.coord.y){
-							this.orientation = 1;
-						}else if(this.vector.y<this.coord.y){
-							this.orientation = 3;
+						if(this.vector){
+							this.x += this.speed*_COS[this.orientation];
+							this.y += this.speed*_SIN[this.orientation];
 						}
 					}
-					this.x += this.speed*_COS[this.orientation];
-					this.y += this.speed*_SIN[this.orientation];
 				},
 				draw:function(context){
 					context.fillStyle = this.color;

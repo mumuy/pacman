@@ -13,6 +13,7 @@ function Game(id,params){
 		for(var i in settings){
 			target[i] = params[i]||settings[i];
 		}
+		return target;
 	};
 	_extend(this,settings,params);
 	var $canvas = document.getElementById(id);
@@ -46,6 +47,7 @@ function Game(id,params){
 			index:0,				//对象索引
 			frames:1,				//速度等级,内部计算器times多少帧变化一次
 			times:0,				//刷新画布计数(用于循环动画状态判断)
+			timeout:0,				//倒计时(用于过程动画状态判断)
 			control:{},				//控制缓存,到达定位点时处理
 			update:function(){}, 	//更新参数信息
 			draw:function(){}		//绘制
@@ -111,18 +113,13 @@ function Game(id,params){
 		};
 	};
 	//寻址算法
-	Map.prototype.finder = function(param){
+	Map.prototype.finder = function(params){
 		var defaults = {
 			map:null,
 			start:{},
 			end:{}
 		};
-		var options = (function(target, params) {
-		   for (var prop in params) {  
-				target[prop] = params[prop];
-		   }      
-		   return target;
-		})(defaults,param);
+		var options = _extend({},defaults,params);
 		var result = [];
 		if(options.map[options.start.y][options.start.x]||options.map[options.end.y][options.end.x]){ //当起点或终点设置在墙上
 			return [];
@@ -219,6 +216,9 @@ function Game(id,params){
 					if(stage.status==1&&item.status==1){  	//对象及布景状态都处于正常状态下
 						if(item.location){
 							item.coord = item.location.position2coord(item.x,item.y);
+						}
+						if(item.timeout){
+							item.timeout--;
 						}
 						item.update();
 					}
