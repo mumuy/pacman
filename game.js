@@ -95,6 +95,12 @@ function Game(id,params){
 		}
 		return -1;
 	};
+	//设置地图上某点的值
+	Map.prototype.set = function(x,y,value){
+		if(this.data[y]){
+			this.data[y][x] = value;
+		}
+	};
 	//地图坐标转画布坐标
 	Map.prototype.coord2position = function(cx,cy){
 		return {

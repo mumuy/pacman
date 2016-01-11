@@ -1,6 +1,6 @@
 //主程序,业务逻辑
 (function(){
-	_DATA = [		//地图数据
+	var _DATA = [		//地图数据
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -11,15 +11,15 @@
 		[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
 		[1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1],
 		[1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
-		[0,0,0,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0],
-		[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
-		[0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0],
-		[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
-		[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
-		[1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1],
-		[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
-		[0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0],
-		[0,0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0],
+		[1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,1,1,1,2,2,1,1,1,0,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,1,2,2,2,2,2,2,1,0,1,1,0,1,1,1,1,1,1],
+		[0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0],
+		[1,1,1,1,1,1,0,1,1,0,1,2,2,2,2,2,2,1,0,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1],
+		[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
 		[1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -36,7 +36,7 @@
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
 	_COLOR = ['#F00','#F60','#3C6','#69F'],
-	_SIZE = 20;		//地图大小
+	_SCORE = 0;		//得分
 
 	var game = new Game('canvas');
 	//启动页
@@ -127,15 +127,12 @@
 		var map = stage.createMap({
 			x:50,
 			y:10,
-			data:_DATA,
+			data:JSON.parse(JSON.stringify(_DATA)),
 			draw:function(context){
-				var y_length = this.data.length;
-				var x_length = this.data[0].length;
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
-						context.lineWidth = 2;
-						context.strokeStyle="#09C";
-						if(this.get(i,j)){
+						var value = this.get(i,j);
+						if(value){
 							var code = 0;
 							if(this.get(i,j-1)&&!(this.get(i-1,j-1)&&this.get(i+1,j-1)&&this.get(i-1,j)&&this.get(i+1,j))){
 								if(j){
@@ -143,12 +140,12 @@
 								}
 							}
 							if(this.get(i+1,j)&&!(this.get(i+1,j-1)&&this.get(i+1,j+1)&&this.get(i,j-1)&&this.get(i,j+1))){
-								if(i<x_length-1){
+								if(i<this.x_length-1){
 									code += 100;
 								}
 							}
 							if(this.get(i,j+1)&&!(this.get(i-1,j+1)&&this.get(i+1,j+1)&&this.get(i-1,j)&&this.get(i+1,j))){
-								if(j<y_length-1){
+								if(j<this.y_length-1){
 									code += 10;
 								}
 							}
@@ -158,6 +155,8 @@
 								}
 							}
 							if(code){
+								context.lineWidth = 2;
+								context.strokeStyle=value==2?"#FFF":"#09C";
 								var pos = this.coord2position(i,j);
 								switch(code){
 									case 1100:
@@ -221,6 +220,39 @@
 				}
 			}
 		});
+		var goods = stage.createMap({
+			x:50,
+			y:10,
+			data:JSON.parse(JSON.stringify(_DATA)),
+			draw:function(context){
+				for(var j=0; j<this.y_length; j++){
+					for(var i=0; i<this.x_length; i++){
+						if(!this.get(i,j)){
+							var pos = this.coord2position(i,j);
+							context.fillStyle = "#FFF";
+							context.fillRect(pos.x-2,pos.y-2,4,4);
+						}
+					}
+				}
+			}
+		});
+		//得分
+		stage.createItem({
+			x:680,
+			y:84,
+			draw:function(context){
+				context.font = 'bold 28px Helvetica';
+				context.textAlign = 'left';
+				context.textBaseline = 'bottom';
+				context.fillStyle = '#C33';
+				context.fillText('SCORE',this.x,this.y);
+				context.font = '28px Helvetica';
+				context.textAlign = 'left';
+				context.textBaseline = 'top';
+				context.fillStyle = '#FFF';
+				context.fillText(_SCORE,this.x+12,this.y);
+			}
+		});
 		//主角
 		var player = stage.createItem({
 			width:30,
@@ -249,6 +281,10 @@
 						this.y -= map.size*(map.y_length-1)*_SIN[this.orientation];
 					}
 				}else{
+					if(!goods.get(this.coord.x,this.coord.y)){
+						_SCORE++;
+						goods.set(this.coord.x,this.coord.y,1);
+					}
 					this.x += this.speed*_COS[this.orientation];
 					this.y += this.speed*_SIN[this.orientation];
 				}
@@ -289,7 +325,7 @@
 				update:function(){
 					if(!this.coord.offset){
 						if(!this.timeout){
-							var new_map = JSON.parse(JSON.stringify(map.data));
+							var new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
 							var items = stage.getItemsByType(2);
 							var index = this.index;
 							items.forEach(function(item){
