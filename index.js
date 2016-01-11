@@ -241,7 +241,7 @@
 		//得分
 		stage.createItem({
 			x:690,
-			y:120,
+			y:100,
 			draw:function(context){
 				context.font = 'bold 28px Helvetica';
 				context.textAlign = 'left';
@@ -258,7 +258,7 @@
 		//生命值
 		stage.createItem({
 			x:705,
-			y:520,
+			y:540,
 			width:30,
 			height:30,
 			draw:function(context){
