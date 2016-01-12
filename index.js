@@ -35,7 +35,7 @@
 	],
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
-	_COLOR = ['#F00','#F60','#3C6','#69F'],
+	_COLOR = ['#F00','#F93','#0CF','#F9C'],//红,橙,
 	_LIFE = 3,
 	_SCORE = 0;		//得分
 
@@ -59,7 +59,7 @@
 			height:100,
 			frames:10,
 			draw:function(context){
-				context.fillStyle = '#FC3';
+				context.fillStyle = '#FFE600';
 				context.beginPath();
 				if(this.times%2){
 					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
@@ -232,7 +232,7 @@
 					for(var i=0; i<this.x_length; i++){
 						if(!this.get(i,j)){
 							var pos = this.coord2position(i,j);
-							context.fillStyle = "#FFF";
+							context.fillStyle = "#F5F5DC";
 							context.fillRect(pos.x-2,pos.y-2,4,4);
 						}
 					}
@@ -266,7 +266,7 @@
 					context.font = '24px Helvetica';
 					context.textAlign = 'left';
 					context.textBaseline = 'center';
-					context.fillStyle = '#FFF';
+					context.fillStyle = '#09F';
 					context.fillText('PAUSE',this.x,this.y);
 				}
 			}
@@ -280,7 +280,7 @@
 			draw:function(context){
 				for(var i=0;i<_LIFE;i++){
 					var x=this.x+36*i,y=this.y;
-					context.fillStyle = '#FC3';
+					context.fillStyle = '#FFE600';
 					context.beginPath();
 					context.arc(x,y,this.width/2,.15*Math.PI,-.15*Math.PI,false);
 					context.lineTo(x,y);
@@ -326,7 +326,7 @@
 				}
 			},
 			draw:function(context){
-				context.fillStyle = '#FC3';
+				context.fillStyle = '#FFE600';
 				context.beginPath();
 				if(stage.status<3){
 					if(this.times%2){
