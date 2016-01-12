@@ -222,6 +222,7 @@
 				}
 			}
 		});
+		//物品地图
 		var goods = stage.createMap({
 			x:60,
 			y:10,
@@ -253,6 +254,21 @@
 				context.textBaseline = 'top';
 				context.fillStyle = '#FFF';
 				context.fillText(_SCORE,this.x+12,this.y);
+			}
+		});
+		//状态文字
+		stage.createItem({
+			x:690,
+			y:320,
+			frames:25,
+			draw:function(context){
+				if(stage.status==2&&this.times%2){
+					context.font = '24px Helvetica';
+					context.textAlign = 'left';
+					context.textBaseline = 'center';
+					context.fillStyle = '#FFF';
+					context.fillText('PAUSE',this.x,this.y);
+				}
 			}
 		});
 		//生命值
