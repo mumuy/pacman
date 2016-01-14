@@ -43,14 +43,6 @@
 	//启动页
 	(function(){
 		var stage = game.createStage();
-		stage.bind('keydown',function(e){
-			switch(e.keyCode){
-				case 13:
-				case 32:
-					game.nextStage();
-				break;
-			}
-		});
 		//logo
 		stage.createItem({
 			x:game.width/2,
@@ -100,6 +92,15 @@
 				context.fillText('© passer-by.com',this.x,this.y);
 			}
 		});
+		//事件绑定
+		stage.bind('keydown',function(e){
+			switch(e.keyCode){
+				case 13:
+				case 32:
+					game.nextStage();
+				break;
+			}
+		});
 	})();
 	//游戏主程序
 	(function(){
@@ -109,7 +110,7 @@
 				if(stage.status==1){
 					var player = stage.getItemsByType(1)[0];
 					var items = stage.getItemsByType(2);
-					items.forEach(function(item){
+					items.forEach(function(item){  //物体检测
 						var dx = item.x-player.x;
 						var dy = item.y-player.y;
 						if(dx*dx+dy*dy<750){
@@ -117,10 +118,18 @@
 							stage.timeout = 30;
 						}
 					});
+					if(JSON.stringify(goods.data).indexOf(0)<0){
+						game.nextStage();
+					}
 				}else if(stage.status==3){
 					if(!stage.timeout){
-						_LIFE&&_LIFE--;
-						stage.reset();
+						_LIFE--;
+						if(_LIFE){
+							stage.resetItems();
+						}else{
+							game.nextStage();
+							return false;
+						}
 					}
 				}
 			}
@@ -129,7 +138,7 @@
 		var map = stage.createMap({
 			x:60,
 			y:10,
-			data:JSON.parse(JSON.stringify(_DATA)),
+			data:_DATA,
 			draw:function(context){
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
@@ -226,7 +235,7 @@
 		var goods = stage.createMap({
 			x:60,
 			y:10,
-			data:JSON.parse(JSON.stringify(_DATA)),
+			data:_DATA,
 			draw:function(context){
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
@@ -432,7 +441,7 @@
 				}
 			});
 		}
-		//布景事件绑定
+		//事件绑定
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
 				case 13: //回车
@@ -454,6 +463,45 @@
 			}
 		});
 	})();
+	//结束画面
+	(function(){
+		var stage = game.createStage();
+		//游戏结束
+		stage.createItem({
+			x:game.width/2,
+			y:game.height*.35,
+			draw:function(context){
+				context.fillStyle = '#FFF';
+				context.font = 'bold 48px Helvetica';
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.fillText('GAME OVER',this.x,this.y);
+			}
+		});
+		//记分
+		stage.createItem({
+			x:game.width/2,
+			y:game.height*.5,
+			draw:function(context){
+				context.fillStyle = '#FFF';
+				context.font = '20px Helvetica';
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
+				context.fillText('FINAL SCORE: '+(_SCORE+50*_LIFE),this.x,this.y);
+			}
+		});
+		//事件绑定
+		stage.bind('keydown',function(e){
+			switch(e.keyCode){
+				case 13: //回车
+				case 32: //空格
+					_SCORE = 0;
+					_LIFE = 3;
+					var st = game.setStage(1);
+					st.reset();
+					break;
+			}
+		});
+	})();
 	game.init();
-	game.nextStage();	//*测试*游戏主布景,完成后需关闭
 })();
