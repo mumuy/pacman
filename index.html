@@ -4,11 +4,21 @@
 		<title>Pac-Man . 吃豆游戏</title>
 		<style>
 			*{padding:0;margin:0;}
-			canvas{display:block;background: #000;margin:0 auto;line-height:36px;text-align: center;color:#999;}
+			.wrapper{
+				width: 960px;
+				margin:0 auto;
+				line-height:36px;
+				text-align:center;
+				color:#999;
+			}
+			canvas{display:block;background: #000;}
 		</style>
 	</head>
 	<body>
-		<canvas id="canvas" width="960" height="640">Canvas not supported</canvas>
+		<div class="wrapper">
+			<canvas id="canvas" width="960" height="640">不支持画布</canvas>
+			<p>按［空格］暂停或继续</p>
+		</div>
 		<script src="game.js"></script>
 		<script src="index.js"></script>
 	</body>
