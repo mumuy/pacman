@@ -487,7 +487,7 @@
 				context.font = '20px Helvetica';
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
-				context.fillText('FINAL SCORE: '+(_SCORE+50*_LIFE),this.x,this.y);
+				context.fillText('FINAL SCORE: '+(_SCORE+50*Math.max(_LIFE-1,0)),this.x,this.y);
 			}
 		});
 		//事件绑定
