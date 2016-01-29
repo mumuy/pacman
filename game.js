@@ -186,7 +186,7 @@ function Game(id,params){
 	var Stage = function(params){
 		this._params = params||{};
 		this._settings = {
-			status:1,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示中断或异常,4表示结束
+			status:0,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示中断或异常,4表示结束
 			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
@@ -198,6 +198,7 @@ function Game(id,params){
 	};
 	//重置物体位置
 	Stage.prototype.resetItems = function(){
+		this.status = 1;
 		this.items.forEach(function(item,index){
 			_extend(item,item._settings,item._params);
 			item.index = index;
@@ -211,6 +212,7 @@ function Game(id,params){
 	};
 	//重置地图
 	Stage.prototype.resetMaps = function(){
+		this.status = 1;
 		this.maps.forEach(function(map){
 			_extend(map,map._settings,map._params);
 			map.data = JSON.parse(JSON.stringify(map._params.data));
