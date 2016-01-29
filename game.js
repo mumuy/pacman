@@ -198,7 +198,6 @@ function Game(id,params){
 	};
 	//重置物体位置
 	Stage.prototype.resetItems = function(){
-		this.status = 1;
 		this.items.forEach(function(item,index){
 			_extend(item,item._settings,item._params);
 			item.index = index;
@@ -212,7 +211,6 @@ function Game(id,params){
 	};
 	//重置地图
 	Stage.prototype.resetMaps = function(){
-		this.status = 1;
 		this.maps.forEach(function(map){
 			_extend(map,map._settings,map._params);
 			map.data = JSON.parse(JSON.stringify(map._params.data));
@@ -339,6 +337,7 @@ function Game(id,params){
 	this.setStage = function(index){
 		_stages[_index].status = 0;
 		_index = index;
+		_stages[_index].status = 1;
 		return _stages[_index];
 	};
 	//下个布景
@@ -346,6 +345,7 @@ function Game(id,params){
 		if(_index<_stages.length-1){
 			_stages[_index].status = 0;
 			_index++;
+			_stages[_index].status = 1;
 			return _stages[_index];
 		}else{
 			throw new Error('unfound new stage.');
