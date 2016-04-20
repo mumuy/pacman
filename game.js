@@ -12,8 +12,7 @@ if (!Date.now)
     for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
         var vp = vendors[i];
         window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-                                   || window[vp+'CancelRequestAnimationFrame']);
+        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame'] || window[vp+'CancelRequestAnimationFrame']);
     }
     if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
         || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
@@ -303,7 +302,6 @@ function Game(id,params){
 	};
 	//动画开始
 	this.start = function() {
-		// var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||window.msRequestAnimationFrame;
 		var f = 0;		//帧数计算
 		var fn = function(){
 			var stage = _stages[_index];
@@ -343,7 +341,6 @@ function Game(id,params){
 	};
 	//动画结束
 	this.stop = function(){
-		// var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;
 		_hander&&cancelAnimationFrame(_hander);
 	};
 	//事件坐标
