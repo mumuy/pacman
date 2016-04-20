@@ -3,30 +3,29 @@
 * 小型游戏引擎
 */
 
-//动画处理
+// requestAnimationFrame polyfill
+if (!Date.now)
+    Date.now = function() { return new Date().getTime(); };
 (function() {
-    var lastTime = 0;
+    'use strict';
     var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+        var vp = vendors[i];
+        window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
+                                   || window[vp+'CancelRequestAnimationFrame']);
     }
-    if (!window.requestAnimationFrame){
-			window.requestAnimationFrame = function(callback, element) {
-					var currTime = new Date().getTime();
-					var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-					var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-						timeToCall);
-					lastTime = currTime + timeToCall;
-					return id;
-			};
-		}
-    if (!window.cancelAnimationFrame){
-			window.cancelAnimationFrame = function(id) {
-					clearTimeout(id);
-			};
-		}
+    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+        || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        var lastTime = 0;
+        window.requestAnimationFrame = function(callback) {
+            var now = Date.now();
+            var nextTime = Math.max(lastTime + 16, now);
+            return setTimeout(function() { callback(lastTime = nextTime); },
+                              nextTime - now);
+        };
+        window.cancelAnimationFrame = clearTimeout;
+    }
 }());
 
 function Game(id,params){
