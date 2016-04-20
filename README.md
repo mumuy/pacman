@@ -1,5 +1,13 @@
-# Pacman
-Pacman. 吃豆游戏
+# Pacman 吃豆游戏
+
+- 演示分支：gh-pages
+
+- 代码发布分支：master
+
+- 项目演示(DEMO)地址：http://passer-by.com/pacman/
+
+### 版权
+本套组件由 [passer-by.com](http://passer-by.com/) 原创，请尊重原创，引用请注明来源。
 
 功能
 
