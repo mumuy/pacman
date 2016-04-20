@@ -2,6 +2,33 @@
 /*
 * 小型游戏引擎
 */
+
+//动画处理
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+    if (!window.requestAnimationFrame){
+			window.requestAnimationFrame = function(callback, element) {
+					var currTime = new Date().getTime();
+					var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+					var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+						timeToCall);
+					lastTime = currTime + timeToCall;
+					return id;
+			};
+		}
+    if (!window.cancelAnimationFrame){
+			window.cancelAnimationFrame = function(id) {
+					clearTimeout(id);
+			};
+		}
+}());
+
 function Game(id,params){
 	var _ = this;
 	params = params||{};
@@ -22,7 +49,7 @@ function Game(id,params){
 	var _context = $canvas.getContext('2d');	//画布上下文环境
 	var _stages = [];							//布景对象队列
 	var _events = {};							//事件集合
-	var _index=0,								//当前布景索引					
+	var _index=0,								//当前布景索引
 		_hander;  								//帧动画控制
 	//活动对象构造
 	var Item = function(params){
@@ -67,7 +94,7 @@ function Game(id,params){
 						}
 					}
 				});
-				e.preventDefault(); 
+				e.preventDefault();
 			});
 		}
 		_events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
@@ -77,7 +104,7 @@ function Game(id,params){
 		this._params = params||{};
 		this._settings = {
 			x:0,						//地图起点坐标
-			y:0,		
+			y:0,
 			size:20,					//地图单元的宽度
 			data:[],					//地图数据
 			stage:null,					//布景
@@ -270,15 +297,15 @@ function Game(id,params){
 				if(_events[eventType][key]){
 					_events[eventType][key](e);
 				}
-				e.preventDefault(); 
+				e.preventDefault();
 			});
 		}
 		_events[eventType]['s'+this.index] = callback.bind(this);	//绑定事件作用域
 	};
 	//动画开始
 	this.start = function() {
-		var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||window.msRequestAnimationFrame;
-		var f = 0;		//帧数计算		
+		// var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||window.msRequestAnimationFrame;
+		var f = 0;		//帧数计算
 		var fn = function(){
 			var stage = _stages[_index];
 			_context.clearRect(0,0,_.width,_.height);		//清除画布
@@ -292,9 +319,9 @@ function Game(id,params){
 						map.update();
 						map.draw(_context);
 					});
-				}			
+				}
 				if(stage.items.length){
-					stage.items.forEach(function(item){				
+					stage.items.forEach(function(item){
 						if(!(f%item.frames)){
 							item.times = f/item.frames;		//计数器
 						}
@@ -317,7 +344,7 @@ function Game(id,params){
 	};
 	//动画结束
 	this.stop = function(){
-		var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;	
+		// var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame||window.mozCancelAnimationFrame ||window.msCancelAnimationFrame;
 		_hander&&cancelAnimationFrame(_hander);
 	};
 	//事件坐标
