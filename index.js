@@ -287,7 +287,7 @@
 			width:30,
 			height:30,
 			draw:function(context){
-				for(var i=0;i<_LIFE;i++){
+				for(var i=0;i<_LIFE-1;i++){
 					var x=this.x+36*i,y=this.y;
 					context.fillStyle = '#FFE600';
 					context.beginPath();
@@ -314,7 +314,7 @@
 					if(typeof this.control.orientation!='undefined'){
 						if(!map.get(coord.x+_COS[this.control.orientation],coord.y+_SIN[this.control.orientation])){
 							this.orientation = this.control.orientation;
-						}	
+						}
 					}
 					this.control = {};
 					var value = map.get(coord.x+_COS[this.orientation],coord.y+_SIN[this.orientation]);
@@ -409,7 +409,7 @@
 				},
 				draw:function(context){
 					context.fillStyle = this.color;
-					context.beginPath();              
+					context.beginPath();
 	            	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
 	            	switch(this.times%2){
 	            		case 0:
