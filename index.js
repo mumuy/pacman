@@ -104,24 +104,28 @@
 	})();
 	//游戏主程序
 	(function(){
-		var stage = game.createStage({
+		var stage,map,goods,beans,player,times;
+		stage = game.createStage({
 			update:function(){
 				var stage = this;
-				if(stage.status==1){
-					var player = stage.getItemsByType(1)[0];
-					var items = stage.getItemsByType(2);
-					items.forEach(function(item){  //物体检测
+				if(stage.status==1){								//场景正常运行
+					items.forEach(function(item){
 						var dx = item.x-player.x;
 						var dy = item.y-player.y;
-						if(dx*dx+dy*dy<750){
-							stage.status = 3;
-							stage.timeout = 30;
+						if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
+							if(item.status==3){
+								item.status = 4;
+								_SCORE += 10;
+							}else{
+								stage.status = 3;
+								stage.timeout = 30;
+							}
 						}
 					});
-					if(JSON.stringify(goods.data).indexOf(0)<0){
+					if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入结束画面
 						game.nextStage();
 					}
-				}else if(stage.status==3){
+				}else if(stage.status==3){		//场景暂停状态
 					if(!stage.timeout){
 						_LIFE--;
 						if(_LIFE){
@@ -135,7 +139,7 @@
 			}
 		});
 		//绘制地图
-		var map = stage.createMap({
+		map = stage.createMap({
 			x:60,
 			y:10,
 			data:_DATA,
@@ -232,17 +236,31 @@
 			}
 		});
 		//物品地图
-		var goods = stage.createMap({
+		goods = {
+			'1,3':1,
+			'26,3':1,
+			'1,23':1,
+			'26,23':1
+		};
+		beans = stage.createMap({
 			x:60,
 			y:10,
 			data:_DATA,
+			frames:8,
 			draw:function(context){
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
 						if(!this.get(i,j)){
 							var pos = this.coord2position(i,j);
 							context.fillStyle = "#F5F5DC";
-							context.fillRect(pos.x-2,pos.y-2,4,4);
+							if(goods[i+','+j]){
+								context.beginPath();
+								context.arc(pos.x,pos.y,3+this.times%2,0,2*Math.PI,true);
+								context.fill();
+								context.closePath();
+							}else{
+								context.fillRect(pos.x-2,pos.y-2,4,4);
+							}
 						}
 					}
 				}
@@ -288,7 +306,7 @@
 			height:30,
 			draw:function(context){
 				for(var i=0;i<_LIFE-1;i++){
-					var x=this.x+36*i,y=this.y;
+					var x=this.x+40*i,y=this.y;
 					context.fillStyle = '#FFE600';
 					context.beginPath();
 					context.arc(x,y,this.width/2,.15*Math.PI,-.15*Math.PI,false);
@@ -298,8 +316,147 @@
 				}
 			}
 		});
+		//NPC
+		for(var i=0;i<4;i++){
+			stage.createItem({
+				width:30,
+				height:30,
+				orientation:3,
+				color:_COLOR[i],
+				location:map,
+				coord:{x:12+i,y:14},
+				vector:{x:12+i,y:14},
+				type:2,
+				frames:10,
+				speed:1,
+				timeout:Math.floor(Math.random()*120),
+				update:function(){
+					var new_map;
+					if(this.status==3&&!this.timeout){
+						this.status = 1;
+					}
+					if(!this.coord.offset){			//到达坐标中心时计算
+						if(this.status==1){
+							if(!this.timeout){			//定时器
+								new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
+								var index = this.index;
+								items.forEach(function(item){
+									if(item.index!=index&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
+										new_map[item.coord.y][item.coord.x]=1;
+									}
+								});
+								this.path = map.finder({
+									map:new_map,
+									start:this.coord,
+									end:player.coord
+								});
+								if(this.path.length){
+									this.vector = this.path[0];
+								}
+							}
+						}else if(this.status==3){
+							new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
+							var index = this.index;
+							items.forEach(function(item){
+								if(item.index!=index){
+									new_map[item.coord.y][item.coord.x]=1;
+								}
+							});
+							this.path = map.finder({
+								map:new_map,
+								start:player.coord,
+								end:this.coord,
+								type:'next'
+							});
+							if(this.path.length){
+								this.vector = this.path[Math.floor(Math.random()*this.path.length)];
+							}
+						}else if(this.status==4){
+							new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
+							this.path = map.finder({
+								map:new_map,
+								start:this.coord,
+								end:this._params.coord
+							});
+							if(this.path.length){
+								this.vector = this.path[0];
+							}else{
+								this.status = 1;
+							}
+						}
+						//是否转变方向
+						if(this.vector.change){
+							this.coord.x = this.vector.x;
+							this.coord.y = this.vector.y;
+							var pos = map.coord2position(this.coord.x,this.coord.y);
+							this.x = pos.x;
+							this.y = pos.y;
+						}
+						//方向判定
+						if(this.vector.x>this.coord.x){
+							this.orientation = 0;
+						}else if(this.vector.x<this.coord.x){
+							this.orientation = 2;
+						}else if(this.vector.y>this.coord.y){
+							this.orientation = 1;
+						}else if(this.vector.y<this.coord.y){
+							this.orientation = 3;
+						}
+					}
+					this.x += this.speed*_COS[this.orientation];
+					this.y += this.speed*_SIN[this.orientation];
+				},
+				draw:function(context){
+					var isSick = false;
+					if(this.status==3){
+						isSick = this.timeout>80||this.times%2?true:false;
+					}
+					if(this.status!=4){
+						context.fillStyle = isSick?'#BABABA':this.color;
+						context.beginPath();
+	        	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
+	        	switch(this.times%2){
+	        		case 0:
+	        			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+	        			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+	            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+	            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+	            	break;
+	            case 1:
+	            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
+	            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
+	            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
+	            	break;
+	        	}
+	        	context.fill();
+	        	context.closePath();
+					}
+        	context.fillStyle = '#FFF';
+					if(isSick){
+						context.beginPath();
+          	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
+          	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
+          	context.fill();
+          	context.closePath();
+					}else{
+						context.beginPath();
+          	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+          	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+          	context.fill();
+          	context.closePath();
+						context.fillStyle = '#000';
+          	context.beginPath();
+          	context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+          	context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+          	context.fill();
+          	context.closePath();
+					}
+				}
+			});
+		}
+		items = stage.getItemsByType(2);
 		//主角
-		var player = stage.createItem({
+		player = stage.createItem({
 			width:30,
 			height:30,
 			type:1,
@@ -326,9 +483,17 @@
 						this.y -= map.size*(map.y_length-1)*_SIN[this.orientation];
 					}
 				}else{
-					if(!goods.get(this.coord.x,this.coord.y)){
+					if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
 						_SCORE++;
-						goods.set(this.coord.x,this.coord.y,1);
+						beans.set(this.coord.x,this.coord.y,1);
+						if(goods[this.coord.x+','+this.coord.y]){	//吃到能量豆
+							items.forEach(function(item){
+								if(item.status==1){	//如果NPC为正常状态，则置为临时状态
+									item.timeout = 450;
+									item.status = 3;
+								}
+							});
+						}
 					}
 					this.x += this.speed*_COS[this.orientation];
 					this.y += this.speed*_SIN[this.orientation];
@@ -337,13 +502,13 @@
 			draw:function(context){
 				context.fillStyle = '#FFE600';
 				context.beginPath();
-				if(stage.status<3){
+				if(stage.status!=3){	//玩家正常状态
 					if(this.times%2){
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
 					}else{
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
 					}
-				}else{
+				}else{	//玩家被吃
 					if(stage.timeout) {
 						context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*stage.timeout)*Math.PI,(.5*this.orientation-1+.02*stage.timeout)*Math.PI,false);
 					}
@@ -353,94 +518,6 @@
 				context.fill();
 			}
 		});
-		//NPC
-		for(var i=0;i<4;i++){
-			stage.createItem({
-				width:30,
-				height:30,
-				orientation:3,
-				color:_COLOR[i],
-				location:map,
-				coord:{x:12+i,y:14},
-				vector:{x:12+i,y:14},
-				type:2,
-				frames:10,
-				speed:1,
-				timeout:Math.floor(Math.random()*120),
-				update:function(){
-					if(!this.coord.offset){
-						if(!this.timeout){
-							var new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
-							var items = stage.getItemsByType(2);
-							var index = this.index;
-							items.forEach(function(item){
-								if(item.index!=index){
-									new_map[item.coord.y][item.coord.x]=1;
-								}
-							});
-							this.path = map.finder({
-								map:new_map,
-								start:this.coord,
-								end:player.coord
-							});
-							if(this.path.length){
-								this.vector = this.path[0];
-							}
-						}
-						if(this.vector.change){ //是否转变方向
-							this.coord.x = this.vector.x;
-							this.coord.y = this.vector.y;
-							var pos = map.coord2position(this.coord.x,this.coord.y);
-							this.x = pos.x;
-							this.y = pos.y;
-						}
-						if(this.vector.x>this.coord.x){
-							this.orientation = 0;
-						}else if(this.vector.x<this.coord.x){
-							this.orientation = 2;
-						}else if(this.vector.y>this.coord.y){
-							this.orientation = 1;
-						}else if(this.vector.y<this.coord.y){
-							this.orientation = 3;
-						}
-					}
-					this.x += this.speed*_COS[this.orientation];
-					this.y += this.speed*_SIN[this.orientation];
-				},
-				draw:function(context){
-					context.fillStyle = this.color;
-					context.beginPath();
-	            	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
-	            	switch(this.times%2){
-	            		case 0:
-	            			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-	            			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-			            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-			            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
-			            	break;
-			            case 1:
-			            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
-			            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
-			            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
-			            	break;
-	            	}
-	            	context.fill();
-	            	context.closePath();
-	            	context.fillStyle = '#FFF';
-	            	context.beginPath();
-	            	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-	            	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-	            	context.fill();
-	            	context.closePath();
-	            	context.fillStyle = '#000';
-	            	context.beginPath();
-	            	context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
-	            	context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
-	            	context.fill();
-	            	context.closePath();
-				}
-			});
-		}
 		//事件绑定
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){

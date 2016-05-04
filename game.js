@@ -59,7 +59,7 @@ function Game(id,params){
 			height:20,				//高
 			type:0,					//对象类型,0表示普通对象(不与地图绑定),1表示玩家控制对象,2表示程序控制对象
 			color:'#F00',			//标识颜色
-			status:1,				//对象状态,0表示隐藏,1表示正常,2表示暂停
+			status:1,				//对象状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时,4表示异常
 			orientation:0,			//当前定位方向,0表示右,1表示下,2表示左,3表示上
 			speed:0,				//移动速度
 			//地图相关
@@ -108,6 +108,8 @@ function Game(id,params){
 			stage:null,					//布景
 			x_length:0,					//二维数组x轴长度
 			y_length:0,					//二维数组y轴长度
+      frames:1,				//速度等级,内部计算器times多少帧变化一次
+			times:0,				//刷新画布计数(用于循环动画状态判断)
 			update:function(){},		//更新地图数据
 			draw:function(){},			//绘制地图
 		};
@@ -148,7 +150,8 @@ function Game(id,params){
 		var defaults = {
 			map:null,
 			start:{},
-			end:{}
+			end:{},
+      type:'path'
 		};
 		var options = _extend({},defaults,params);
 		var result = [];
@@ -159,30 +162,48 @@ function Game(id,params){
 		var y_length  = options.map.length;
 		var x_length = options.map[0].length;
 		var steps = []; 	//步骤的映射
+    var steps_length = 0;
 		for(var y=y_length;y--;){
 			steps[y] = [];
 			for(var x=x_length;x--;){
 				steps[y][x] = 0;
 			}
 		}
-		var _render = function(list){
+    var _getValue = function(x,y){  //获取地图上的值
+      if(options.map[y]&&typeof options.map[y][x]!='undefined'){
+        return options.map[y][x];
+      }
+      return -1;
+    };
+    var _next = function(to){ //判定是非可走,可走放入列表
+      var value = _getValue(to.x,to.y);
+      if(value<1){
+        if(value==-1){
+          to.x = (to.x+x_length)%x_length;
+          to.y = (to.y+y_length)%y_length;
+          to.change = 1;
+        }
+        if(!steps[to.y][to.x]){
+          result.push(to);
+        }
+      }
+    };
+		var _render = function(list){//找线路
 			var new_list = [];
 			var next = function(from,to){
-				if(!finded){
-					var value = options.map[to.y]&&typeof options.map[to.y][to.x] !='undefined'?options.map[to.y][to.x]:-1;
-					if(value!=1){	//当前点是否可以走
-						if(value==-1){
-							to.x = (to.x+x_length)%x_length;
-							to.y = (to.y+y_length)%y_length;
-							to.change = 1;
-						}
-						if(to.x==options.end.x&&to.y==options.end.y){
-							steps[to.y][to.x] = from;
-							finded = true;
-						}else if(!steps[to.y][to.x]){
-							steps[to.y][to.x] = from;
-							new_list.push(to);
-						}
+				var value = _getValue(to.x,to.y);
+				if(value<1){	//当前点是否可以走
+					if(value==-1){
+						to.x = (to.x+x_length)%x_length;
+						to.y = (to.y+y_length)%y_length;
+						to.change = 1;
+					}
+					if(to.x==options.end.x&&to.y==options.end.y){
+						steps[to.y][to.x] = from;
+						finded = true;
+					}else if(!steps[to.y][to.x]){
+						steps[to.y][to.x] = from;
+						new_list.push(to);
 					}
 				}
 			};
@@ -199,11 +220,18 @@ function Game(id,params){
 		};
 		_render([options.start]);
 		if(finded){
-			var current=options.end;
-			while(current.x!=options.start.x||current.y!=options.start.y){
-				result.unshift(current);
-				current=steps[current.y][current.x];
-			}
+      var current=options.end;
+      if(options.type=='path'){
+  			while(current.x!=options.start.x||current.y!=options.start.y){
+  				result.unshift(current);
+  				current=steps[current.y][current.x];
+  			}
+      }else if(options.type=='next'){
+        _next({x:current.x+1,y:current.y});
+        _next({x:current.x,y:current.y+1});
+        _next({x:current.x-1,y:current.y});
+        _next({x:current.x,y:current.y-1});
+      }
 		}
 		return result;
 	};
@@ -211,7 +239,7 @@ function Game(id,params){
 	var Stage = function(params){
 		this._params = params||{};
 		this._settings = {
-			status:0,						//布景状态,0表示未激活,1表示正常,2表示暂停,3表示中断或异常,4表示结束
+			status:0,						//布景状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时,4表示异常
 			maps:[],						//地图队列
 			audio:[],						//音频资源
 			images:[],						//图片资源
@@ -312,7 +340,10 @@ function Game(id,params){
 			}
 			if(stage.update()!=false){		//update返回false,则不绘制
 				if(stage.maps.length){
-					stage.maps.forEach(function(map,index){
+					stage.maps.forEach(function(map){
+            if(!(f%map.frames)){
+							map.times = f/map.frames;		//计数器
+						}
 						map.update();
 						map.draw(_context);
 					});
@@ -322,7 +353,7 @@ function Game(id,params){
 						if(!(f%item.frames)){
 							item.times = f/item.frames;		//计数器
 						}
-						if(stage.status==1&&item.status==1){  	//对象及布景状态都处于正常状态下
+						if(stage.status==1&&item.status!=2){  	//对象及布景状态都处于正常状态下
 							if(item.location){
 								item.coord = item.location.position2coord(item.x,item.y);
 							}
