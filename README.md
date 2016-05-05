@@ -7,7 +7,7 @@
 - 项目演示(DEMO)地址：http://passer-by.com/pacman/
 
 ### 版权
-本套组件由 [passer-by.com](http://passer-by.com/) 原创，请尊重原创，引用请注明来源。
+本游戏由 [passer-by.com](http://passer-by.com/) 制作，请尊重作者，引用请注明来源。
 
 功能
 
