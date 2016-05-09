@@ -110,6 +110,7 @@ function Game(id,params){
 			y_length:0,					//二维数组y轴长度
       frames:1,				//速度等级,内部计算器times多少帧变化一次
 			times:0,				//刷新画布计数(用于循环动画状态判断)
+      cache:false,    //是否静态（如静态则设置缓存）
 			update:function(){},		//更新地图数据
 			draw:function(){},			//绘制地图
 		};
@@ -311,6 +312,7 @@ function Game(id,params){
 		map.stage = this;
 		map.y_length = map.data.length;
 		map.x_length = map.data[0].length;
+    map.imageData = null;
 		this.maps.push(map);
 		return map;
 	};
@@ -345,7 +347,18 @@ function Game(id,params){
 							map.times = f/map.frames;		//计数器
 						}
 						map.update();
-						map.draw(_context);
+            if(map.cache){
+              if(!map.imageData){
+                _context.save();
+                map.draw(_context);
+                map.imageData = _context.getImageData(0,0,_.width,_.height);
+                _context.restore();
+              }else{
+                _context.putImageData(map.imageData,0,0);
+              }
+            }else{
+              map.draw(_context);
+            }
 					});
 				}
 				if(stage.items.length){

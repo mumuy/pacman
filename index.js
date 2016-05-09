@@ -143,6 +143,7 @@
 			x:60,
 			y:10,
 			data:_DATA,
+			cache:true,
 			draw:function(context){
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
