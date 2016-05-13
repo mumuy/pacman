@@ -97,7 +97,7 @@
 			switch(e.keyCode){
 				case 13:
 				case 32:
-					game.nextStage();
+				game.nextStage();
 				break;
 			}
 		});
@@ -176,59 +176,59 @@
 								var pos = this.coord2position(i,j);
 								switch(code){
 									case 1100:
-										context.beginPath();
-										context.arc(pos.x+this.size/2,pos.y-this.size/2,this.size/2,.5*Math.PI,1*Math.PI,false);
-										context.stroke();
-										context.closePath();
-										break;
+									context.beginPath();
+									context.arc(pos.x+this.size/2,pos.y-this.size/2,this.size/2,.5*Math.PI,1*Math.PI,false);
+									context.stroke();
+									context.closePath();
+									break;
 									case 110:
-										context.beginPath();
-										context.arc(pos.x+this.size/2,pos.y+this.size/2,this.size/2,Math.PI,1.5*Math.PI,false);
-										context.stroke();
-										context.closePath();
-										break;
+									context.beginPath();
+									context.arc(pos.x+this.size/2,pos.y+this.size/2,this.size/2,Math.PI,1.5*Math.PI,false);
+									context.stroke();
+									context.closePath();
+									break;
 									case 11:
-										context.beginPath();
-										context.arc(pos.x-this.size/2,pos.y+this.size/2,this.size/2,1.5*Math.PI,2*Math.PI,false);
-										context.stroke();
-										context.closePath();
-										break;
+									context.beginPath();
+									context.arc(pos.x-this.size/2,pos.y+this.size/2,this.size/2,1.5*Math.PI,2*Math.PI,false);
+									context.stroke();
+									context.closePath();
+									break;
 									case 1001:
+									context.beginPath();
+									context.arc(pos.x-this.size/2,pos.y-this.size/2,this.size/2,0,.5*Math.PI,false);
+									context.stroke();
+									context.closePath();
+									break;
+									default:
+									var arr = String.prototype.split.call(code,'');
+									if(+arr.pop()){
 										context.beginPath();
-										context.arc(pos.x-this.size/2,pos.y-this.size/2,this.size/2,0,.5*Math.PI,false);
+										context.moveTo(pos.x,pos.y);
+										context.lineTo(pos.x-this.size/2,pos.y);
 										context.stroke();
 										context.closePath();
-										break;
-									default:
-										var arr = String.prototype.split.call(code,'');
-										if(+arr.pop()){
-											context.beginPath();
-											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x-this.size/2,pos.y);
-											context.stroke();
-											context.closePath();
-										}
-										if(+arr.pop()){
-											context.beginPath();
-											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x,pos.y+this.size/2);
-											context.stroke();
-											context.closePath();
-										}
-										if(+arr.pop()){
-											context.beginPath();
-											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x+this.size/2,pos.y);
-											context.stroke();
-											context.closePath();
-										}
-										if(+arr.pop()){
-											context.beginPath();
-											context.moveTo(pos.x,pos.y);
-											context.lineTo(pos.x,pos.y-this.size/2);
-											context.stroke();
-											context.closePath();
-										}
+									}
+									if(+arr.pop()){
+										context.beginPath();
+										context.moveTo(pos.x,pos.y);
+										context.lineTo(pos.x,pos.y+this.size/2);
+										context.stroke();
+										context.closePath();
+									}
+									if(+arr.pop()){
+										context.beginPath();
+										context.moveTo(pos.x,pos.y);
+										context.lineTo(pos.x+this.size/2,pos.y);
+										context.stroke();
+										context.closePath();
+									}
+									if(+arr.pop()){
+										context.beginPath();
+										context.moveTo(pos.x,pos.y);
+										context.lineTo(pos.x,pos.y-this.size/2);
+										context.stroke();
+										context.closePath();
+									}
 								}
 							}
 						}
@@ -415,42 +415,42 @@
 					if(this.status!=4){
 						context.fillStyle = isSick?'#BABABA':this.color;
 						context.beginPath();
-	        	context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
-	        	switch(this.times%2){
-	        		case 0:
-	        			context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-	        			context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-	            	context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-	            	context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
-	            	break;
-	            case 1:
-	            	context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
-	            	context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
-	            	context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
-	            	break;
-	        	}
-	        	context.fill();
-	        	context.closePath();
+						context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
+						switch(this.times%2){
+							case 0:
+							context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+							context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+							context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+							context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+							break;
+							case 1:
+							context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
+							context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
+							context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
+							break;
+						}
+						context.fill();
+						context.closePath();
 					}
-        	context.fillStyle = '#FFF';
+					context.fillStyle = '#FFF';
 					if(isSick){
 						context.beginPath();
-          	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
-          	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
-          	context.fill();
-          	context.closePath();
+						context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
+						context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
+						context.fill();
+						context.closePath();
 					}else{
 						context.beginPath();
-          	context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-          	context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-          	context.fill();
-          	context.closePath();
+						context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+						context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+						context.fill();
+						context.closePath();
 						context.fillStyle = '#000';
-          	context.beginPath();
-          	context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
-          	context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
-          	context.fill();
-          	context.closePath();
+						context.beginPath();
+						context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+						context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+						context.fill();
+						context.closePath();
 					}
 				}
 			});
@@ -524,20 +524,20 @@
 			switch(e.keyCode){
 				case 13: //回车
 				case 32: //空格
-					this.status = this.status==2?1:2;
-					break;
+				this.status = this.status==2?1:2;
+				break;
 				case 39: //右
-					player.control = {orientation:0};
-					break;
+				player.control = {orientation:0};
+				break;
 				case 40: //下
-					player.control = {orientation:1};
-					break;
+				player.control = {orientation:1};
+				break;
 				case 37: //左
-					player.control = {orientation:2};
-					break;
+				player.control = {orientation:2};
+				break;
 				case 38: //上
-					player.control = {orientation:3};
-					break;
+				player.control = {orientation:3};
+				break;
 			}
 		});
 	})();
@@ -573,11 +573,11 @@
 			switch(e.keyCode){
 				case 13: //回车
 				case 32: //空格
-					_SCORE = 0;
-					_LIFE = 3;
-					var st = game.setStage(1);
-					st.reset();
-					break;
+				_SCORE = 0;
+				_LIFE = 3;
+				var st = game.setStage(1);
+				st.reset();
+				break;
 			}
 		});
 	})();
