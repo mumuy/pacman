@@ -108,9 +108,9 @@ function Game(id,params){
             stage:null,					//布景
             x_length:0,					//二维数组x轴长度
             y_length:0,					//二维数组y轴长度
-            frames:1,				//速度等级,内部计算器times多少帧变化一次
-            times:0,				//刷新画布计数(用于循环动画状态判断)
-            cache:false,    //是否静态（如静态则设置缓存）
+            frames:1,					//速度等级,内部计算器times多少帧变化一次
+            times:0,					//刷新画布计数(用于循环动画状态判断)
+            cache:false,    			//是否静态（如静态则设置缓存）
             update:function(){},		//更新地图数据
             draw:function(){},			//绘制地图
         };
@@ -155,15 +155,14 @@ function Game(id,params){
             type:'path'
         };
         var options = _extend({},defaults,params);
-        var result = [];
         if(options.map[options.start.y][options.start.x]||options.map[options.end.y][options.end.x]){ //当起点或终点设置在墙上
             return [];
         }
         var finded = false;
+        var result = [];
         var y_length  = options.map.length;
         var x_length = options.map[0].length;
         var steps = []; 	//步骤的映射
-        var steps_length = 0;
         for(var y=y_length;y--;){
             steps[y] = [];
             for(var x=x_length;x--;){
@@ -208,13 +207,12 @@ function Game(id,params){
                     }
                 }
             };
-            for(var i=0,len=list.length;i<len;i++){
-                var current = list[i];
-                next(current,{y:current.y+1,x:current.x});
+            list.forEach(function(current){
+				next(current,{y:current.y+1,x:current.x});
                 next(current,{y:current.y,x:current.x+1});
                 next(current,{y:current.y-1,x:current.x});
                 next(current,{y:current.y,x:current.x-1});
-            }
+            });
             if(!finded&&new_list.length){
                 _render(new_list);
             }
@@ -340,44 +338,40 @@ function Game(id,params){
             if(stage.timeout){
                 stage.timeout--;
             }
-            if(stage.update()!=false){		//update返回false,则不绘制
-                if(stage.maps.length){
-                    stage.maps.forEach(function(map){
-                        if(!(f%map.frames)){
-                            map.times = f/map.frames;		//计数器
-                        }
-                        map.update();
-                        if(map.cache){
-                            if(!map.imageData){
-                                _context.save();
-                                map.draw(_context);
-                                map.imageData = _context.getImageData(0,0,_.width,_.height);
-                                _context.restore();
-                            }else{
-                                _context.putImageData(map.imageData,0,0);
-                            }
-                        }else{
+            if(stage.update()!=false){		            //update返回false,则不绘制
+                stage.maps.forEach(function(map){
+                    if(!(f%map.frames)){
+                        map.times = f/map.frames;		//计数器
+                    }
+                    if(map.cache){
+                        if(!map.imageData){
+                            _context.save();
                             map.draw(_context);
+                            map.imageData = _context.getImageData(0,0,_.width,_.height);
+                            _context.restore();
+                        }else{
+                            _context.putImageData(map.imageData,0,0);
                         }
-                    });
-                }
-                if(stage.items.length){
-                    stage.items.forEach(function(item){
-                        if(!(f%item.frames)){
-                            item.times = f/item.frames;		//计数器
+                    }else{
+                    	map.update();
+                        map.draw(_context);
+                    }
+                });
+                stage.items.forEach(function(item){
+                    if(!(f%item.frames)){
+                        item.times = f/item.frames;		   //计数器
+                    }
+                    if(stage.status==1&&item.status!=2){  	//对象及布景状态都不处于暂停状态
+                        if(item.location){
+                            item.coord = item.location.position2coord(item.x,item.y);
                         }
-                        if(stage.status==1&&item.status!=2){  	//对象及布景状态都处于正常状态下
-                            if(item.location){
-                                item.coord = item.location.position2coord(item.x,item.y);
-                            }
-                            if(item.timeout){
-                                item.timeout--;
-                            }
-                            item.update();
+                        if(item.timeout){
+                            item.timeout--;
                         }
-                        item.draw(_context);
-                    });
-                }
+                        item.update();
+                    }
+                    item.draw(_context);
+                });
             }
             _hander = requestAnimationFrame(fn);
         };
