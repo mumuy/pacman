@@ -33,6 +33,12 @@
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	],
+	_GOODS = {			//能量豆
+		'1,3':1,
+		'26,3':1,
+		'1,23':1,
+		'26,23':1
+	},
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
 	_COLOR = ['#F00','#F93','#0CF','#F9C'],//红,橙,
@@ -104,7 +110,7 @@
 	})();
 	//游戏主程序
 	(function(){
-		var stage,map,goods,beans,player,times;
+		var stage,map,beans,player,times;
 		stage = game.createStage({
 			update:function(){
 				var stage = this;
@@ -237,12 +243,6 @@
 			}
 		});
 		//物品地图
-		goods = {
-			'1,3':1,
-			'26,3':1,
-			'1,23':1,
-			'26,23':1
-		};
 		beans = stage.createMap({
 			x:60,
 			y:10,
@@ -254,7 +254,7 @@
 						if(!this.get(i,j)){
 							var pos = this.coord2position(i,j);
 							context.fillStyle = "#F5F5DC";
-							if(goods[i+','+j]){
+							if(_GOODS[i+','+j]){
 								context.beginPath();
 								context.arc(pos.x,pos.y,3+this.times%2,0,2*Math.PI,true);
 								context.fill();
@@ -340,9 +340,9 @@
 						if(this.status==1){
 							if(!this.timeout){			//定时器
 								new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
-								var index = this.index;
+								var id = this._id;
 								items.forEach(function(item){
-									if(item.index!=index&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
+									if(item._id!=id&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
 										new_map[item.coord.y][item.coord.x]=1;
 									}
 								});
@@ -357,9 +357,9 @@
 							}
 						}else if(this.status==3){
 							new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
-							var index = this.index;
+							var id = this._id;
 							items.forEach(function(item){
-								if(item.index!=index){
+								if(item._id!=id){
 									new_map[item.coord.y][item.coord.x]=1;
 								}
 							});
@@ -469,7 +469,7 @@
 			update:function(){
 				var coord = this.coord;
 				if(!coord.offset){
-					if(typeof this.control.orientation!='undefined'){
+					if(this.control.orientation!='undefined'){
 						if(!map.get(coord.x+_COS[this.control.orientation],coord.y+_SIN[this.control.orientation])){
 							this.orientation = this.control.orientation;
 						}
@@ -487,7 +487,7 @@
 					if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
 						_SCORE++;
 						beans.set(this.coord.x,this.coord.y,1);
-						if(goods[this.coord.x+','+this.coord.y]){	//吃到能量豆
+						if(_GOODS[this.coord.x+','+this.coord.y]){	//吃到能量豆
 							items.forEach(function(item){
 								if(item.status==1||item.status==3){	//如果NPC为正常状态，则置为临时状态
 									item.timeout = 450;

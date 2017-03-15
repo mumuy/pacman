@@ -29,18 +29,18 @@ Date.now = function() { return new Date().getTime(); };
 
 function Game(id,params){
     var _ = this;
-    params = params||{};
     var settings = {
         width:960,						//画布宽度
         height:640						//画布高度
     };
     var _extend = function(target,settings,params){
+        params = params||{};
         for(var i in settings){
             target[i] = params[i]||settings[i];
         }
         return target;
     };
-    _extend(this,settings,params);
+    _extend(_,settings,params);
     var $canvas = document.getElementById(id);
     $canvas.width = _.width;
     $canvas.height = _.height;
@@ -48,10 +48,12 @@ function Game(id,params){
     var _stages = [];							//布景对象队列
     var _events = {};							//事件集合
     var _index=0,								//当前布景索引
-    _hander;  								//帧动画控制
+        _hander;  								//帧动画控制
     //活动对象构造
     var Item = function(params){
         this._params = params||{};
+        this._id = 0;               //标志符
+        this._stage = null;         //与所属布景绑定
         this._settings = {
             x:0,					//位置坐标:横坐标
             y:0,					//位置坐标:纵坐标
@@ -68,8 +70,6 @@ function Game(id,params){
             path:[],				//NPC自动行走的路径
             vector:null,			//目标坐标
             //布局相关
-            stage:null,				//绑定对象与所属布景绑定
-            index:0,				//对象索引
             frames:1,				//速度等级,内部计算器times多少帧变化一次
             times:0,				//刷新画布计数(用于循环动画状态判断)
             timeout:0,				//倒计时(用于过程动画状态判断)
@@ -86,7 +86,7 @@ function Game(id,params){
                 var position = _.getPosition(e);
                 _stages[_index].items.forEach(function(item){
                     if(Math.abs(position.x-item.x)<item.width/2&&Math.abs(position.y-item.y)<item.height/2){
-                        var key = 's'+_index+'i'+item.index;
+                        var key = 's'+_index+'i'+item._id;
                         if(_events[eventType][key]){
                             _events[eventType][key](e);
                         }
@@ -95,24 +95,25 @@ function Game(id,params){
                 e.preventDefault();
             });
         }
-        _events[eventType]['s'+this.stage.index+'i'+this.index] = callback.bind(this);  //绑定作用域
+        _events[eventType]['s'+this._stage.index+'i'+this._id] = callback.bind(this);  //绑定作用域
     };
     //地图对象构造器
     var Map = function(params){
         this._params = params||{};
+        this._id = 0;               //标志符
+        this._stage = null;         //与所属布景绑定
         this._settings = {
-            x:0,						//地图起点坐标
+            x:0,					//地图起点坐标
             y:0,
-            size:20,					//地图单元的宽度
-            data:[],					//地图数据
-            stage:null,					//布景
-            x_length:0,					//二维数组x轴长度
-            y_length:0,					//二维数组y轴长度
-            frames:1,					//速度等级,内部计算器times多少帧变化一次
-            times:0,					//刷新画布计数(用于循环动画状态判断)
-            cache:false,    			//是否静态（如静态则设置缓存）
-            update:function(){},		//更新地图数据
-            draw:function(){},			//绘制地图
+            size:20,				//地图单元的宽度
+            data:[],				//地图数据
+            x_length:0,				//二维数组x轴长度
+            y_length:0,				//二维数组y轴长度
+            frames:1,				//速度等级,内部计算器times多少帧变化一次
+            times:0,				//刷新画布计数(用于循环动画状态判断)
+            cache:false,    		//是否静态（如静态则设置缓存）
+            update:function(){},	//更新地图数据
+            draw:function(){},		//绘制地图
         };
         _extend(this,this._settings,this._params);
     };
@@ -162,12 +163,9 @@ function Game(id,params){
         var result = [];
         var y_length  = options.map.length;
         var x_length = options.map[0].length;
-        var steps = []; 	//步骤的映射
+        var steps = [];     //步骤的映射
         for(var y=y_length;y--;){
-            steps[y] = [];
-            for(var x=x_length;x--;){
-                steps[y][x] = 0;
-            }
+            steps[y] = new Array(x_length).fill(0);
         }
         var _getValue = function(x,y){  //获取地图上的值
             if(options.map[y]&&typeof options.map[y][x]!='undefined'){
@@ -175,7 +173,7 @@ function Game(id,params){
             }
             return -1;
         };
-        var _next = function(to){ //判定是非可走,可走放入列表
+        var _next = function(to){ //判定是否可走,可走放入列表
             var value = _getValue(to.x,to.y);
             if(value<1){
                 if(value==-1){
@@ -238,6 +236,7 @@ function Game(id,params){
     var Stage = function(params){
         this._params = params||{};
         this._settings = {
+            index:0,                        //布景索引
             status:0,						//布景状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时,4表示异常
             maps:[],						//地图队列
             audio:[],						//音频资源
@@ -248,19 +247,54 @@ function Game(id,params){
         };
         _extend(this,this._settings,this._params);
     };
+    //添加对象
+    Stage.prototype.createItem = function(options){
+        var item = new Item(options);
+        //动态属性
+        if(item.location){
+            var position = item.location.coord2position(item.coord.x,item.coord.y);
+            item.x = position.x;
+            item.y = position.y;
+        }
+        //关系绑定
+        item._stage = this;
+        item._id = this.items.length;
+        this.items.push(item);
+        return item;
+    };
     //重置物体位置
     Stage.prototype.resetItems = function(){
         this.status = 1;
         this.items.forEach(function(item,index){
             _extend(item,item._settings,item._params);
-            item.index = index;
-            item.stage = this;
             if(item.location){
                 var position = item.location.coord2position(item.coord.x,item.coord.y);
                 item.x = position.x;
                 item.y = position.y;
             }
-        }.bind(this));
+        });
+    };
+    //获取对象列表
+    Stage.prototype.getItemsByType = function(type){
+        return this.items.filter(function(item){
+            if(item.type==type){
+                return item;
+            }
+        });
+    };
+    //添加地图
+    Stage.prototype.createMap = function(options){
+        var map = new Map(options);
+        //动态属性
+        map.data = JSON.parse(JSON.stringify(map._params.data));
+        map.y_length = map.data.length;
+        map.x_length = map.data[0].length;
+        map.imageData = null;
+        //关系绑定
+        map._stage = this;
+        map._id = this.maps.length;
+        this.maps.push(map);
+        return map;
     };
     //重置地图
     Stage.prototype.resetMaps = function(){
@@ -268,51 +302,16 @@ function Game(id,params){
         this.maps.forEach(function(map){
             _extend(map,map._settings,map._params);
             map.data = JSON.parse(JSON.stringify(map._params.data));
-            map.stage = this;
             map.y_length = map.data.length;
             map.x_length = map.data[0].length;
-        }.bind(this));
+            map.imageData = null;
+        });
     };
     //重置
     Stage.prototype.reset = function(){
         _extend(this,this._settings,this._params);
         this.resetItems();
         this.resetMaps();
-    };
-    //添加对象
-    Stage.prototype.createItem = function(options){
-        var item = new Item(options);
-        //动态属性
-        item.stage = this;
-        item.index = this.items.length;
-        if(item.location){
-            var position = item.location.coord2position(item.coord.x,item.coord.y);
-            item.x = position.x;
-            item.y = position.y;
-        }
-        this.items.push(item);
-        return item;
-    };
-    //获取对象列表
-    Stage.prototype.getItemsByType = function(type){
-        var items = this.items.filter(function(item){
-            if(item.type==type){
-                return item;
-            }
-        });
-        return items;
-    };
-    //添加地图
-    Stage.prototype.createMap = function(options){
-        var map = new Map(options);
-        //动态属性
-        map.data = JSON.parse(JSON.stringify(map._params.data));
-        map.stage = this;
-        map.y_length = map.data.length;
-        map.x_length = map.data[0].length;
-        map.imageData = null;
-        this.maps.push(map);
-        return map;
     };
     //绑定事件
     Stage.prototype.bind = function(eventType,callback){
@@ -406,10 +405,7 @@ function Game(id,params){
     //下个布景
     this.nextStage = function(){
         if(_index<_stages.length-1){
-            _stages[_index].status = 0;
-            _index++;
-            _stages[_index].status = 1;
-            return _stages[_index];
+            return this.setStage(++_index);
         }else{
             throw new Error('unfound new stage.');
         }
