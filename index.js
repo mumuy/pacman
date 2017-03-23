@@ -116,22 +116,24 @@
 				var stage = this;
 				if(stage.status==1){								//场景正常运行
 					items.forEach(function(item){
-						var dx = item.x-player.x;
-						var dy = item.y-player.y;
-						if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
-							if(item.status==3){
-								item.status = 4;
-								_SCORE += 10;
-							}else{
-								stage.status = 3;
-								stage.timeout = 30;
+						if(map&&!map.get(item.coord.x,item.coord.y)&&!map.get(player.coord.x,player.coord.y)){
+							var dx = item.x-player.x;
+							var dy = item.y-player.y;
+							if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
+								if(item.status==3){
+									item.status = 4;
+									_SCORE += 10;
+								}else{
+									stage.status = 3;
+									stage.timeout = 30;
+								}
 							}
 						}
 					});
 					if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入结束画面
 						game.nextStage();
 					}
-				}else if(stage.status==3){		//场景暂停状态
+				}else if(stage.status==3){		//场景临时状态
 					if(!stage.timeout){
 						_LIFE--;
 						if(_LIFE){
@@ -338,7 +340,7 @@
 					}
 					if(!this.coord.offset){			//到达坐标中心时计算
 						if(this.status==1){
-							if(!this.timeout){			//定时器
+							if(!this.timeout){		//定时器
 								new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
 								var id = this._id;
 								items.forEach(function(item){
