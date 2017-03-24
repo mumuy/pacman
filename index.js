@@ -153,90 +153,63 @@
 			data:_DATA,
 			cache:true,
 			draw:function(context){
+				context.lineWidth = 2;
 				for(var j=0; j<this.y_length; j++){
 					for(var i=0; i<this.x_length; i++){
 						var value = this.get(i,j);
 						if(value){
-							var code = 0;
-							if(this.get(i,j-1)&&!(this.get(i-1,j-1)&&this.get(i+1,j-1)&&this.get(i-1,j)&&this.get(i+1,j))){
-								if(j){
-									code += 1000;
-								}
-							}
+							var code = [0,0,0,0];
 							if(this.get(i+1,j)&&!(this.get(i+1,j-1)&&this.get(i+1,j+1)&&this.get(i,j-1)&&this.get(i,j+1))){
-								if(i<this.x_length-1){
-									code += 100;
-								}
+								code[0]=1;
 							}
 							if(this.get(i,j+1)&&!(this.get(i-1,j+1)&&this.get(i+1,j+1)&&this.get(i-1,j)&&this.get(i+1,j))){
-								if(j<this.y_length-1){
-									code += 10;
-								}
+								code[1]=1;
 							}
 							if(this.get(i-1,j)&&!(this.get(i-1,j-1)&&this.get(i-1,j+1)&&this.get(i,j-1)&&this.get(i,j+1))){
-								if(i){
-									code += 1;
-								}
+								code[2]=1;
 							}
-							if(code){
-								context.lineWidth = 2;
+							if(this.get(i,j-1)&&!(this.get(i-1,j-1)&&this.get(i+1,j-1)&&this.get(i-1,j)&&this.get(i+1,j))){
+								code[3]=1;
+							}
+							if(code.indexOf(1)>-1){
 								context.strokeStyle=value==2?"#FFF":"#09C";
 								var pos = this.coord2position(i,j);
-								switch(code){
-									case 1100:
-									context.beginPath();
-									context.arc(pos.x+this.size/2,pos.y-this.size/2,this.size/2,.5*Math.PI,1*Math.PI,false);
-									context.stroke();
-									context.closePath();
-									break;
-									case 110:
-									context.beginPath();
-									context.arc(pos.x+this.size/2,pos.y+this.size/2,this.size/2,Math.PI,1.5*Math.PI,false);
-									context.stroke();
-									context.closePath();
-									break;
-									case 11:
-									context.beginPath();
-									context.arc(pos.x-this.size/2,pos.y+this.size/2,this.size/2,1.5*Math.PI,2*Math.PI,false);
-									context.stroke();
-									context.closePath();
-									break;
-									case 1001:
-									context.beginPath();
-									context.arc(pos.x-this.size/2,pos.y-this.size/2,this.size/2,0,.5*Math.PI,false);
-									context.stroke();
-									context.closePath();
-									break;
+								switch(code.join('')){
+									case '1100':
+										context.beginPath();
+										context.arc(pos.x+this.size/2,pos.y+this.size/2,this.size/2,Math.PI,1.5*Math.PI,false);
+										context.stroke();
+										context.closePath();
+										break;
+									case '0110':
+										context.beginPath();
+										context.arc(pos.x-this.size/2,pos.y+this.size/2,this.size/2,1.5*Math.PI,2*Math.PI,false);
+										context.stroke();
+										context.closePath();
+										break;
+									case '0011':
+										context.beginPath();
+										context.arc(pos.x-this.size/2,pos.y-this.size/2,this.size/2,0,.5*Math.PI,false);
+										context.stroke();
+										context.closePath();
+										break;
+									case '1001':
+										context.beginPath();
+										context.arc(pos.x+this.size/2,pos.y-this.size/2,this.size/2,.5*Math.PI,1*Math.PI,false);
+										context.stroke();
+										context.closePath();
+										break;
 									default:
-									var arr = String.prototype.split.call(code,'');
-									if(+arr.pop()){
-										context.beginPath();
-										context.moveTo(pos.x,pos.y);
-										context.lineTo(pos.x-this.size/2,pos.y);
-										context.stroke();
-										context.closePath();
-									}
-									if(+arr.pop()){
-										context.beginPath();
-										context.moveTo(pos.x,pos.y);
-										context.lineTo(pos.x,pos.y+this.size/2);
-										context.stroke();
-										context.closePath();
-									}
-									if(+arr.pop()){
-										context.beginPath();
-										context.moveTo(pos.x,pos.y);
-										context.lineTo(pos.x+this.size/2,pos.y);
-										context.stroke();
-										context.closePath();
-									}
-									if(+arr.pop()){
-										context.beginPath();
-										context.moveTo(pos.x,pos.y);
-										context.lineTo(pos.x,pos.y-this.size/2);
-										context.stroke();
-										context.closePath();
-									}
+										var dist = this.size/2;
+										code.forEach(function(v,index){
+											if(v){
+												context.beginPath();
+												context.moveTo(pos.x,pos.y);
+												context.lineTo(pos.x-_COS[index]*dist,pos.y-_SIN[index]*dist);
+												context.stroke();
+												context.closePath();							
+											}
+										});
 								}
 							}
 						}
