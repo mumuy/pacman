@@ -55,15 +55,12 @@
 			y:game.height*.45,
 			width:100,
 			height:100,
-			frames:10,
+			frames:3,
 			draw:function(context){
+				var t = Math.abs(5-this.times%10);
 				context.fillStyle = '#FFE600';
 				context.beginPath();
-				if(this.times%2){
-					context.arc(this.x,this.y,this.width/2,.20*Math.PI,1.80*Math.PI,false);
-				}else{
-					context.arc(this.x,this.y,this.width/2,.01*Math.PI,1.99*Math.PI,false);
-				}
+				context.arc(this.x,this.y,this.width/2,t*.04*Math.PI,(2-t*.04)*Math.PI,false);
 				context.lineTo(this.x,this.y);
 				context.closePath();
 				context.fill();
