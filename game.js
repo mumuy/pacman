@@ -333,6 +333,8 @@ function Game(id,params){
         var fn = function(){
             var stage = _stages[_index];
             _context.clearRect(0,0,_.width,_.height);		//清除画布
+            _context.fillStyle = '#000000';
+            _context.fillRect(0,0,_.width,_.height);
             f++;
             if(stage.timeout){
                 stage.timeout--;
