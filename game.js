@@ -237,7 +237,7 @@ function Game(id,params){
         this._params = params||{};
         this._settings = {
             index:0,                        //布景索引
-            status:0,						//布景状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时,4表示异常
+            status:0,						//布景状态,0表示未激活/结束,1表示正常,2表示暂停,3表示临时状态
             maps:[],						//地图队列
             audio:[],						//音频资源
             images:[],						//图片资源
@@ -411,6 +411,10 @@ function Game(id,params){
         }else{
             throw new Error('unfound new stage.');
         }
+    };
+    //获取布景列表
+    this.getStages = function(){
+        return _stages;
     };
     //初始化游戏引擎
     this.init = function(){
