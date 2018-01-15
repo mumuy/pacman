@@ -260,9 +260,7 @@
 							}
 						});
 						if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入下一关
-							setTimeout(function(){
-								game.nextStage();
-							},1500);
+							game.nextStage();
 						}
 					}else if(stage.status==3){		//场景临时状态
 						if(!stage.timeout){
