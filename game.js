@@ -402,6 +402,7 @@ function Game(id,params){
         _stages[_index].status = 0;
         _index = index;
         _stages[_index].status = 1;
+        _stages[_index].reset(); //重置
         return _stages[_index];
     };
     //下个布景

@@ -1033,8 +1033,7 @@
 				case 32: //空格
 				_SCORE = 0;
 				_LIFE = 5;
-				var st = game.setStage(1);
-				st.reset();
+				game.setStage(1);
 				break;
 			}
 		});
