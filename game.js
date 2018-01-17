@@ -245,9 +245,7 @@ function Game(id,params){
         var item = new Item(options);
         //动态属性
         if(item.location){
-            var position = item.location.coord2position(item.coord.x,item.coord.y);
-            item.x = position.x;
-            item.y = position.y;
+            Object.assign(item,item.location.coord2position(item.coord.x,item.coord.y));
         }
         //关系绑定
         item._stage = this;
@@ -261,9 +259,7 @@ function Game(id,params){
         this.items.forEach(function(item,index){
             Object.assign(item,item._settings,item._params);
             if(item.location){
-                var position = item.location.coord2position(item.coord.x,item.coord.y);
-                item.x = position.x;
-                item.y = position.y;
+                Object.assign(item,item.location.coord2position(item.coord.x,item.coord.y));
             }
         });
     };
