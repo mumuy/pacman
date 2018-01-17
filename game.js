@@ -33,14 +33,7 @@ function Game(id,params){
         width:960,						//画布宽度
         height:640						//画布高度
     };
-    var _extend = function(target,settings,params){
-        params = params||{};
-        for(var i in settings){
-            target[i] = params[i]||settings[i];
-        }
-        return target;
-    };
-    _extend(_,settings,params);
+    Object.assign(_,settings,params);
     var $canvas = document.getElementById(id);
     $canvas.width = _.width;
     $canvas.height = _.height;
@@ -77,7 +70,7 @@ function Game(id,params){
             update:function(){}, 	//更新参数信息
             draw:function(){}		//绘制
         };
-        _extend(this,this._settings,this._params);
+        Object.assign(this,this._settings,this._params);
     };
     Item.prototype.bind = function(eventType,callback){
         if(!_events[eventType]){
@@ -115,7 +108,7 @@ function Game(id,params){
             update:function(){},	//更新地图数据
             draw:function(){},		//绘制地图
         };
-        _extend(this,this._settings,this._params);
+        Object.assign(this,this._settings,this._params);
     };
     //获取地图上某点的值
     Map.prototype.get = function(x,y){
@@ -155,7 +148,7 @@ function Game(id,params){
             end:{},
             type:'path'
         };
-        var options = _extend({},defaults,params);
+        var options = Object.assign({},defaults,params);
         if(options.map[options.start.y][options.start.x]||options.map[options.end.y][options.end.x]){ //当起点或终点设置在墙上
             return [];
         }
@@ -245,7 +238,7 @@ function Game(id,params){
             timeout:0,						//倒计时(用于过程动画状态判断)
             update:function(){}				//嗅探,处理布局下不同对象的相对关系
         };
-        _extend(this,this._settings,this._params);
+        Object.assign(this,this._settings,this._params);
     };
     //添加对象
     Stage.prototype.createItem = function(options){
@@ -266,7 +259,7 @@ function Game(id,params){
     Stage.prototype.resetItems = function(){
         this.status = 1;
         this.items.forEach(function(item,index){
-            _extend(item,item._settings,item._params);
+            Object.assign(item,item._settings,item._params);
             if(item.location){
                 var position = item.location.coord2position(item.coord.x,item.coord.y);
                 item.x = position.x;
@@ -300,7 +293,7 @@ function Game(id,params){
     Stage.prototype.resetMaps = function(){
         this.status = 1;
         this.maps.forEach(function(map){
-            _extend(map,map._settings,map._params);
+            Object.assign(map,map._settings,map._params);
             map.data = JSON.parse(JSON.stringify(map._params.data));
             map.y_length = map.data.length;
             map.x_length = map.data[0].length;
@@ -309,7 +302,7 @@ function Game(id,params){
     };
     //重置
     Stage.prototype.reset = function(){
-        _extend(this,this._settings,this._params);
+        Object.assign(this,this._settings,this._params);
         this.resetItems();
         this.resetMaps();
     };
