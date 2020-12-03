@@ -266,9 +266,7 @@ function Game(id,params){
     //获取对象列表
     Stage.prototype.getItemsByType = function(type){
         return this.items.filter(function(item){
-            if(item.type==type){
-                return item;
-            }
+	    return item.type == type;
         });
     };
     //添加地图
