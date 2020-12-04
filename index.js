@@ -926,7 +926,7 @@
 				update:function(){
 					var coord = this.coord;
 					if(!coord.offset){
-						if(this.control.orientation!='undefined'){
+						if(typeof this.control.orientation != 'undefined'){
 							if(!map.get(coord.x+_COS[this.control.orientation],coord.y+_SIN[this.control.orientation])){
 								this.orientation = this.control.orientation;
 							}
