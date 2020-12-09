@@ -575,7 +575,7 @@
 	//游戏主程序
 	(function(){
 		_COIGIG.forEach(function(config,index){
-			var stage,map,beans,items,player,times;
+			var stage,map,beans,items,player;
 			stage = game.createStage({
 				update:function(){
 					var stage = this;
