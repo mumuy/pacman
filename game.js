@@ -156,10 +156,7 @@ function Game(id,params){
         var result = [];
         var y_length  = options.map.length;
         var x_length = options.map[0].length;
-        var steps = [];     //步骤的映射
-        for(var y=y_length;y--;){
-            steps[y] = new Array(x_length).fill(0);
-        }
+        var steps = Array(y_length).fill(0).map(()=>Array(x_length).fill(0));     //步骤的映射
         var _getValue = function(x,y){  //获取地图上的值
             if(options.map[y]&&typeof options.map[y][x]!='undefined'){
                 return options.map[y][x];
