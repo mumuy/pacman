@@ -84,19 +84,19 @@ function Game(id,params){
     Item.prototype.bind = function(eventType,callback){
         if(!_events[eventType]){
             _events[eventType] = {};
-            $canvas.addEventListener(eventType,function(e){
-                var position = _.getPosition(e);
-                _stages[_index].items.forEach(function(item){
-                    if(Math.abs(position.x-item.x)<item.width/2&&Math.abs(position.y-item.y)<item.height/2){
-                        var key = 's'+_index+'i'+item._id;
-                        if(_events[eventType][key]){
-                            _events[eventType][key](e);
-                        }
-                    }
-                });
-                e.preventDefault();
-            });
         }
+        $canvas.addEventListener(eventType,function(e){
+            var position = _.getPosition(e);
+            _stages[_index].items.forEach(function(item){
+                if(item.x<=position.x&&position.x<=item.x+item.width&&item.y<=position.y&&position.y<=item.y+item.height){
+                    var key = 's'+_index+'i'+item._id;
+                    if(_events[eventType][key]){
+                        _events[eventType][key](e);
+                    }
+                }
+            });
+            e.preventDefault();
+        });
         _events[eventType]['s'+this._stage.index+'i'+this._id] = callback.bind(this);  //绑定作用域
     };
     //地图对象构造器
@@ -310,14 +310,14 @@ function Game(id,params){
     Stage.prototype.bind = function(eventType,callback){
         if(!_events[eventType]){
             _events[eventType] = {};
-            window.addEventListener(eventType,function(e){
-                var key = 's' + _index;
-                if(_events[eventType][key]){
-                    _events[eventType][key](e);
-                }
-                e.preventDefault();
-            });
         }
+        window.addEventListener(eventType,function(e){
+            var key = 's' + _index;
+            if(_events[eventType][key]){
+                _events[eventType][key](e);
+            }
+            e.preventDefault();
+        });
         _events[eventType]['s'+this.index] = callback.bind(this);	//绑定事件作用域
     };
     //动画开始

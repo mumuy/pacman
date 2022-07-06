@@ -561,15 +561,21 @@
 		});
 		//版权信息
 		stage.createItem({
-			x:game.width-12,
+			x:game.width-10,
 			y:game.height-5,
 			draw:function(context){
-				context.font = '14px Helvetica';
-				context.textAlign = 'right';
-				context.textBaseline = 'bottom';
+				var text = '© passer-by.com';
+				context.font = '14px/20px Helvetica';
+				context.textAlign = 'left';
+				context.textBaseline = 'top';
 				context.fillStyle = '#AAA';
-				context.fillText('© passer-by.com',this.x,this.y);
+				this.width = context.measureText(text).width;
+				this.x = game.width-this.width-10;
+				this.y = game.height-20-5;
+				context.fillText(text,this.x,this.y);
 			}
+		}).bind('click',function(){
+			window.open('https://passer-by.com');
 		});
 		//事件绑定
 		stage.bind('keydown',function(e){
