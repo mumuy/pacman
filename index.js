@@ -688,7 +688,7 @@
 													context.moveTo(pos.x,pos.y);
 													context.lineTo(pos.x-_COS[index]*dist,pos.y-_SIN[index]*dist);
 													context.stroke();
-													context.closePath();							
+													context.closePath();
 												}
 											});
 									}
