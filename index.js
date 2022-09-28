@@ -941,11 +941,22 @@
 				update:function(){
 					var coord = this.coord;
 					if(!coord.offset){
-						if(typeof this.control.orientation != 'undefined'){
-							if(!map.get(coord.x+_COS[this.control.orientation],coord.y+_SIN[this.control.orientation])){
-								this.orientation = this.control.orientation;
+
+						if (typeof this.control.orientation != 'undefined')
+						{
+							this.requestedOrientation = this.control.orientation;
+						}
+
+						if (typeof this.requestedOrientation != 'undefined')
+						{
+							if (!map.get(coord.x + _COS[this.requestedOrientation], coord.y + _SIN[this.requestedOrientation]))
+							{
+								this.orientation = this.requestedOrientation;
+								this.requestedOrientation = null;
 							}
 						}
+
+
 						this.control = {};
 						var value = map.get(coord.x+_COS[this.orientation],coord.y+_SIN[this.orientation]);
 						if(value==0){
