@@ -323,7 +323,14 @@ function Game(id,params){
     //动画开始
     this.start = function() {
         var f = 0;		//帧数计算
+        var timestamp = (new Date()).getTime();
         var fn = function(){
+            var now = (new Date()).getTime();
+            if(now-timestamp<16){   // 限频，防止高刷屏幕动画过快
+                _hander = requestAnimationFrame(fn);
+                return false;
+            }
+            timestamp = now;
             var stage = _stages[_index];
             _context.clearRect(0,0,_.width,_.height);		//清除画布
             _context.fillStyle = '#000000';
