@@ -570,7 +570,7 @@
 					context.textAlign = 'center';
 					context.textBaseline = 'middle';
 					context.fillStyle = '#AAA';
-					context.fillText('Press ENTER to start',this.x,this.y);
+					context.fillText('Press Enter to start',this.x,this.y);
 				}
 			}
 		});
@@ -797,11 +797,13 @@
 						context.closePath();
 						context.fill();
 					}
-					context.font = '20px PressStart2P';
+					context.font = '18px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'center';
 					context.fillStyle = '#FFF';
-					context.fillText('X '+(_LIFE-1),this.x-15,this.y+30);
+					context.fillText('X',this.x-15,this.y+30);
+					context.font = '24px PressStart2P';
+					context.fillText((_LIFE-1),this.x+10,this.y+26);
 				}
 			});
 			//NPC
