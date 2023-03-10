@@ -528,7 +528,7 @@
 		//logo
 		stage.createItem({
 			x:game.width/2,
-			y:game.height*.45,
+			y:game.height*.35,
 			width:100,
 			height:100,
 			frames:3,
@@ -547,16 +547,31 @@
 				context.fill();
 			}
 		});
-		//游戏名
+		// 游戏名
 		stage.createItem({
 			x:game.width/2,
-			y:game.height*.6,
+			y:game.height*.5,
 			draw:function(context){
-				context.font = 'bold 42px Helvetica';
+				context.font = 'bold 42px PressStart2P';
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
 				context.fillStyle = '#FFF';
 				context.fillText('Pac-Man',this.x,this.y);
+			}
+		});
+		// 提示
+		stage.createItem({
+			x:game.width/2,
+			y:game.height*.64,
+			frames:32,
+			draw:function(context){
+				if(this.times%2){
+					context.font = 'bold 16px PressStart2P';
+					context.textAlign = 'center';
+					context.textBaseline = 'middle';
+					context.fillStyle = '#CCC';
+					context.fillText('Press ENTER to start',this.x,this.y);
+				}
 			}
 		});
 		//版权信息
@@ -565,7 +580,7 @@
 			y:game.height-5,
 			draw:function(context){
 				var text = '© passer-by.com';
-				context.font = '14px/20px Helvetica';
+				context.font = '13px/20px PressStart2P';
 				context.textAlign = 'left';
 				context.textBaseline = 'top';
 				context.fillStyle = '#AAA';
@@ -728,26 +743,26 @@
 				x:690,
 				y:80,
 				draw:function(context){
-					context.font = 'bold 26px Helvetica';
+					context.font = 'bold 24px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'bottom';
 					context.fillStyle = '#C33';
 					context.fillText('SCORE',this.x,this.y);
-					context.font = '26px Helvetica';
+					context.font = '24px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'top';
 					context.fillStyle = '#FFF';
-					context.fillText(_SCORE,this.x+12,this.y);
-					context.font = 'bold 26px Helvetica';
+					context.fillText(_SCORE,this.x+12,this.y+10);
+					context.font = 'bold 24px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'bottom';
 					context.fillStyle = '#C33';
 					context.fillText('LEVEL',this.x,this.y+72);
-					context.font = '26px Helvetica';
+					context.font = '24px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'top';
 					context.fillStyle = '#FFF';
-					context.fillText(index+1,this.x+12,this.y+72);
+					context.fillText(index+1,this.x+12,this.y+82);
 				}
 			});
 			//状态文字
@@ -757,7 +772,7 @@
 				frames:25,
 				draw:function(context){
 					if(stage.status==2&&this.times%2){
-						context.font = '24px Helvetica';
+						context.font = '24px PressStart2P';
 						context.textAlign = 'left';
 						context.textBaseline = 'center';
 						context.fillStyle = '#FFF';
@@ -782,7 +797,7 @@
 						context.closePath();
 						context.fill();
 					}
-					context.font = '26px Helvetica';
+					context.font = '20px PressStart2P';
 					context.textAlign = 'left';
 					context.textBaseline = 'center';
 					context.fillStyle = '#FFF';
@@ -1023,7 +1038,7 @@
 			y:game.height*.35,
 			draw:function(context){
 				context.fillStyle = '#FFF';
-				context.font = 'bold 48px Helvetica';
+				context.font = 'bold 48px PressStart2P';
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
 				context.fillText(_LIFE?'YOU WIN!':'GAME OVER',this.x,this.y);
@@ -1035,7 +1050,7 @@
 			y:game.height*.5,
 			draw:function(context){
 				context.fillStyle = '#FFF';
-				context.font = '20px Helvetica';
+				context.font = '20px PressStart2P';
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
 				context.fillText('FINAL SCORE: '+(_SCORE+50*Math.max(_LIFE-1,0)),this.x,this.y);
@@ -1053,5 +1068,10 @@
 			}
 		});
 	})();
-	game.init();
+
+	const myFont = new FontFace('PressStart2P', 'url(./PressStart2P.ttf)');
+	myFont.load().then(font => {
+	  	document.fonts.add(font);
+		game.init();
+	});
 })();
