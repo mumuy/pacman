@@ -563,13 +563,13 @@
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.64,
-			frames:32,
+			frames:28,
 			draw:function(context){
 				if(this.times%2){
-					context.font = 'bold 16px PressStart2P';
+					context.font = 'bold 14px PressStart2P';
 					context.textAlign = 'center';
 					context.textBaseline = 'middle';
-					context.fillStyle = '#CCC';
+					context.fillStyle = '#AAA';
 					context.fillText('Press ENTER to start',this.x,this.y);
 				}
 			}
@@ -580,7 +580,7 @@
 			y:game.height-5,
 			draw:function(context){
 				var text = '© passer-by.com';
-				context.font = '13px/20px PressStart2P';
+				context.font = '12px/20px PressStart2P';
 				context.textAlign = 'left';
 				context.textBaseline = 'top';
 				context.fillStyle = '#AAA';
