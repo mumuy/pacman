@@ -1,82 +1,39 @@
 <html>
 	<head>
 		<meta charset="utf8">
-		<title>Pac-Man . 吃豆人游戏</title>
+		<title>吃豆人 ・ Pac-Man</title>
 		<meta name="description" content="吃豆人（Pac-Man）是上世纪80年代一款经典街机游戏，游戏的主角小精灵的形象甚至被作为一种大众文化符号。本游戏使用HTML5完美移植该游戏，设置了多个关卡并改良了幽灵的寻路算法，可作为Canvas游戏学习的案例演示。">
 		<meta name="keywords" content="吃豆人,FC吃豆子,吃豆游戏,Pac-Man,HTML5游戏,Javascript游戏引擎">
 		<link rel="shortcut icon" href="favicon.png">
-		<style>
-			html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h3,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;*font-size:100%}legend{color:#000}
-			.wrapper{
-				width: 960px;
-				margin:0 auto;
-				color:#999;
-			}
-			canvas{display:block;background: #000;}
-			.mod-game .info{
-				padding: 10px 0;
-				margin-bottom: 5px;
-				line-height: 20px;
-				text-align: center;
-				color: #666;
-			}
-			.mod-game .info p{
-				line-height: 20px;
-				font-size: 14px;
-				color: #666;
-			}
-			.mod-game .intro{
-				padding: 10px 15px;
-				background: #f8f8f8;
-				border-radius: 5px;
-			}
-			.mod-game .intro p{
-				line-height: 22px;
-				text-indent: 2em;
-				font-size: 14px;
-				color: #666;
-			}
-			.mod-button{
-				height: 32px;
-				padding: 15px 0;
-				text-align: center;
-			}
-			.mod-button span,.mod-button a{
-				vertical-align: middle;
-			}
-			.mod-button .btn{
-				display: inline-block;
-				padding: 0 12px;
-				line-height: 26px;
-				color: #24292f;
-				border: 1px solid #dddede;
-				text-decoration: none;
-				font-size: 13px;
-				color: #24292f;
-				border-radius: 2px;
-			}
-		</style>
+		<link rel="stylesheet" href="./static/style/index.css">
 		<script type="text/javascript">
-			setTimeout(function(){
-				if(location.hostname.indexOf('passer-by.com')<0){
-					location.href = 'http://passer-by.com/';
-				}else if( window.top != window.self ) {
-				    window.top.location = self.location.href;
-				}
-			},parseInt(3000+15000*Math.random()));
+            if(location.protocol!='file:'){
+                setTimeout(function(){
+                    if(!location.hostname.includes('passer-by.com')){
+                        location.href = 'http://passer-by.com/';
+                    }else if( window.top != window.self ) {
+                        window.top.location = self.location.href;
+                    }
+                },parseInt(3000+15000*Math.random()));
+            }
 		</script>
 	</head>
 	<body>
 		<div class="wrapper">
-			<div class="mod-game">
-				<canvas id="canvas" width="960" height="640">不支持画布</canvas>
-				<div class="info">
-					<p>按 [空格键] 暂停或继续</p>
-					<p>Press [space] to pause or continue</p>
+			<div class="mod-panel">
+				<div class="hd"><h1>吃豆人 ・ Pac-Man</h1></div>
+				<div class="bd">
+					<canvas id="canvas" width="960" height="640">不支持画布</canvas>
 				</div>
-				<div class="intro">
-					<p>这款吃豆人游戏的开发是我在学习和探索HTML5游戏的一次尝试，也是对这款儿时经典街机游戏的致敬。游戏大致还原了我印象中Pac-Man的样子，在移植关卡和玩法规则的同时，在游戏中加入了游戏角色动画管理和幽灵的智能寻址算法，实现了幽灵对玩家的围堵。在你玩的过程中，你会发现这些精灵似乎很有想法，它们知道如何彼此协作对你穷追不舍。</p>
-					<p>如果你对此感兴趣，可以在Github上关注此项目。我希望能通过游戏和代码与你分享一些我对游戏开发的感悟。</p>
+				<div class="ft">
+					<div class="info">
+						<p>按 [空格键] 暂停或继续</p>
+						<p>Press [space] to pause or continue</p>
+					</div>
+					<div class="intro">
+						<p>这款吃豆人游戏的开发是我在学习和探索HTML5游戏的一次尝试，也是对这款儿时经典街机游戏的致敬。游戏大致还原了我印象中Pac-Man的样子，在移植关卡和玩法规则的同时，在游戏中加入了游戏角色动画管理和幽灵的智能寻址算法，实现了幽灵对玩家的围堵。在你玩的过程中，你会发现这些精灵似乎很有想法，它们知道如何彼此协作对你穷追不舍。</p>
+						<p>如果你对此感兴趣，可以在Github上关注此项目。我希望能通过游戏和代码与你分享一些我对游戏开发的感悟。</p>
+					</div>
 				</div>
 			</div>
 			<div class="mod-button">
@@ -86,8 +43,8 @@
 				<a class="btn" href="/">返回首页</a>
 			</div>
 		</div>
-		<script src="game.js"></script>
-		<script src="index.js"></script>
+		<script src="./static/script/game.js"></script>
+		<script src="./static/script/index.js"></script>
 		<script async defer src="https://buttons.github.io/buttons.js"></script>
 		<script type="text/javascript" src="https://passer-by.com/public/script/projects.js"></script>
 		<script type="text/javascript" src="https://passer-by.com/public/script/stat.js"></script>

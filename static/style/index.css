@@ -1,0 +1,59 @@
+html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h3,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;*font-size:100%}legend{color:#000}
+.wrapper{
+    width: 960px;
+    margin:0 auto;
+    color:#999;
+}
+.mod-panel .hd{
+    padding-top: 10px;
+    line-height: 40px;
+    text-align: center;
+}
+.mod-panel .hd h1{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+.mod-panel canvas{display:block;background: #000;}
+.mod-panel .info{
+    padding: 10px 0;
+    margin-bottom: 5px;
+    line-height: 20px;
+    text-align: center;
+    color: #666;
+}
+.mod-panel .info p{
+    line-height: 20px;
+    font-size: 14px;
+    color: #666;
+}
+.mod-panel .intro{
+    padding: 10px 15px;
+    background: #f8f8f8;
+    border-radius: 5px;
+}
+.mod-panel .intro p{
+    line-height: 22px;
+    text-indent: 2em;
+    font-size: 14px;
+    color: #666;
+}
+.mod-button{
+    height: 32px;
+    padding: 15px 0;
+    text-align: center;
+}
+.mod-button span,.mod-button a{
+    vertical-align: middle;
+}
+.mod-button .btn{
+    display: inline-block;
+    padding: 0 12px;
+    line-height: 26px;
+    color: #24292f;
+    border: 1px solid #dddede;
+    text-decoration: none;
+    font-size: 13px;
+    color: #24292f;
+    border-radius: 2px;
+}
