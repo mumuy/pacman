@@ -38,22 +38,31 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
     font-size: 14px;
     color: #666;
 }
+
 .mod-button{
     height: 32px;
     padding: 15px 0;
+    margin-bottom: 15px;
     text-align: center;
 }
 .mod-button span,.mod-button a{
+    display: inline-block;
+    height: 28px;
     vertical-align: middle;
 }
 .mod-button .btn{
     display: inline-block;
+    height: 26px;
     padding: 0 12px;
     line-height: 26px;
-    color: #24292f;
-    border: 1px solid #dddede;
+    background-color: #ebf0f4;
+    border: 1px solid #d1d9e0;
     text-decoration: none;
+    font-weight: bold;
     font-size: 13px;
-    color: #24292f;
-    border-radius: 2px;
+    color: #25292e;
+    border-radius: 3px;
+}
+.mod-button .btn:hover{
+    background: #f5f6f7;
 }
