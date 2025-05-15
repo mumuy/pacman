@@ -9,6 +9,14 @@
 
 //主程序,业务逻辑
 (function(){
+	const eatSound = document.getElementById('eatSound')
+		|| new Audio('./eat.mp3');
+	eatSound.preload = 'auto';
+
+	const dieSound = document.getElementById('dieSound')
+		|| new Audio('./die.mp3');
+	dieSound.preload = 'auto';
+
 	var _COIGIG = [		//关卡
 		{				//第1关
 			'map':[		//地图数据
@@ -619,6 +627,8 @@
 										item.status = 4;
 										_SCORE += 10;
 									}else{
+										dieSound.currentTime = 0;
+										dieSound.play().catch(()=>{});
 										stage.status = 3;
 										stage.timeout = 30;
 									}
@@ -976,6 +986,10 @@
 						if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
 							_SCORE++;
 							beans.set(this.coord.x,this.coord.y,1);
+
+							eatSound.currentTime = 0;
+							eatSound.play().catch(()=>{});
+
 							if(config['goods'][this.coord.x+','+this.coord.y]){	//吃到能量豆
 								items.forEach(function(item){
 									if(item.status==1||item.status==3){	//如果NPC为正常状态，则置为临时状态
@@ -1026,6 +1040,18 @@
 					break;
 					case 38: //上
 					player.control = {orientation:3};
+					break;
+					case 68: // D → 右
+					player.control = { orientation: 0 };
+					break;
+					case 83: // S → 下
+					player.control = { orientation: 1 };
+					break;
+					case 65: // A → 左
+					player.control = { orientation: 2 };
+					break;
+					case 87: // W → 上
+					player.control = { orientation: 3 };
 					break;
 				}
 			});
