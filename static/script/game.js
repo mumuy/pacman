@@ -14,7 +14,7 @@
 
 // requestAnimationFrame polyfill
 if (!Date.now)
-Date.now = function() { return new Date().getTime(); };
+    Date.now = function() { return new Date().getTime(); };
 (function() {
     'use strict';
     var vendors = ['webkit', 'moz'];
@@ -24,13 +24,13 @@ Date.now = function() { return new Date().getTime(); };
         window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame'] || window[vp+'CancelRequestAnimationFrame']);
     }
     if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
-    || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
         var lastTime = 0;
         window.requestAnimationFrame = function(callback) {
             var now = Date.now();
             var nextTime = Math.max(lastTime + 16, now);
             return setTimeout(function() { callback(lastTime = nextTime); },
-            nextTime - now);
+                nextTime - now);
         };
         window.cancelAnimationFrame = clearTimeout;
     }
@@ -205,7 +205,7 @@ function Game(id,params){
                 }
             };
             list.forEach(function(current){
-				next(current,{y:current.y+1,x:current.x});
+                next(current,{y:current.y+1,x:current.x});
                 next(current,{y:current.y,x:current.x+1});
                 next(current,{y:current.y-1,x:current.x});
                 next(current,{y:current.y,x:current.x-1});
@@ -242,6 +242,7 @@ function Game(id,params){
             images:[],						//图片资源
             items:[],						//对象队列
             timeout:0,						//倒计时(用于过程动画状态判断)
+            timeLeft:60*300,
             update:function(){}				//嗅探,处理布局下不同对象的相对关系
         };
         Object.assign(this,this._settings,this._params);
@@ -272,7 +273,7 @@ function Game(id,params){
     //获取对象列表
     Stage.prototype.getItemsByType = function(type){
         return this.items.filter(function(item){
-	    return item.type == type;
+            return item.type == type;
         });
     };
     //添加地图
@@ -354,7 +355,7 @@ function Game(id,params){
                             _context.putImageData(map.imageData,0,0);
                         }
                     }else{
-                    	map.update();
+                        map.update();
                         map.draw(_context);
                     }
                 });

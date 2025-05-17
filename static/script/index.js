@@ -528,6 +528,7 @@
 	_SIN = [0,1,0,-1],
 	_LIFE = 5,				//玩家生命值
 	_SCORE = 0;				//玩家得分
+	TIME_LIMIT = 300;
 
 	var game = new Game('canvas');
 	//启动页
@@ -605,8 +606,8 @@
 			switch(e.keyCode){
 				case 13:
 				case 32:
-				game.nextStage();
-				break;
+					game.nextStage();
+					break;
 			}
 		});
 	})();
@@ -617,6 +618,8 @@
 			stage = game.createStage({
 				update:function(){
 					var stage = this;
+					if(stage.status==1&&stage.timeLeft>0){stage.timeLeft--;}
+					if(stage.status==1&&stage.timeLeft==0){stage.status=3;stage.timeout=30;}
 					if(stage.status==1){								//场景正常运行
 						items.forEach(function(item){
 							if(map&&!map.get(item.coord.x,item.coord.y)&&!map.get(player.coord.x,player.coord.y)){
@@ -773,6 +776,14 @@
 					context.textBaseline = 'top';
 					context.fillStyle = '#FFF';
 					context.fillText(index+1,this.x+12,this.y+82);
+					context.font='bold 24px PressStart2P';
+					context.fillStyle='#C33';
+					context.textBaseline='bottom';
+					context.fillText('TIME',this.x,this.y+144);
+					context.font='24px PressStart2P';
+					context.textBaseline='top';
+					context.fillStyle='#FFF';
+					context.fillText(Math.ceil(stage.timeLeft/60),this.x+12,this.y+154);
 				}
 			});
 			//状态文字
@@ -917,16 +928,16 @@
 							context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
 							switch(this.times%2){
 								case 0:
-								context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-								context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
-								break;
+									context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
+									context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
+									context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
+									context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
+									break;
 								case 1:
-								context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
-								break;
+									context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
+									context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
+									context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
+									break;
 							}
 							context.fill();
 							context.closePath();
@@ -1027,32 +1038,32 @@
 				switch(e.keyCode){
 					case 13: //回车
 					case 32: //空格
-					this.status = this.status==2?1:2;
-					break;
+						this.status = this.status==2?1:2;
+						break;
 					case 39: //右
-					player.control = {orientation:0};
-					break;
+						player.control = {orientation:0};
+						break;
 					case 40: //下
-					player.control = {orientation:1};
-					break;
+						player.control = {orientation:1};
+						break;
 					case 37: //左
-					player.control = {orientation:2};
-					break;
+						player.control = {orientation:2};
+						break;
 					case 38: //上
-					player.control = {orientation:3};
-					break;
+						player.control = {orientation:3};
+						break;
 					case 68: // D → 右
-					player.control = { orientation: 0 };
-					break;
+						player.control = { orientation: 0 };
+						break;
 					case 83: // S → 下
-					player.control = { orientation: 1 };
-					break;
+						player.control = { orientation: 1 };
+						break;
 					case 65: // A → 左
-					player.control = { orientation: 2 };
-					break;
+						player.control = { orientation: 2 };
+						break;
 					case 87: // W → 上
-					player.control = { orientation: 3 };
-					break;
+						player.control = { orientation: 3 };
+						break;
 				}
 			});
 		});
@@ -1089,17 +1100,17 @@
 			switch(e.keyCode){
 				case 13: //回车
 				case 32: //空格
-				_SCORE = 0;
-				_LIFE = 5;
-				game.setStage(1);
-				break;
+					_SCORE = 0;
+					_LIFE = 5;
+					game.setStage(1);
+					break;
 			}
 		});
 	})();
 
 	const myFont = new FontFace('PressStart2P', 'url(./static/font/PressStart2P.ttf)');
 	myFont.load().then(font => {
-	  	document.fonts.add(font);
+		document.fonts.add(font);
 		game.init();
 	});
 })();
