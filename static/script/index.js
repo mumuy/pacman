@@ -1,17 +1,17 @@
 /*!
- * Pacman - HTML5 Game
- * https://passer-by.com/pacman/
- *
- * Copyright (c) 2016-present, HaoLe Zheng
- * Released under the MIT License.
+ * Meeting Monster - HTML5 Game
+ * Based on Pacman by HaoLe Zheng
+ * 
+ * Original source: https://passer-by.com/pacman/
+ * Licensed under MIT License
  * https://github.com/mumuy/pacman/blob/master/LICENSE
 */
 
-//主程序,业务逻辑
+//Main program, business logic
 (function(){
-	var _COIGIG = [		//关卡
-		{				//第1关
-			'map':[		//地图数据
+	var _COIGIG = [		//Levels
+		{				//Level 1
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -45,15 +45,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#09f',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,23':1,
 				'26,23':1
 			}
 		},
-		{				//第2关
-			'map':[		//地图数据
+		{				//Level 2
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
@@ -87,15 +87,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#FF5983',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,2':1,
 				'26,2':1,
 				'1,27':1,
 				'26,27':1
 			}
 		},
-		{				//第3关
-			'map':[		//地图数据
+		{				//Level 3
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,0,1],
@@ -129,15 +129,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#E08031',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,2':1,
 				'26,2':1,
 				'1,23':1,
 				'26,23':1
 			}
 		},
-		{				//第4关
-			'map':[		//地图数据
+		{				//Level 4
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
@@ -171,15 +171,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#37C6C0',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,28':1,
 				'26,28':1
 			}
 		},
-		{				//第5关
-			'map':[		//地图数据
+		{				//Level 5
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -213,15 +213,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#5ED5D1',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,27':1,
 				'26,27':1
 			}
 		},
-		{				//第6关
-			'map':[		//地图数据
+		{				//Level 6
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -255,15 +255,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#7E884F',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,28':1,
 				'26,28':1
 			}
 		},
-		{				//第7关
-			'map':[		//地图数据
+		{				//Level 7
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -297,15 +297,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#C9C',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,24':1,
 				'26,24':1
 			}
 		},
-		{				//第8关
-			'map':[		//地图数据
+		{				//Level 8
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
@@ -339,15 +339,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#EB3F2F',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,4':1,
 				'26,4':1,
 				'1,25':1,
 				'26,25':1
 			}
 		},
-		{				//第9关
-			'map':[		//地图数据
+		{				//Level 9
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
@@ -381,15 +381,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#2E68AA',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,6':1,
 				'26,6':1,
 				'1,27':1,
 				'26,27':1
 			}
 		},
-		{				//第10关
-			'map':[		//地图数据
+		{				//Level 10
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1],
@@ -423,15 +423,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#C1194E',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,4':1,
 				'26,4':1,
 				'1,28':1,
 				'26,28':1
 			}
 		},
-		{				//第11关
-			'map':[		//地图数据
+		{				//Level 11
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1],
@@ -465,15 +465,15 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#56A36C',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,3':1,
 				'26,3':1,
 				'1,28':1,
 				'26,28':1
 			}
 		},
-		{				//第12关
-			'map':[		//地图数据
+		{				//Level 12
+			'map':[		//Map data
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 				[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
 				[1,0,1,1,0,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,0,1,1,0,1],
@@ -507,7 +507,7 @@
 				[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 			],
 			'wall_color':'#9966CC',
-			'goods':{		//能量豆
+			'goods':{		//Energy dots
 				'1,4':1,
 				'26,4':1,
 				'1,27':1,
@@ -515,14 +515,22 @@
 			}
 		}
 	];
-	_COLOR = ['#F00','#F93','#0CF','#F9C'],	//NPC颜色
+	_COLOR = ['#F00','#F93','#0CF','#F9C'],	//NPC colors
 	_COS = [1,0,-1,0],
 	_SIN = [0,1,0,-1],
-	_LIFE = 5,				//玩家生命值
-	_SCORE = 0;				//玩家得分
+	_LIFE = 5,				//Player lives
+	_SCORE = 0;				//Player score
 
 	var game = new Game('canvas');
-	//启动页
+	
+	// Load monster sprite image globally
+	var monsterImage = new Image();
+	monsterImage.src = 'static/assets/monster.png';
+	
+	// Sprite sheet constants (3x2 grid)
+	var SPRITE_COLS = 3;
+	var SPRITE_ROWS = 2;
+	//Startup page
 	(function(){
 		var stage = game.createStage();
 		//logo
@@ -533,21 +541,35 @@
 			height:100,
 			frames:3,
 			draw:function(context){
-				var t = Math.abs(5-this.times%10);
-				context.fillStyle = '#FFE600';
-				context.beginPath();
-				context.arc(this.x,this.y,this.width/2,t*.04*Math.PI,(2-t*.04)*Math.PI,false);
-				context.lineTo(this.x,this.y);
-				context.closePath();
-				context.fill();
-				context.fillStyle = '#000';
-				context.beginPath();
-				context.arc(this.x+5,this.y-27,7,0,2*Math.PI,false);
-				context.closePath();
-				context.fill();
+				if(monsterImage.complete) {
+					// Use first monster sprite (top-left, position 0,0)
+					var spriteWidth = monsterImage.width / SPRITE_COLS;
+					var spriteHeight = monsterImage.height / SPRITE_ROWS;
+					
+					// Draw the first monster sprite as logo
+					context.drawImage(
+						monsterImage,
+						0, 0, spriteWidth, spriteHeight, // Source: first sprite
+						this.x - this.width/2, this.y - this.height/2, this.width, this.height // Destination
+					);
+				} else {
+					// Fallback to original logo if image not loaded
+					var t = Math.abs(5-this.times%10);
+					context.fillStyle = '#FFE600';
+					context.beginPath();
+					context.arc(this.x,this.y,this.width/2,t*.04*Math.PI,(2-t*.04)*Math.PI,false);
+					context.lineTo(this.x,this.y);
+					context.closePath();
+					context.fill();
+					context.fillStyle = '#000';
+					context.beginPath();
+					context.arc(this.x+5,this.y-27,7,0,2*Math.PI,false);
+					context.closePath();
+					context.fill();
+				}
 			}
 		});
-		// 游戏名
+		// Game name
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.5,
@@ -556,10 +578,10 @@
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
 				context.fillStyle = '#FFF';
-				context.fillText('Pac-Man',this.x,this.y);
+				context.fillText('Meeting Monster',this.x,this.y);
 			}
 		});
-		// 提示
+		// Instructions
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.64,
@@ -574,12 +596,12 @@
 				}
 			}
 		});
-		//版权信息
+		//Copyright information
 		stage.createItem({
 			x:game.width-10,
 			y:game.height-5,
 			draw:function(context){
-				var text = '© passer-by.com';
+				var text = '';
 				context.font = '12px/20px PressStart2P';
 				context.textAlign = 'left';
 				context.textBaseline = 'top';
@@ -589,10 +611,8 @@
 				this.y = game.height-20-5;
 				context.fillText(text,this.x,this.y);
 			}
-		}).bind('click',function(){
-			window.open('https://passer-by.com');
-		});
-		//事件绑定
+		}).bind('click',function(){});
+		//Event binding
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
 				case 13:
@@ -602,19 +622,19 @@
 			}
 		});
 	})();
-	//游戏主程序
+	//Main game program
 	(function(){
 		_COIGIG.forEach(function(config,index){
 			var stage,map,beans,items,player;
 			stage = game.createStage({
 				update:function(){
 					var stage = this;
-					if(stage.status==1){								//场景正常运行
+					if(stage.status==1){								//Scene running normally
 						items.forEach(function(item){
 							if(map&&!map.get(item.coord.x,item.coord.y)&&!map.get(player.coord.x,player.coord.y)){
 								var dx = item.x-player.x;
 								var dy = item.y-player.y;
-								if(dx*dx+dy*dy<750&&item.status!=4){		//物体检测
+								if(dx*dx+dy*dy<750&&item.status!=4){		//Object detection
 									if(item.status==3){
 										item.status = 4;
 										_SCORE += 10;
@@ -625,10 +645,10 @@
 								}
 							}
 						});
-						if(JSON.stringify(beans.data).indexOf(0)<0){	//当没有物品的时候，进入下一关
+						if(JSON.stringify(beans.data).indexOf(0)<0){	//When no items left, proceed to next level
 							game.nextStage();
 						}
-					}else if(stage.status==3){		//场景临时状态
+					}else if(stage.status==3){		//Scene temporary state
 						if(!stage.timeout){
 							_LIFE--;
 							if(_LIFE){
@@ -642,7 +662,7 @@
 					}
 				}
 			});
-			//绘制地图
+			//Draw map
 			map = stage.createMap({
 				x:60,
 				y:10,
@@ -713,7 +733,7 @@
 					}
 				}
 			});
-			//物品地图
+			//Item map
 			beans = stage.createMap({
 				x:60,
 				y:10,
@@ -724,21 +744,90 @@
 						for(var i=0; i<this.x_length; i++){
 							if(!this.get(i,j)){
 								var pos = this.coord2position(i,j);
-								context.fillStyle = "#F5F5DC";
 								if(config['goods'][i+','+j]){
+									// Draw analog clock for power pellets
+									var clockSize = 6 + this.times%2;
+									
+									// Clock face
+									context.fillStyle = "#FFFFFF";
 									context.beginPath();
-									context.arc(pos.x,pos.y,3+this.times%2,0,2*Math.PI,true);
+									context.arc(pos.x, pos.y, clockSize, 0, 2*Math.PI, true);
 									context.fill();
-									context.closePath();
+									
+									// Clock border
+									context.strokeStyle = "#333333";
+									context.lineWidth = 1;
+									context.beginPath();
+									context.arc(pos.x, pos.y, clockSize, 0, 2*Math.PI, true);
+									context.stroke();
+									
+									// Clock hands based on game time
+									var time = (this.times * 0.5) % 12; // Rotating time
+									
+									// Hour hand
+									context.strokeStyle = "#000000";
+									context.lineWidth = 2;
+									context.beginPath();
+									context.moveTo(pos.x, pos.y);
+									var hourAngle = (time * Math.PI / 6) - Math.PI/2;
+									context.lineTo(
+										pos.x + Math.cos(hourAngle) * (clockSize * 0.5), 
+										pos.y + Math.sin(hourAngle) * (clockSize * 0.5)
+									);
+									context.stroke();
+									
+									// Minute hand
+									context.lineWidth = 1;
+									context.beginPath();
+									context.moveTo(pos.x, pos.y);
+									var minuteAngle = (time * 12 * Math.PI / 6) - Math.PI/2;
+									context.lineTo(
+										pos.x + Math.cos(minuteAngle) * (clockSize * 0.7), 
+										pos.y + Math.sin(minuteAngle) * (clockSize * 0.7)
+									);
+									context.stroke();
+									
+									// Center dot
+									context.fillStyle = "#333333";
+									context.beginPath();
+									context.arc(pos.x, pos.y, 1, 0, 2*Math.PI, true);
+									context.fill();
 								}else{
-									context.fillRect(pos.x-2,pos.y-2,4,4);
+									// Draw small clock for regular dots
+									var dotSize = 3;
+									
+									// Small clock face
+									context.fillStyle = "#F5F5DC";
+									context.beginPath();
+									context.arc(pos.x, pos.y, dotSize, 0, 2*Math.PI, true);
+									context.fill();
+									
+									// Small clock border
+									context.strokeStyle = "#999999";
+									context.lineWidth = 0.5;
+									context.beginPath();
+									context.arc(pos.x, pos.y, dotSize, 0, 2*Math.PI, true);
+									context.stroke();
+									
+									// Simple clock hands
+									var time = (this.times * 0.3) % 12;
+									context.strokeStyle = "#666666";
+									context.lineWidth = 0.5;
+									context.beginPath();
+									context.moveTo(pos.x, pos.y);
+									var angle = (time * Math.PI / 6) - Math.PI/2;
+									context.lineTo(
+										pos.x + Math.cos(angle) * (dotSize * 0.6), 
+										pos.y + Math.sin(angle) * (dotSize * 0.6)
+									);
+									context.stroke();
 								}
 							}
 						}
 					}
 				}
 			});
-			//关卡得分
+			//Level score
 			stage.createItem({
 				x:690,
 				y:80,
@@ -765,7 +854,7 @@
 					context.fillText(index+1,this.x+12,this.y+82);
 				}
 			});
-			//状态文字
+			//Status text
 			stage.createItem({
 				x:690,
 				y:285,
@@ -780,7 +869,7 @@
 					}
 				}
 			});
-			//生命值
+			//Lives
 			stage.createItem({
 				x:705,
 				y:510,
@@ -790,12 +879,25 @@
 					var max = Math.min(_LIFE-1,5);
 					for(var i=0;i<max;i++){
 						var x=this.x+40*i,y=this.y;
-						context.fillStyle = '#FFE600';
-						context.beginPath();
-						context.arc(x,y,this.width/2,.15*Math.PI,-.15*Math.PI,false);
-						context.lineTo(x,y);
-						context.closePath();
-						context.fill();
+						if(monsterImage.complete) {
+							// Use first monster sprite for each life
+							var spriteWidth = monsterImage.width / SPRITE_COLS;
+							var spriteHeight = monsterImage.height / SPRITE_ROWS;
+							
+							context.drawImage(
+								monsterImage,
+								0, 0, spriteWidth, spriteHeight, // Source: first sprite (top-left)
+								x - this.width/2, y - this.height/2, this.width, this.height // Destination
+							);
+						} else {
+							// Fallback to simple circles if image not loaded
+							context.fillStyle = '#FFE600';
+							context.beginPath();
+							context.arc(x,y,this.width/2,.15*Math.PI,-.15*Math.PI,false);
+							context.lineTo(x,y);
+							context.closePath();
+							context.fill();
+						}
 					}
 					context.font = '18px PressStart2P';
 					context.textAlign = 'left';
@@ -825,13 +927,13 @@
 						if(this.status==3&&!this.timeout){
 							this.status = 1;
 						}
-						if(!this.coord.offset){			//到达坐标中心时计算
+						if(!this.coord.offset){			//Calculate when reaching coordinate center
 							if(this.status==1){
-								if(!this.timeout){		//定时器
+								if(!this.timeout){		//Timer
 									new_map = JSON.parse(JSON.stringify(map.data).replace(/2/g,0));
 									var id = this._id;
 									items.forEach(function(item){
-										if(item._id!=id&&item.status==1){	//NPC将其它所有还处于正常状态的NPC当成一堵墙
+										if(item._id!=id&&item.status==1){	//NPC treats other NPCs in normal state as walls
 											new_map[item.coord.y][item.coord.x]=1;
 										}
 									});
@@ -874,7 +976,7 @@
 									this.status = 1;
 								}
 							}
-							//是否转变方向
+							//Whether to change direction
 							if(this.vector.change){
 								this.coord.x = this.vector.x;
 								this.coord.y = this.vector.y;
@@ -882,7 +984,7 @@
 								this.x = pos.x;
 								this.y = pos.y;
 							}
-							//方向判定
+							//Direction determination
 							if(this.vector.x>this.coord.x){
 								this.orientation = 0;
 							}else if(this.vector.x<this.coord.x){
@@ -902,50 +1004,161 @@
 							isSick = this.timeout>80||this.times%2?true:false;
 						}
 						if(this.status!=4){
-							context.fillStyle = isSick?'#BABABA':this.color;
+							// Draw office worker
+							var workerColor = isSick ? '#BABABA' : this.color;
+							var headSize = this.width * 0.3;
+							var bodyWidth = this.width * 0.6;
+							var bodyHeight = this.height * 0.5;
+							
+							// Head (circle)
+							context.fillStyle = '#FDBCB4'; // Skin color
 							context.beginPath();
-							context.arc(this.x,this.y,this.width*.5,0,Math.PI,true);
-							switch(this.times%2){
-								case 0:
-								context.lineTo(this.x-this.width*.5,this.y+this.height*.4);
-								context.quadraticCurveTo(this.x-this.width*.4,this.y+this.height*.5,this.x-this.width*.2,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x,this.y+this.height*.5,this.x+this.width*.2,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x+this.width*.4,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.4);
-								break;
-								case 1:
-								context.lineTo(this.x-this.width*.5,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x-this.width*.25,this.y+this.height*.5,this.x,this.y+this.height*.3);
-								context.quadraticCurveTo(this.x+this.width*.25,this.y+this.height*.5,this.x+this.width*.5,this.y+this.height*.3);
-								break;
-							}
+							context.arc(this.x, this.y - this.height * 0.2, headSize, 0, 2 * Math.PI);
 							context.fill();
-							context.closePath();
+							
+							// Body (rectangle with suit)
+							context.fillStyle = workerColor;
+							context.fillRect(
+								this.x - bodyWidth/2, 
+								this.y - this.height * 0.1, 
+								bodyWidth, 
+								bodyHeight
+							);
+							
+							// Shirt (white rectangle)
+							context.fillStyle = '#FFFFFF';
+							context.fillRect(
+								this.x - bodyWidth/4, 
+								this.y - this.height * 0.1, 
+								bodyWidth/2, 
+								bodyHeight * 0.8
+							);
+							
+							// Tie
+							context.fillStyle = '#333333';
+							context.fillRect(
+								this.x - this.width * 0.05, 
+								this.y - this.height * 0.05, 
+								this.width * 0.1, 
+								bodyHeight * 0.6
+							);
+							
+							// Arms (animated based on movement)
+							context.fillStyle = workerColor;
+							var armOffset = (this.times % 2) ? 2 : -2;
+							// Left arm
+							context.fillRect(
+								this.x - bodyWidth/2 - 5, 
+								this.y + armOffset, 
+								5, 
+								this.height * 0.3
+							);
+							// Right arm
+							context.fillRect(
+								this.x + bodyWidth/2, 
+								this.y - armOffset, 
+								5, 
+								this.height * 0.3
+							);
+							
+							// Legs (animated based on movement)
+							var legOffset = (this.times % 2) ? 3 : -3;
+							context.fillStyle = '#333333'; // Dark pants
+							// Left leg
+							context.fillRect(
+								this.x - this.width * 0.15, 
+								this.y + this.height * 0.3, 
+								this.width * 0.15, 
+								this.height * 0.2 + legOffset
+							);
+							// Right leg
+							context.fillRect(
+								this.x, 
+								this.y + this.height * 0.3, 
+								this.width * 0.15, 
+								this.height * 0.2 - legOffset
+							);
+							
+							// Briefcase or laptop (occasionally)
+							if(this.times % 20 < 5) {
+								context.fillStyle = '#8B4513'; // Brown briefcase
+								context.fillRect(
+									this.x + this.width * 0.4, 
+									this.y + this.height * 0.1, 
+									this.width * 0.2, 
+									this.height * 0.15
+								);
+								// Briefcase handle
+								context.strokeStyle = '#654321';
+								context.lineWidth = 2;
+								context.beginPath();
+								context.moveTo(this.x + this.width * 0.45, this.y + this.height * 0.1);
+								context.lineTo(this.x + this.width * 0.45, this.y + this.height * 0.05);
+								context.lineTo(this.x + this.width * 0.55, this.y + this.height * 0.05);
+								context.lineTo(this.x + this.width * 0.55, this.y + this.height * 0.1);
+								context.stroke();
+							}
 						}
+						// Eyes for office worker
 						context.fillStyle = '#FFF';
 						if(isSick){
+							// Dizzy/stressed eyes (X shapes)
+							context.strokeStyle = '#333';
+							context.lineWidth = 2;
+							// Left eye X
 							context.beginPath();
-							context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
-							context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.08,0,2*Math.PI,false);
-							context.fill();
-							context.closePath();
+							context.moveTo(this.x - this.width * 0.12, this.y - this.height * 0.25);
+							context.lineTo(this.x - this.width * 0.08, this.y - this.height * 0.21);
+							context.moveTo(this.x - this.width * 0.08, this.y - this.height * 0.25);
+							context.lineTo(this.x - this.width * 0.12, this.y - this.height * 0.21);
+							// Right eye X
+							context.moveTo(this.x + this.width * 0.08, this.y - this.height * 0.25);
+							context.lineTo(this.x + this.width * 0.12, this.y - this.height * 0.21);
+							context.moveTo(this.x + this.width * 0.12, this.y - this.height * 0.25);
+							context.lineTo(this.x + this.width * 0.08, this.y - this.height * 0.21);
+							context.stroke();
 						}else{
+							// Normal eyes
 							context.beginPath();
-							context.arc(this.x-this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
-							context.arc(this.x+this.width*.15,this.y-this.height*.21,this.width*.12,0,2*Math.PI,false);
+							context.arc(this.x - this.width * 0.1, this.y - this.height * 0.25, this.width * 0.04, 0, 2 * Math.PI);
+							context.arc(this.x + this.width * 0.1, this.y - this.height * 0.25, this.width * 0.04, 0, 2 * Math.PI);
 							context.fill();
-							context.closePath();
+							
+							// Pupils looking in movement direction
 							context.fillStyle = '#000';
 							context.beginPath();
-							context.arc(this.x-this.width*(.15-.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
-							context.arc(this.x+this.width*(.15+.04*_COS[this.orientation]),this.y-this.height*(.21-.04*_SIN[this.orientation]),this.width*.07,0,2*Math.PI,false);
+							var pupilOffsetX = _COS[this.orientation] * this.width * 0.02;
+							var pupilOffsetY = _SIN[this.orientation] * this.width * 0.02;
+							context.arc(
+								this.x - this.width * 0.1 + pupilOffsetX, 
+								this.y - this.height * 0.25 + pupilOffsetY, 
+								this.width * 0.02, 0, 2 * Math.PI
+							);
+							context.arc(
+								this.x + this.width * 0.1 + pupilOffsetX, 
+								this.y - this.height * 0.25 + pupilOffsetY, 
+								this.width * 0.02, 0, 2 * Math.PI
+							);
 							context.fill();
-							context.closePath();
+							
+							// Glasses (occasionally)
+							if(this._id % 2 === 0) {
+								context.strokeStyle = '#333';
+								context.lineWidth = 1;
+								context.beginPath();
+								context.arc(this.x - this.width * 0.1, this.y - this.height * 0.25, this.width * 0.06, 0, 2 * Math.PI);
+								context.arc(this.x + this.width * 0.1, this.y - this.height * 0.25, this.width * 0.06, 0, 2 * Math.PI);
+								// Bridge
+								context.moveTo(this.x - this.width * 0.04, this.y - this.height * 0.25);
+								context.lineTo(this.x + this.width * 0.04, this.y - this.height * 0.25);
+								context.stroke();
+							}
 						}
 					}
 				});
 			}
 			items = stage.getItemsByType(2);
-			//主角
+			//Main character
 			player = stage.createItem({
 				width:30,
 				height:30,
@@ -973,12 +1186,12 @@
 							this.y -= map.size*(map.y_length-1)*_SIN[this.orientation];
 						}
 					}else{
-						if(!beans.get(this.coord.x,this.coord.y)){	//吃豆
+						if(!beans.get(this.coord.x,this.coord.y)){	//Eat dot
 							_SCORE++;
 							beans.set(this.coord.x,this.coord.y,1);
-							if(config['goods'][this.coord.x+','+this.coord.y]){	//吃到能量豆
+							if(config['goods'][this.coord.x+','+this.coord.y]){	//Eat power pellet
 								items.forEach(function(item){
-									if(item.status==1||item.status==3){	//如果NPC为正常状态，则置为临时状态
+									if(item.status==1||item.status==3){	//If NPC is in normal state, set to temporary state
 										item.timeout = 450;
 										item.status = 3;
 									}
@@ -990,51 +1203,83 @@
 					}
 				},
 				draw:function(context){
-					context.fillStyle = '#FFE600';
-					context.beginPath();
-					if(stage.status!=3){	//玩家正常状态
-						if(this.times%2){
-							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.20)*Math.PI,(.5*this.orientation-.20)*Math.PI,false);
-						}else{
-							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+.01)*Math.PI,(.5*this.orientation-.01)*Math.PI,false);
+					if(monsterImage.complete) {
+						// Sprite sheet has 6 sprites in 3x2 grid
+						var spriteWidth = monsterImage.width / SPRITE_COLS;
+						var spriteHeight = monsterImage.height / SPRITE_ROWS;
+						
+						// Determine sprite based on orientation and animation
+						var spriteX = 0;
+						var spriteY = 0;
+						
+						if(stage.status!=3){	//Player normal state
+							// Use different sprites for different directions
+							// orientation: 0=right, 1=down, 2=left, 3=up
+							switch(this.orientation) {
+								case 0: // Right
+									spriteX = (this.times % 2) ? 1 : 0; // Animate between first two sprites
+									spriteY = 0;
+									break;
+								case 1: // Down
+									spriteX = 2;
+									spriteY = (this.times % 2) ? 1 : 0; // Animate
+									break;
+								case 2: // Left
+									spriteX = (this.times % 2) ? 1 : 0; // Mirror of right
+									spriteY = 1;
+									break;
+								case 3: // Up
+									spriteX = 2;
+									spriteY = (this.times % 2) ? 0 : 1; // Animate
+									break;
+							}
+						} else {	//Player eaten - use different sprite
+							spriteX = 1;
+							spriteY = 1;
 						}
-					}else{	//玩家被吃
-						if(stage.timeout) {
-							context.arc(this.x,this.y,this.width/2,(.5*this.orientation+1-.02*stage.timeout)*Math.PI,(.5*this.orientation-1+.02*stage.timeout)*Math.PI,false);
-						}
+						
+						// Draw the sprite
+						context.drawImage(
+							monsterImage,
+							spriteX * spriteWidth, spriteY * spriteHeight, spriteWidth, spriteHeight,
+							this.x - this.width/2, this.y - this.height/2, this.width, this.height
+						);
+					} else {
+						// Fallback to original drawing if image not loaded
+						context.fillStyle = '#FFE600';
+						context.beginPath();
+						context.arc(this.x, this.y, this.width/2, 0, 2*Math.PI, false);
+						context.fill();
 					}
-					context.lineTo(this.x,this.y);
-					context.closePath();
-					context.fill();
 				}
 			});
-			//事件绑定
+			//Event binding
 			stage.bind('keydown',function(e){
 				switch(e.keyCode){
-					case 13: //回车
-					case 32: //空格
+					case 13: //Enter
+					case 32: //Space
 					this.status = this.status==2?1:2;
 					break;
-					case 39: //右
+					case 39: //Right
 					player.control = {orientation:0};
 					break;
-					case 40: //下
+					case 40: //Down
 					player.control = {orientation:1};
 					break;
-					case 37: //左
+					case 37: //Left
 					player.control = {orientation:2};
 					break;
-					case 38: //上
+					case 38: //Up
 					player.control = {orientation:3};
 					break;
 				}
 			});
 		});
 	})();
-	//结束画面
+	//End screen
 	(function(){
 		var stage = game.createStage();
-		//游戏结束
+		//Game over
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.35,
@@ -1046,7 +1291,7 @@
 				context.fillText(_LIFE?'YOU WIN!':'GAME OVER',this.x,this.y);
 			}
 		});
-		//记分
+		//Score
 		stage.createItem({
 			x:game.width/2,
 			y:game.height*.5,
@@ -1058,11 +1303,11 @@
 				context.fillText('FINAL SCORE: '+(_SCORE+50*Math.max(_LIFE-1,0)),this.x,this.y);
 			}
 		});
-		//事件绑定
+		//Event binding
 		stage.bind('keydown',function(e){
 			switch(e.keyCode){
-				case 13: //回车
-				case 32: //空格
+				case 13: //Enter
+				case 32: //Space
 				_SCORE = 0;
 				_LIFE = 5;
 				game.setStage(1);
